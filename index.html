@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>视频抽帧工作台</title>
+  <title data-i18n="document.title">视频抽帧工作台</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <style>
     :root {
@@ -946,6 +946,28 @@
     .theme-toggle:focus-visible { outline: 3px solid rgba(89,116,190,.24); outline-offset: 2px; }
     .theme-icon { display: inline-grid; place-items: center; width: 13px; height: 13px; font-size: 13px; line-height: 1; }
     .theme-label { white-space: nowrap; }
+    .language-toggle {
+      min-width: 52px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 0 8px;
+      color: #50658f;
+      border: 1px solid rgba(127, 147, 192, .26);
+      border-radius: 999px;
+      background: rgba(255,255,255,.56);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.82), 0 4px 12px rgba(62,78,117,.06);
+      font-size: 10px;
+      font-weight: 800;
+      line-height: 1;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease, color .18s ease;
+    }
+    .language-toggle:hover { transform: translateY(-1px); color: #3f5794; border-color: rgba(95,120,187,.52); background: rgba(255,255,255,.84); }
+    .language-toggle:focus-visible { outline: 3px solid rgba(89,116,190,.24); outline-offset: 2px; }
+    .language-icon { display: inline-grid; place-items: center; width: 12px; height: 13px; font-size: 12px; line-height: 1; }
+    .language-label { white-space: nowrap; }
 
     /* 视频来源选择：手机端可直接调用系统原相机录像；桌面端继续保持文件选择/拖入。 */
     .video-source-actions {
@@ -1049,8 +1071,9 @@
       .panel-head strong, .panel-head small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       .panel-actions { gap: 5px; }
       .panel-badge { display: none; }
+      .language-toggle { min-width: 48px; height: 27px; padding: 0 7px; }
       .theme-toggle { min-width: 58px; height: 27px; padding: 0 7px; }
-      .theme-label { font-size: 9px; }
+      .theme-label, .language-label { font-size: 9px; }
 
       .dropzone { padding: 12px 10px; }
       .dropzone > b, .dropzone > span { display: none; }
@@ -1164,6 +1187,7 @@
       background: rgba(102, 124, 198, .19);
     }
     html[data-theme="dark"] .theme-toggle,
+    html[data-theme="dark"] .language-toggle,
     html[data-theme="dark"] .status-chip,
     html[data-theme="dark"] .tiny-btn,
     html[data-theme="dark"] .btn,
@@ -1174,6 +1198,7 @@
       box-shadow: inset 0 1px 0 rgba(255,255,255,.035), 0 5px 14px rgba(0,0,0,.13);
     }
     html[data-theme="dark"] .theme-toggle:hover,
+    html[data-theme="dark"] .language-toggle:hover,
     html[data-theme="dark"] .tiny-btn:hover,
     html[data-theme="dark"] .btn:not(:disabled):hover {
       color: #ffffff;
@@ -1271,16 +1296,20 @@
   </style>
 </head>
 <body>
-  <aside class="control-panel" aria-label="抽帧控制面板">
+  <aside class="control-panel" aria-label="抽帧控制面板" data-i18n-aria-label="panel.aria">
     <div class="panel-head">
       <div class="panel-brand">
         <div class="brand-mark">▣</div>
         <div>
-          <strong>视频抽帧工作台</strong>
-          <small>本地处理 · 不上传视频</small>
+          <strong data-i18n="brand.title">视频抽帧工作台</strong>
+          <small data-i18n="brand.subtitle">本地处理 · 不上传视频</small>
         </div>
       </div>
       <div class="panel-actions">
+        <button class="language-toggle" id="languageToggle" type="button" aria-label="切换中文或英文" aria-pressed="false" title="切换中文或英文">
+          <span class="language-icon" aria-hidden="true">文</span>
+          <span class="language-label" id="languageLabel">EN</span>
+        </button>
         <button class="theme-toggle" id="themeToggle" type="button" aria-label="切换深色或浅色模式" aria-pressed="false" title="切换深色或浅色模式">
           <span class="theme-icon" id="themeIcon" aria-hidden="true">☾</span>
           <span class="theme-label" id="themeLabel">深色</span>
@@ -1289,133 +1318,135 @@
       </div>
     </div>
 
-    <div class="dropzone" id="dropzone" aria-label="选择视频来源" tabindex="0">
+    <div class="dropzone" id="dropzone" aria-label="选择视频来源" data-i18n-aria-label="upload.aria" tabindex="0">
       <input id="videoInput" type="file" accept="video/*" />
       <input id="cameraVideoInput" type="file" accept="video/*" capture="environment" />
-      <b>选择或拖入视频</b>
-      <span>MP4 / MOV / WebM 等常见格式</span>
-      <div class="video-source-actions" aria-label="手机视频来源">
-        <label class="source-action" for="videoInput" title="从相册或文件中选择已有视频">
-          <span aria-hidden="true">▣</span><span>选择视频</span>
+      <b data-i18n="upload.title">选择或拖入视频</b>
+      <span data-i18n="upload.subtitle">MP4 / MOV / WebM 等常见格式</span>
+      <div class="video-source-actions" aria-label="手机视频来源" data-i18n-aria-label="upload.actions.aria">
+        <label class="source-action" for="videoInput" title="从相册或文件中选择已有视频" data-i18n-title="upload.select.title">
+          <span aria-hidden="true">▣</span><span data-i18n="upload.select">选择视频</span>
         </label>
-        <label class="source-action camera" for="cameraVideoInput" title="调用手机系统原相机录制视频">
-          <span aria-hidden="true">●</span><span>原相机录像</span>
+        <label class="source-action camera" for="cameraVideoInput" title="调用手机系统原相机录制视频" data-i18n-title="upload.camera.title">
+          <span aria-hidden="true">●</span><span data-i18n="upload.camera">原相机录像</span>
         </label>
       </div>
-      <p class="capture-help">点击“原相机录像”会调用手机系统相机；录制完成后将自动导入并进入抽帧。</p>
+      <p class="capture-help" data-i18n="upload.help">点击“原相机录像”会调用手机系统相机；录制完成后将自动导入并进入抽帧。</p>
       <div class="file-name" id="fileName">尚未选择文件</div>
     </div>
 
     <div class="field">
-      <div class="field-label"><span>抽帧模式</span><span id="modeLabel">按时间间隔</span></div>
-      <div class="mode-switch" role="tablist" aria-label="抽帧模式">
-        <button class="active" id="timeModeBtn" type="button">按秒抽帧</button>
-        <button id="frameModeBtn" type="button">按帧抽帧</button>
+      <div class="field-label"><span data-i18n="mode.title">抽帧模式</span><span id="modeLabel">按时间间隔</span></div>
+      <div class="mode-switch" role="tablist" aria-label="抽帧模式" data-i18n-aria-label="mode.aria">
+        <button class="active" id="timeModeBtn" type="button" data-i18n="mode.time">按秒抽帧</button>
+        <button id="frameModeBtn" type="button" data-i18n="mode.frame">按帧抽帧</button>
       </div>
     </div>
 
     <div class="field mode-settings" id="modeSettings">
       <div id="timeSettings">
-        <div class="field-label"><span>每隔多久抽取一帧</span></div>
+        <div class="field-label"><span data-i18n="time.interval.title">每隔多久抽取一帧</span></div>
         <div class="input-row">
           <input id="intervalSeconds" type="number" min="0.01" step="0.01" value="1" inputmode="decimal" />
-          <div class="field-unit">秒</div>
+          <div class="field-unit" data-i18n="unit.second">秒</div>
         </div>
-        <p class="small-help">例如填写 1，即每 1 秒截取一张图片。</p>
+        <p class="small-help" data-i18n="time.interval.help">例如填写 1，即每 1 秒截取一张图片。</p>
       </div>
 
       <div id="frameSettings" hidden>
-        <div class="field-label"><span>每隔多少原视频帧抽取</span></div>
+        <div class="field-label"><span data-i18n="frame.stride.title">每隔多少原视频帧抽取</span></div>
         <div class="input-row">
           <input id="frameStride" type="number" min="1" step="1" value="30" inputmode="numeric" />
-          <div class="field-unit">帧</div>
+          <div class="field-unit" data-i18n="unit.frame">帧</div>
         </div>
-        <p class="small-help">系统会自动识别视频帧率，用于计算“每 N 帧”对应的抽取位置。</p>
+        <p class="small-help" data-i18n="frame.stride.help">系统会自动识别视频帧率，用于计算“每 N 帧”对应的抽取位置。</p>
       </div>
     </div>
 
     <div class="field">
-      <div class="field-label"><span>导出图片格式</span></div>
-      <select id="formatSelect" aria-label="导出图片格式">
-        <option value="png">PNG（无损）</option>
-        <option value="jpeg">JPEG（体积小）</option>
-        <option value="jpg">JPG（体积小）</option>
-        <option value="webp">WebP（清晰省空间）</option>
-        <option value="tif">TIFF / TIF（无损）</option>
+      <div class="field-label"><span data-i18n="format.title">导出图片格式</span></div>
+      <select id="formatSelect" aria-label="导出图片格式" data-i18n-aria-label="format.aria">
+        <option value="png" data-i18n="format.png">PNG（无损）</option>
+        <option value="jpeg" data-i18n="format.jpeg">JPEG（体积小）</option>
+        <option value="jpg" data-i18n="format.jpg">JPG（体积小）</option>
+        <option value="webp" data-i18n="format.webp">WebP（清晰省空间）</option>
+        <option value="heif" data-i18n="format.heif">HEIF（高效压缩）</option>
+        <option value="tif" data-i18n="format.tif">TIFF / TIF（无损）</option>
       </select>
-      <p class="small-help">WebP 由浏览器本地编码；TIFF / TIF 为无压缩高质量格式，文件体积会明显更大。</p>
+      <p class="small-help" data-i18n="format.help">WebP 由浏览器本地编码；TIFF / TIF 为无压缩高质量格式，文件体积会明显更大。</p>
+      <p class="small-help" id="heifHelp" hidden data-i18n="format.heifHelp">HEIF 会在第一次抽帧时加载本地浏览器编码器。请保持网络可用；若编码器加载失败，请改用 WebP、PNG、JPEG 或 TIFF / TIF。</p>
     </div>
 
     <div class="field">
-      <div class="field-label"><span>文件夹名称</span></div>
-      <input id="exportFolderName" type="text" maxlength="80" placeholder="默认跟随原视频名称" autocomplete="off" />
-      <p class="small-help">ZIP 模式：作为 ZIP 文件名和 ZIP 内文件夹名。直接导出：图片会保存到浏览器默认下载位置，不会创建系统文件夹。</p>
+      <div class="field-label"><span data-i18n="folder.title">文件夹名称</span></div>
+      <input id="exportFolderName" type="text" maxlength="80" placeholder="默认跟随原视频名称" data-i18n-placeholder="folder.placeholder" autocomplete="off" />
+      <p class="small-help" data-i18n="folder.help">ZIP 模式：作为 ZIP 文件名和 ZIP 内文件夹名。直接导出：图片会保存到浏览器默认下载位置，不会创建系统文件夹。</p>
     </div>
 
     <div class="field">
-      <div class="field-label"><span>图片名称</span></div>
-      <input id="exportImageName" type="text" maxlength="80" placeholder="默认跟随原视频名称" autocomplete="off" />
-      <p class="small-help">作为每张图片的文件名前缀，系统会自动补上序号、时间码和图片格式。</p>
+      <div class="field-label"><span data-i18n="imageName.title">图片名称</span></div>
+      <input id="exportImageName" type="text" maxlength="80" placeholder="默认跟随原视频名称" data-i18n-placeholder="imageName.placeholder" autocomplete="off" />
+      <p class="small-help" data-i18n="imageName.help">作为每张图片的文件名前缀，系统会自动补上序号、时间码和图片格式。</p>
     </div>
 
     <div class="field">
-      <div class="field-label"><span>导出方式</span></div>
-      <select id="exportMode" aria-label="导出方式">
-        <option value="zip">导出 ZIP 压缩包</option>
-        <option value="folder">直接导出</option>
+      <div class="field-label"><span data-i18n="export.title">导出方式</span></div>
+      <select id="exportMode" aria-label="导出方式" data-i18n-aria-label="export.aria">
+        <option value="zip" data-i18n="export.zip.option">导出 ZIP 压缩包</option>
+        <option value="folder" data-i18n="export.direct.option">直接导出</option>
       </select>
       <div class="direct-folder-row" id="directFolderRow">
-        <div class="field-label" style="margin:0 0 7px;"><span>文件导出位置</span></div>
+        <div class="field-label" style="margin:0 0 7px;"><span data-i18n="location.title">文件导出位置</span></div>
         <div class="folder-choice-line">
-          <button class="btn" id="chooseExportLocationBtn" type="button">选择 ZIP 保存位置</button>
-          <span class="folder-status" id="exportLocationStatus">未选择，使用浏览器默认下载位置</span>
+          <button class="btn" id="chooseExportLocationBtn" type="button" data-i18n="location.zip.button">选择 ZIP 保存位置</button>
+          <span class="folder-status" id="exportLocationStatus" data-i18n="location.defaultStatus">未选择，使用浏览器默认下载位置</span>
         </div>
-        <p class="small-help" id="exportLocationHelp">可选：选择后，ZIP 会直接保存到你指定的位置；不选择则下载到浏览器默认下载目录。</p>
+        <p class="small-help" id="exportLocationHelp" data-i18n="location.zip.help">可选：选择后，ZIP 会直接保存到你指定的位置；不选择则下载到浏览器默认下载目录。</p>
       </div>
     </div>
 
     <div class="field">
-      <div class="field-label"><span>导出分辨率</span><span id="resolutionHint">原始尺寸</span></div>
-      <select id="resolutionPreset" aria-label="导出分辨率">
-        <option value="original">原始视频尺寸</option>
-        <option value="2160">4K / 长边 2160 px</option>
-        <option value="1440">2K / 长边 1440 px</option>
-        <option value="1080">Full HD / 长边 1080 px</option>
-        <option value="720">HD / 长边 720 px</option>
-        <option value="custom">自定义宽高</option>
+      <div class="field-label"><span data-i18n="resolution.title">导出分辨率</span><span id="resolutionHint">原始尺寸</span></div>
+      <select id="resolutionPreset" aria-label="导出分辨率" data-i18n-aria-label="resolution.aria">
+        <option value="original" data-i18n="resolution.original">原始视频尺寸</option>
+        <option value="2160" data-i18n="resolution.2160">4K / 长边 2160 px</option>
+        <option value="1440" data-i18n="resolution.1440">2K / 长边 1440 px</option>
+        <option value="1080" data-i18n="resolution.1080">Full HD / 长边 1080 px</option>
+        <option value="720" data-i18n="resolution.720">HD / 长边 720 px</option>
+        <option value="custom" data-i18n="resolution.custom">自定义宽高</option>
       </select>
       <div class="resolution-row" id="customResolutionRow" hidden>
         <div class="input-row">
           <input id="outputWidth" type="number" min="1" step="1" value="1080" inputmode="numeric" />
-          <div class="field-unit">宽</div>
+          <div class="field-unit" data-i18n="unit.width">宽</div>
         </div>
         <div class="input-row">
           <input id="outputHeight" type="number" min="1" step="1" value="1920" inputmode="numeric" />
-          <div class="field-unit">高</div>
+          <div class="field-unit" data-i18n="unit.height">高</div>
         </div>
       </div>
       <label class="aspect-toggle">
         <input id="lockAspect" type="checkbox" checked />
-        <span>锁定视频原始比例</span>
+        <span data-i18n="resolution.lock">锁定视频原始比例</span>
       </label>
-      <p class="small-help">预设按长边等比例缩放；自定义可输出指定尺寸。</p>
+      <p class="small-help" data-i18n="resolution.help">预设按长边等比例缩放；自定义可输出指定尺寸。</p>
     </div>
 
         <div class="button-row">
-      <button class="btn primary" id="extractBtn" type="button" disabled>开始抽帧</button>
-      <button class="btn cancel" id="cancelBtn" type="button" disabled>停止任务</button>
+      <button class="btn primary" id="extractBtn" type="button" disabled data-i18n="button.extract">开始抽帧</button>
+      <button class="btn cancel" id="cancelBtn" type="button" disabled data-i18n="button.cancel">停止任务</button>
     </div>
-    <button class="btn wide" id="zipBtn" type="button" disabled>导出已选图片 ZIP</button>
-    <button class="btn wide clear" id="clearBtn" type="button" disabled>清空当前结果</button>
-    <div class="panel-footer">修改模式、间隔、帧数、格式或分辨率后，只更新计划；必须点击“开始抽帧”才会生成图片。</div>
+    <button class="btn wide" id="zipBtn" type="button" disabled data-i18n="button.exportZip">导出已选图片 ZIP</button>
+    <button class="btn wide clear" id="clearBtn" type="button" disabled data-i18n="button.clear">清空当前结果</button>
+    <div class="panel-footer" data-i18n="footer">修改模式、间隔、帧数、格式或分辨率后，只更新计划；必须点击“开始抽帧”才会生成图片。</div>
   </aside>
 
   <main class="app">
     <section class="hero">
       <div>
         <p class="eyebrow">LOCAL VIDEO FRAME EXTRACTOR</p>
-        <h1>从视频里，取走你需要的每一帧。</h1>
-        <p>支持按时间间隔或固定帧数抽取。所有文件仅在当前浏览器中处理，生成后可单独勾选并一次性导出 ZIP。</p>
+        <h1 data-i18n="hero.title">从视频里，取走你需要的每一帧。</h1>
+        <p data-i18n="hero.description">支持按时间间隔或固定帧数抽取。所有文件仅在当前浏览器中处理，生成后可单独勾选并一次性导出 ZIP。</p>
       </div>
       <div class="status-chip" id="statusChip"><i class="status-dot"></i><span id="statusText">等待导入视频</span></div>
     </section>
@@ -1425,8 +1456,8 @@
         <div class="video-area" id="videoArea">
           <div class="empty-video" id="emptyVideo">
             <div class="play-icon">▶</div>
-            <strong>这里会显示视频预览</strong>
-            <span>从左上角选择视频，程序将自动读取时长、尺寸和帧率。</span>
+            <strong data-i18n="preview.empty.title">这里会显示视频预览</strong>
+            <span data-i18n="preview.empty.description">从左上角选择视频，程序将自动读取时长、尺寸和帧率。</span>
           </div>
           <video id="previewVideo" controls playsinline preload="metadata"></video>
           <div class="video-meta" id="videoMeta">—</div>
@@ -1434,16 +1465,16 @@
       </div>
 
       <aside class="card stats-card">
-        <h2 class="card-title"><span>当前抽帧计划</span><span id="planState">未加载</span></h2>
+        <h2 class="card-title"><span data-i18n="plan.title">当前抽帧计划</span><span id="planState">未加载</span></h2>
         <ul class="summary-list">
-          <li><span>视频时长</span><strong id="durationValue">—</strong></li>
-          <li><span>视频尺寸</span><strong id="dimensionsValue">—</strong></li>
-          <li><span>导出尺寸</span><strong id="outputDimensionsValue">—</strong></li>
-          <li><span>检测帧率</span><strong id="fpsValue">—</strong></li>
-          <li><span>抽帧规则</span><strong id="ruleValue">—</strong></li>
-          <li><span>预计生成</span><strong id="estimateValue">—</strong></li>
-          <li><span>导出格式</span><strong id="formatValue">PNG</strong></li>
-          <li><span>导出名称</span><strong id="exportNameValue">—</strong></li>
+          <li><span data-i18n="summary.duration">视频时长</span><strong id="durationValue">—</strong></li>
+          <li><span data-i18n="summary.dimensions">视频尺寸</span><strong id="dimensionsValue">—</strong></li>
+          <li><span data-i18n="summary.outputDimensions">导出尺寸</span><strong id="outputDimensionsValue">—</strong></li>
+          <li><span data-i18n="summary.fps">检测帧率</span><strong id="fpsValue">—</strong></li>
+          <li><span data-i18n="summary.rule">抽帧规则</span><strong id="ruleValue">—</strong></li>
+          <li><span data-i18n="summary.estimate">预计生成</span><strong id="estimateValue">—</strong></li>
+          <li><span data-i18n="summary.format">导出格式</span><strong id="formatValue">PNG</strong></li>
+          <li><span data-i18n="summary.exportName">导出名称</span><strong id="exportNameValue">—</strong></li>
         </ul>
         <div class="notice" id="autoNotice"><b>等待手动开始：</b>导入视频和修改参数后会实时更新抽帧计划；确认后，请点击左上角“开始抽帧”。</div>
         <div class="progress-wrap" id="progressWrap">
@@ -1457,22 +1488,22 @@
       <div class="card frames-card">
         <div class="frames-toolbar">
           <div>
-            <h2>已抽取图片</h2>
+            <h2 data-i18n="frames.title">已抽取图片</h2>
             <p id="framesIntro">生成后，勾选要放进 ZIP 的图片。</p>
           </div>
           <div class="selection-actions">
             <span class="selection-count" id="selectionCount">已选 0 / 0</span>
-            <button class="tiny-btn" id="selectAllBtn" type="button">全选</button>
-            <button class="tiny-btn" id="selectNoneBtn" type="button">全不选</button>
-            <button class="tiny-btn" id="invertBtn" type="button">反选</button>
+            <button class="tiny-btn" id="selectAllBtn" type="button" data-i18n="button.selectAll">全选</button>
+            <button class="tiny-btn" id="selectNoneBtn" type="button" data-i18n="button.selectNone">全不选</button>
+            <button class="tiny-btn" id="invertBtn" type="button" data-i18n="button.invert">反选</button>
           </div>
         </div>
         <div class="frames-grid" id="framesGrid">
           <div class="empty-frames">
             <div>
               <div class="empty-icon">▦</div>
-              <strong>还没有抽取图片</strong>
-              <span>选择视频后会自动抽帧。<br/>生成图片会显示在这里。</span>
+              <strong data-i18n="frames.empty.title">还没有抽取图片</strong>
+              <span data-i18n-html="frames.empty.description">选择视频后会自动抽帧。<br/>生成图片会显示在这里。</span>
             </div>
           </div>
         </div>
@@ -1499,6 +1530,7 @@
         intervalSeconds: $('#intervalSeconds'),
         frameStride: $('#frameStride'),
         formatSelect: $('#formatSelect'),
+        heifHelp: $('#heifHelp'),
         exportFolderName: $('#exportFolderName'),
         exportImageName: $('#exportImageName'),
         exportMode: $('#exportMode'),
@@ -1544,6 +1576,8 @@
         selectAllBtn: $('#selectAllBtn'),
         selectNoneBtn: $('#selectNoneBtn'),
         invertBtn: $('#invertBtn'),
+        languageToggle: $('#languageToggle'),
+        languageLabel: $('#languageLabel'),
         themeToggle: $('#themeToggle'),
         themeIcon: $('#themeIcon'),
         themeLabel: $('#themeLabel'),
@@ -1564,9 +1598,91 @@
         directDirectoryLabel: '',
         zipSaveHandle: null,
         zipSaveLabel: '',
+        heifEncoder: null,
+        heifEncoderPromise: null,
       };
 
       const THEME_STORAGE_KEY = 'frame-lab-theme';
+      const LANGUAGE_STORAGE_KEY = 'frame-lab-language';
+      const LOCALES = {"zh":{"document.title":"视频抽帧工作台","brand.title":"视频抽帧工作台","brand.subtitle":"本地处理 · 不上传视频","panel.aria":"抽帧控制面板","upload.aria":"选择视频来源","upload.actions.aria":"手机视频来源","upload.title":"选择或拖入视频","upload.subtitle":"MP4 / MOV / WebM 等常见格式","upload.select":"选择视频","upload.select.title":"从相册或文件中选择已有视频","upload.camera":"原相机录像","upload.camera.title":"调用手机系统原相机录制视频","upload.help":"点击“原相机录像”会调用手机系统相机；录制完成后将自动导入并进入抽帧。","file.none":"尚未选择文件","mode.title":"抽帧模式","mode.aria":"抽帧模式","mode.time":"按秒抽帧","mode.frame":"按帧抽帧","mode.time.label":"按时间间隔","mode.frame.label":"按固定帧数","time.interval.title":"每隔多久抽取一帧","unit.second":"秒","time.interval.help":"例如填写 1，即每 1 秒截取一张图片。","frame.stride.title":"每隔多少原视频帧抽取","unit.frame":"帧","frame.stride.help":"系统会自动识别视频帧率，用于计算“每 N 帧”对应的抽取位置。","format.title":"导出图片格式","format.aria":"导出图片格式","format.png":"PNG（无损）","format.jpeg":"JPEG（体积小）","format.jpg":"JPG（体积小）","format.webp":"WebP（清晰省空间）","format.heif":"HEIF（高效压缩）","format.tif":"TIFF / TIF（无损）","format.help":"WebP 由浏览器本地编码；TIFF / TIF 为无压缩高质量格式，文件体积会明显更大。","format.heifHelp":"HEIF 会在第一次抽帧时加载本地浏览器编码器。请保持网络可用；若编码器加载失败，请改用 WebP、PNG、JPEG 或 TIFF / TIF。","folder.title":"文件夹名称","folder.placeholder":"默认跟随原视频名称","folder.help":"ZIP 模式：作为 ZIP 文件名和 ZIP 内文件夹名。直接导出：图片会保存到浏览器默认下载位置，不会创建系统文件夹。","imageName.title":"图片名称","imageName.placeholder":"默认跟随原视频名称","imageName.help":"作为每张图片的文件名前缀，系统会自动补上序号、时间码和图片格式。","export.title":"导出方式","export.aria":"导出方式","export.zip.option":"导出 ZIP 压缩包","export.direct.option":"直接导出","export.button.direct":"直接导出已选图片","export.button.zip":"导出已选图片 ZIP","export.browserDownload":"浏览器下载","export.selectedLocation":"已选位置：{name}","export.sequence":"序号","fileType.zip":"ZIP 压缩包","location.title":"文件导出位置","location.zip.button":"选择 ZIP 保存位置","location.folder.button":"选择图片导出文件夹","location.defaultStatus":"未选择，使用浏览器默认下载位置","location.selectedStatus":"已选择：{name}","location.folder.help.selected":"会在该位置创建“{folder}”文件夹并写入图片。请不要选择 Windows、Program Files 等系统目录。","location.folder.help.default":"可选：选择一个普通本地文件夹后，图片会直接写入该文件夹；不选择则逐张下载到浏览器默认下载位置。","location.zip.help.selected":"ZIP 导出时会直接写入已选位置。修改“文件夹名称”后，建议重新选择 ZIP 保存位置。","location.zip.help.default":"可选：选择后，ZIP 会直接保存到你指定的位置；不选择则下载到浏览器默认下载目录。","resolution.title":"导出分辨率","resolution.aria":"导出分辨率","resolution.original":"原始视频尺寸","resolution.2160":"4K / 长边 2160 px","resolution.1440":"2K / 长边 1440 px","resolution.1080":"Full HD / 长边 1080 px","resolution.720":"HD / 长边 720 px","resolution.custom":"自定义宽高","unit.width":"宽","unit.height":"高","resolution.lock":"锁定视频原始比例","resolution.help":"预设按长边等比例缩放；自定义可输出指定尺寸。","resolution.hintOriginal":"原始尺寸","button.extract":"开始抽帧","button.cancel":"停止任务","button.exportZip":"导出已选图片 ZIP","button.clear":"清空当前结果","button.selectAll":"全选","button.selectNone":"全不选","button.invert":"反选","footer":"修改模式、间隔、帧数、格式或分辨率后，只更新计划；必须点击“开始抽帧”才会生成图片。","hero.title":"从视频里，取走你需要的每一帧。","hero.description":"支持按时间间隔或固定帧数抽取。所有文件仅在当前浏览器中处理，生成后可单独勾选并一次性导出 ZIP。","status.waiting":"等待导入视频","preview.empty.title":"这里会显示视频预览","preview.empty.description":"从左上角选择视频，程序将自动读取时长、尺寸和帧率。","plan.title":"当前抽帧计划","plan.notLoaded":"未加载","plan.ruleTime":"每 {interval} 秒 1 张","plan.ruleFrame":"每 {stride} 帧 1 张","plan.overLimit":"超过 12,000 张","plan.estimate":"预计 {count} 张","summary.duration":"视频时长","summary.dimensions":"视频尺寸","summary.outputDimensions":"导出尺寸","summary.fps":"检测帧率","summary.rule":"抽帧规则","summary.estimate":"预计生成","summary.format":"导出格式","summary.exportName":"导出名称","notice.waiting":"<b>等待手动开始：</b>导入视频和修改参数后会实时更新抽帧计划；确认后，请点击左上角“开始抽帧”。","notice.videoReady":"<b>视频已就绪：</b>确认参数后，点击左上角“开始抽帧”。","notice.parameterUpdated":"<b>参数已更新：</b>当前图片不会自动重做。确认后请点击“开始抽帧”。","notice.stopped.withFrames":"<b>任务已停止：</b>已经生成的 {count} 张图片会保留，可直接导出 ZIP。","notice.stopped.empty":"<b>任务已停止：</b>尚未生成图片。你可以调整参数后重新开始。","notice.done":"<b>抽帧已完成：</b>下方已默认全选。取消不想导出的图片，再点击左上角“导出已选图片 ZIP”。","notice.directStarted":"<b>直接导出已开始：</b>图片会保存到浏览器默认下载位置。若浏览器询问是否允许多个下载，请选择允许。","progress.preparing":"正在准备…","frames.title":"已抽取图片","frames.intro.empty":"生成后，勾选要放进 ZIP 的图片。","frames.intro.summary":"共生成 {total} 张图片；已选 {selected} 张用于导出。","frames.selected":"已选 {selected} / {total}","frames.selected.initial":"已选 0 / 0","frames.empty.title":"还没有抽取图片","frames.empty.description":"选择视频后会自动抽帧。<br/>生成图片会显示在这里。","frames.empty.message":"生成后，勾选要放进 ZIP 的图片。","frames.preparing":"正在准备新的抽帧任务…","frames.reading":"正在读取视频信息…","frame.card.title":"第 {index} 张，{time}","frame.card.alt":"抽取帧 {index}","frame.card.aria":"选择第 {index} 张图片","theme.toLight":"切换为浅色模式","theme.toDark":"切换为深色模式","theme.light":"浅色","theme.dark":"深色","language.toEnglish":"切换为英文","language.toChinese":"切换为中文","language.aria":"切换中文或英文","error.heifInterface":"HEIF 编码模块接口不完整。","error.heifLoad":"HEIF 编码器加载失败。请确认网络可用，或改用 WebP、PNG、JPEG 或 TIFF / TIF。{detail}","error.tiffInvalid":"TIFF 图片尺寸无效，无法编码。","error.heifEncode":"HEIF 编码失败。","error.imageEncode":"图片编码失败。","error.webpUnsupported":"当前浏览器不支持 WebP 导出，请改用 PNG、JPEG、HEIF 或 TIFF / TIF。","error.videoRead":"视频读取失败，可能是不支持的格式或文件已损坏。","error.videoTimeout":"读取视频超时，请尝试重新选择文件。","error.seek":"定位视频帧失败。","error.videoUnsupported":"视频无法读取，请使用浏览器支持的 MP4、MOV 或 WebM 视频文件。","error.readVideo":"读取视频失败。","error.noTargets":"当前设置没有可抽取的图片，请检查抽帧间隔或帧数。","error.tooMany":"当前参数预计超过 12,000 张图片。请增大秒数间隔或帧数间隔后再试。","error.extract":"抽帧中断，请重新尝试。","error.folderPickerUnsupported":"当前浏览器不支持文件夹位置选择。请使用最新版 Chrome 或 Edge，或不选择位置并使用浏览器默认下载目录。","error.folderPicker":"无法选择该文件夹。请改选桌面、文档、下载或自建项目目录；不要选择 Windows、Program Files、浏览器安装目录等系统受保护文件夹。","error.savePickerUnsupported":"当前浏览器不支持保存位置选择。请使用最新版 Chrome 或 Edge，或不选择位置并使用浏览器默认下载目录。","error.zipSavePicker":"无法选择 ZIP 保存位置。请改选普通本地目录，避免系统受保护文件夹。","error.permissionZip":"未获得 ZIP 保存位置的写入权限。","error.selectFrames":"请先勾选至少一张图片。","error.zipComponent":"ZIP 组件未加载。请确认网络可以访问 cdnjs，再刷新页面后重试。","error.zipExport":"ZIP 导出失败，请重新尝试。","error.permissionFolder":"未获得所选文件夹的写入权限。","error.directExport":"直接导出失败。","error.directExportAdvice":"\n\n请改选桌面、文档、下载或自建项目目录；不要选择 Windows、Program Files 等系统目录。","error.dropVideo":"请拖入视频文件。","confirm.clear":"清空当前已经抽取的图片吗？此操作无法恢复。","status.reading":"正在读取视频…","status.detectingFps":"正在识别帧率…","status.videoReady":"视频已就绪，等待开始抽帧","status.cannotRead":"无法读取视频","status.parametersUpdated":"参数已更新，等待开始抽帧","status.stoppedWithFrames":"已停止，保留 {count} 张图片","status.stopped":"已停止抽帧","status.loadingHeif":"正在加载 HEIF 编码器…","status.extracting":"正在抽取图片…","status.done":"已抽取 {count} 张图片","status.extractFailed":"抽帧失败","status.zipPacking":"正在打包 ZIP…","status.zipSaved":"ZIP 已保存到指定位置","status.zipDownloading":"ZIP 已交给浏览器下载","status.folderWriting":"正在写入指定文件夹…","status.directExporting":"正在直接导出图片…","status.folderSaved":"图片已保存到指定文件夹","status.directDownloading":"图片已交给浏览器下载","status.exportFailed":"导出失败","status.cleared":"结果已清空，等待开始抽帧","progress.compressing":"正在压缩 {count} 张图片","progress.compressingStart":"正在压缩 0 / {count}","progress.zipSaved":"ZIP 已保存：{count} 张图片","progress.zipExported":"ZIP 已导出：{count} 张图片","progress.writingStart":"正在写入 0 / {count}","progress.downloadingStart":"正在下载 0 / {count}","progress.writing":"正在写入 {current} / {total}","progress.downloading":"正在下载 {current} / {total}","progress.folderSaved":"已保存 {count} 张图片到指定位置","progress.directStarted":"已开始直接导出 {count} 张图片","progress.heifPreparing":"正在准备 HEIF 编码…","progress.extracting":"正在抽取 {current} / {total}","progress.done":"已完成 {count} 张图片"},"en":{"document.title":"Video Frame Extractor","brand.title":"Video Frame Extractor","brand.subtitle":"Local processing · Videos stay on this device","panel.aria":"Frame extraction controls","upload.aria":"Choose video source","upload.actions.aria":"Mobile video source","upload.title":"Choose or drop a video","upload.subtitle":"MP4 / MOV / WebM and other common formats","upload.select":"Choose video","upload.select.title":"Choose an existing video from Photos or Files","upload.camera":"Record with camera","upload.camera.title":"Open the device camera to record a video","upload.help":"Tap “Record with camera” to open the device camera. The video imports automatically after recording.","file.none":"No file selected","mode.title":"Frame extraction mode","mode.aria":"Frame extraction mode","mode.time":"By time","mode.frame":"By frame","mode.time.label":"Time interval","mode.frame.label":"Frame interval","time.interval.title":"Extract one frame every","unit.second":"sec","time.interval.help":"For example, enter 1 to capture one image every second.","frame.stride.title":"Extract one frame every","unit.frame":"frames","frame.stride.help":"The app detects the video frame rate automatically to calculate each extraction point.","format.title":"Export image format","format.aria":"Export image format","format.png":"PNG (lossless)","format.jpeg":"JPEG (smaller files)","format.jpg":"JPG (smaller files)","format.webp":"WebP (sharp, compact)","format.heif":"HEIF (efficient compression)","format.tif":"TIFF / TIF (lossless)","format.help":"WebP is encoded locally in the browser. TIFF / TIF is an uncompressed, high-quality format with substantially larger files.","format.heifHelp":"HEIF loads a browser-side encoder on the first extraction. Keep the network available. If the encoder fails, use WebP, PNG, JPEG, or TIFF / TIF.","folder.title":"Folder name","folder.placeholder":"Default: source video name","folder.help":"ZIP mode uses this as the ZIP filename and the folder inside it. Direct export saves images to the browser download location and does not create a system folder.","imageName.title":"Image name","imageName.placeholder":"Default: source video name","imageName.help":"Used as the prefix for each image. The app automatically appends the sequence, timestamp, and file extension.","export.title":"Export method","export.aria":"Export method","export.zip.option":"Export ZIP archive","export.direct.option":"Direct export","export.button.direct":"Export selected images","export.button.zip":"Export selected images as ZIP","export.browserDownload":"Browser downloads","export.selectedLocation":"Selected: {name}","export.sequence":"sequence","fileType.zip":"ZIP archive","location.title":"Export location","location.zip.button":"Choose ZIP save location","location.folder.button":"Choose image export folder","location.defaultStatus":"Not selected; using the browser download location","location.selectedStatus":"Selected: {name}","location.folder.help.selected":"A “{folder}” folder will be created there for the images. Do not choose Windows, Program Files, or another system folder.","location.folder.help.default":"Optional: choose a normal local folder to write images directly there. Otherwise, each image downloads through the browser.","location.zip.help.selected":"The ZIP will be written directly to the selected location. Choose it again after changing the folder name.","location.zip.help.default":"Optional: choose a location to save the ZIP there. Otherwise, it downloads to the browser’s default download folder.","resolution.title":"Export resolution","resolution.aria":"Export resolution","resolution.original":"Original video size","resolution.2160":"4K / 2160 px long edge","resolution.1440":"2K / 1440 px long edge","resolution.1080":"Full HD / 1080 px long edge","resolution.720":"HD / 720 px long edge","resolution.custom":"Custom width & height","unit.width":"W","unit.height":"H","resolution.lock":"Lock source aspect ratio","resolution.help":"Presets scale proportionally by the long edge; custom mode exports the size you specify.","resolution.hintOriginal":"Original size","button.extract":"Extract frames","button.cancel":"Stop task","button.exportZip":"Export selected images as ZIP","button.clear":"Clear results","button.selectAll":"Select all","button.selectNone":"Select none","button.invert":"Invert selection","footer":"Changing the mode, interval, frame count, format, or resolution only updates the plan. Click “Extract frames” to create images.","hero.title":"Take exactly the frames you need from any video.","hero.description":"Extract by a time interval or a fixed frame interval. Files are processed only in this browser; select any results and export them together as a ZIP.","status.waiting":"Waiting for a video","preview.empty.title":"Your video preview appears here","preview.empty.description":"Choose a video from the panel. The app will read its duration, dimensions, and frame rate.","plan.title":"Current extraction plan","plan.notLoaded":"Not loaded","plan.ruleTime":"1 image every {interval} sec","plan.ruleFrame":"1 image every {stride} frames","plan.overLimit":"More than 12,000 images","plan.estimate":"Est. {count} images","summary.duration":"Video duration","summary.dimensions":"Video dimensions","summary.outputDimensions":"Output dimensions","summary.fps":"Detected frame rate","summary.rule":"Extraction rule","summary.estimate":"Estimated output","summary.format":"Export format","summary.exportName":"Export name","notice.waiting":"<b>Waiting for manual start:</b> import a video or adjust settings to update the extraction plan, then click “Extract frames”.","notice.videoReady":"<b>Video ready:</b> confirm the settings, then click “Extract frames”.","notice.parameterUpdated":"<b>Settings updated:</b> existing images are not remade automatically. Click “Extract frames” when ready.","notice.stopped.withFrames":"<b>Task stopped:</b> the {count} images already created are kept and can be exported.","notice.stopped.empty":"<b>Task stopped:</b> no image has been created. Adjust settings and start again.","notice.done":"<b>Extraction complete:</b> all images below are selected by default. Deselect any you do not want, then export the selected images.","notice.directStarted":"<b>Direct export started:</b> images are saving to the browser download location. Allow multiple downloads if your browser asks.","progress.preparing":"Preparing…","frames.title":"Extracted images","frames.intro.empty":"After extraction, select the images to include in the ZIP.","frames.intro.summary":"{total} images created; {selected} selected for export.","frames.selected":"Selected {selected} / {total}","frames.selected.initial":"Selected 0 / 0","frames.empty.title":"No images extracted yet","frames.empty.description":"Choose a video to start extracting frames.<br/>Your images will appear here.","frames.empty.message":"After extraction, select the images to include in the ZIP.","frames.preparing":"Preparing a new extraction task…","frames.reading":"Reading video details…","frame.card.title":"Image {index}, {time}","frame.card.alt":"Extracted frame {index}","frame.card.aria":"Select image {index}","theme.toLight":"Switch to light mode","theme.toDark":"Switch to dark mode","theme.light":"Light","theme.dark":"Dark","language.toEnglish":"Switch to English","language.toChinese":"切换为中文","language.aria":"Switch Chinese or English","error.heifInterface":"The HEIF encoder interface is incomplete.","error.heifLoad":"Could not load the HEIF encoder. Check your network, or use WebP, PNG, JPEG, or TIFF / TIF.{detail}","error.tiffInvalid":"Invalid TIFF dimensions; encoding cannot continue.","error.heifEncode":"HEIF encoding failed.","error.imageEncode":"Image encoding failed.","error.webpUnsupported":"This browser cannot export WebP. Use PNG, JPEG, HEIF, or TIFF / TIF instead.","error.videoRead":"The video could not be read. It may be unsupported or damaged.","error.videoTimeout":"Timed out reading the video. Try selecting the file again.","error.seek":"Could not seek to the video frame.","error.videoUnsupported":"The video could not be read. Use an MP4, MOV, or WebM file supported by this browser.","error.readVideo":"Could not read the video.","error.noTargets":"The current settings do not produce any frames. Check the time interval or frame interval.","error.tooMany":"The current settings would create more than 12,000 images. Increase the time interval or frame interval and try again.","error.extract":"Frame extraction was interrupted. Try again.","error.folderPickerUnsupported":"This browser cannot choose a folder location. Use the latest Chrome or Edge, or use the browser’s default download folder.","error.folderPicker":"Could not choose that folder. Select Desktop, Documents, Downloads, or a project folder instead; do not choose a protected system folder such as Windows, Program Files, or the browser install folder.","error.savePickerUnsupported":"This browser cannot choose a save location. Use the latest Chrome or Edge, or use the browser’s default download folder.","error.zipSavePicker":"Could not choose a ZIP save location. Select a normal local folder rather than a protected system folder.","error.permissionZip":"Write permission was not granted for the ZIP location.","error.selectFrames":"Select at least one image first.","error.zipComponent":"The ZIP component did not load. Confirm the browser can access cdnjs, then refresh and try again.","error.zipExport":"ZIP export failed. Try again.","error.permissionFolder":"Write permission was not granted for the selected folder.","error.directExport":"Direct export failed.","error.directExportAdvice":"\n\nChoose Desktop, Documents, Downloads, or a project folder; do not choose Windows, Program Files, or another system folder.","error.dropVideo":"Drop a video file here.","confirm.clear":"Clear all extracted images? This cannot be undone.","status.reading":"Reading video…","status.detectingFps":"Detecting frame rate…","status.videoReady":"Video ready; waiting to extract","status.cannotRead":"Unable to read video","status.parametersUpdated":"Settings updated; waiting to extract","status.stoppedWithFrames":"Stopped; kept {count} images","status.stopped":"Extraction stopped","status.loadingHeif":"Loading HEIF encoder…","status.extracting":"Extracting images…","status.done":"Extracted {count} images","status.extractFailed":"Extraction failed","status.zipPacking":"Packing ZIP…","status.zipSaved":"ZIP saved to selected location","status.zipDownloading":"ZIP sent to browser downloads","status.folderWriting":"Writing to selected folder…","status.directExporting":"Exporting images directly…","status.folderSaved":"Images saved to selected folder","status.directDownloading":"Images sent to browser downloads","status.exportFailed":"Export failed","status.cleared":"Results cleared; ready to extract","progress.compressing":"Compressing {count} images","progress.compressingStart":"Compressing 0 / {count}","progress.zipSaved":"ZIP saved: {count} images","progress.zipExported":"ZIP exported: {count} images","progress.writingStart":"Writing 0 / {count}","progress.downloadingStart":"Downloading 0 / {count}","progress.writing":"Writing {current} / {total}","progress.downloading":"Downloading {current} / {total}","progress.folderSaved":"Saved {count} images to selected location","progress.directStarted":"Direct export started for {count} images","progress.heifPreparing":"Preparing HEIF encoder…","progress.extracting":"Extracting {current} / {total}","progress.done":"Completed {count} images"}};
+      state.language = 'zh';
+
+      function t(key, variables = {}) {
+        const dictionary = LOCALES[state.language] || LOCALES.zh;
+        let value = dictionary[key] ?? LOCALES.zh[key] ?? key;
+        return String(value).replace(/\{(\w+)\}/g, (_match, name) => String(variables[name] ?? ''));
+      }
+
+      function getPreferredLanguage() {
+        try {
+          const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+          if (saved === 'zh' || saved === 'en') return saved;
+        } catch (_) {
+          // Local storage can be unavailable in restricted browser contexts.
+        }
+        return navigator.language?.toLowerCase().startsWith('zh') ? 'zh' : 'en';
+      }
+
+      function localizeStaticContent() {
+        document.documentElement.lang = state.language === 'en' ? 'en' : 'zh-CN';
+        document.title = t('document.title');
+        document.querySelectorAll('[data-i18n]').forEach((element) => {
+          element.textContent = t(element.dataset.i18n);
+        });
+        document.querySelectorAll('[data-i18n-html]').forEach((element) => {
+          element.innerHTML = t(element.dataset.i18nHtml);
+        });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach((element) => {
+          element.setAttribute('placeholder', t(element.dataset.i18nPlaceholder));
+        });
+        document.querySelectorAll('[data-i18n-title]').forEach((element) => {
+          element.setAttribute('title', t(element.dataset.i18nTitle));
+        });
+        document.querySelectorAll('[data-i18n-aria-label]').forEach((element) => {
+          element.setAttribute('aria-label', t(element.dataset.i18nAriaLabel));
+        });
+        if (!state.file) {
+          els.fileName.textContent = t('file.none');
+          els.statusText.textContent = t('status.waiting');
+          els.autoNotice.innerHTML = t('notice.waiting');
+        }
+        if (!els.progressWrap.classList.contains('show')) {
+          els.progressText.textContent = t('progress.preparing');
+        }
+      }
+
+      function applyLanguage(language, persist = true) {
+        const nextLanguage = language === 'en' ? 'en' : 'zh';
+        state.language = nextLanguage;
+        localizeStaticContent();
+
+        const isEnglish = nextLanguage === 'en';
+        els.languageToggle?.setAttribute('aria-pressed', String(isEnglish));
+        els.languageToggle?.setAttribute('aria-label', t('language.aria'));
+        els.languageToggle?.setAttribute('title', isEnglish ? t('language.toChinese') : t('language.toEnglish'));
+        if (els.languageLabel) els.languageLabel.textContent = isEnglish ? '中文' : 'EN';
+
+        if (document.documentElement.dataset.theme) {
+          applyTheme(document.documentElement.dataset.theme, false);
+        }
+        refreshPlan();
+        updateSelectionUI();
+
+        if (persist) {
+          try {
+            localStorage.setItem(LANGUAGE_STORAGE_KEY, nextLanguage);
+          } catch (_) {
+            // Persisting the language preference is optional.
+          }
+        }
+      }
+
+      function initLanguage() {
+        applyLanguage(getPreferredLanguage(), false);
+        els.languageToggle?.addEventListener('click', () => {
+          applyLanguage(state.language === 'en' ? 'zh' : 'en');
+        });
+      }
 
       function getPreferredTheme() {
         try {
@@ -1585,9 +1701,9 @@
 
         const isDark = nextTheme === 'dark';
         els.themeToggle?.setAttribute('aria-pressed', String(isDark));
-        els.themeToggle?.setAttribute('title', isDark ? '切换为浅色模式' : '切换为深色模式');
+        els.themeToggle?.setAttribute('title', isDark ? t('theme.toLight') : t('theme.toDark'));
         if (els.themeIcon) els.themeIcon.textContent = isDark ? '☀' : '☾';
-        if (els.themeLabel) els.themeLabel.textContent = isDark ? '浅色' : '深色';
+        if (els.themeLabel) els.themeLabel.textContent = isDark ? t('theme.light') : t('theme.dark');
 
         if (persist) {
           try {
@@ -1621,7 +1737,7 @@
       function sanitizeExportName(value, fallback) {
         const cleaned = String(value || '')
           .trim()
-          .replace(/\.(zip|png|jpe?g|webp|tiff?)$/i, '')
+          .replace(/\.(zip|png|jpe?g|webp|heif|tiff?)$/i, '')
           .replace(/[<>:"/\\|?*\x00-\x1F]+/g, '_')
           .replace(/\s+/g, '_')
           .replace(/_+/g, '_')
@@ -1646,30 +1762,30 @@
       function updateExportUI() {
         const direct = els.exportMode.value === 'folder';
         els.directFolderRow.hidden = false;
-        els.zipBtn.textContent = direct ? '直接导出已选图片' : '导出已选图片 ZIP';
+        els.zipBtn.textContent = direct ? t('export.button.direct') : t('export.button.zip');
 
         const exportSummary = direct
-          ? `${state.directDirectoryLabel ? `已选位置：${state.directDirectoryLabel}` : '浏览器下载'} · ${exportImageName()}_序号`
-          : `${state.zipSaveLabel ? `已选位置：${state.zipSaveLabel}` : `${exportFolderName()}.zip`} · ${exportImageName()}_序号`;
+          ? `${state.directDirectoryLabel ? t('export.selectedLocation', { name: state.directDirectoryLabel }) : t('export.browserDownload')} · ${exportImageName()}_${t('export.sequence')}`
+          : `${state.zipSaveLabel ? t('export.selectedLocation', { name: state.zipSaveLabel }) : `${exportFolderName()}.zip`} · ${exportImageName()}_${t('export.sequence')}`;
 
         els.exportNameValue.textContent = exportSummary;
 
         if (direct) {
-          els.chooseExportLocationBtn.textContent = '选择图片导出文件夹';
+          els.chooseExportLocationBtn.textContent = t('location.folder.button');
           els.exportLocationStatus.textContent = state.directDirectoryLabel
-            ? `已选择：${state.directDirectoryLabel}`
-            : '未选择，图片将下载到浏览器默认下载位置';
+            ? t('location.selectedStatus', { name: state.directDirectoryLabel })
+            : t('location.defaultStatus');
           els.exportLocationHelp.textContent = state.directDirectoryLabel
-            ? `会在该位置创建“${exportFolderName()}”文件夹并写入图片。请不要选择 Windows、Program Files 等系统目录。`
-            : '可选：选择一个普通本地文件夹后，图片会直接写入该文件夹；不选择则逐张下载到浏览器默认下载位置。';
+            ? t('location.folder.help.selected', { folder: exportFolderName() })
+            : t('location.folder.help.default');
         } else {
-          els.chooseExportLocationBtn.textContent = '选择 ZIP 保存位置';
+          els.chooseExportLocationBtn.textContent = t('location.zip.button');
           els.exportLocationStatus.textContent = state.zipSaveLabel
-            ? `已选择：${state.zipSaveLabel}`
-            : '未选择，ZIP 将下载到浏览器默认下载位置';
+            ? t('location.selectedStatus', { name: state.zipSaveLabel })
+            : t('location.defaultStatus');
           els.exportLocationHelp.textContent = state.zipSaveLabel
-            ? 'ZIP 导出时会直接写入已选位置。修改“文件夹名称”后，建议重新选择 ZIP 保存位置。'
-            : '可选：选择后，ZIP 会直接保存到你指定的位置；不选择则下载到浏览器默认下载目录。';
+            ? t('location.zip.help.selected')
+            : t('location.zip.help.default');
         }
       }
 
@@ -1703,7 +1819,7 @@
         const custom = els.resolutionPreset.value === 'custom';
         els.customResolutionRow.hidden = !custom;
         const dims = getOutputDimensions();
-        els.resolutionHint.textContent = dims.width ? `${dims.width} × ${dims.height}` : '原始尺寸';
+        els.resolutionHint.textContent = dims.width ? `${dims.width} × ${dims.height}` : t('resolution.hintOriginal');
         if (sync && state.width && state.height) {
           if (!custom) {
             els.outputWidth.value = dims.width;
@@ -1743,10 +1859,15 @@
         return els.formatSelect.value === 'tif' || els.formatSelect.value === 'tiff';
       }
 
+      function isHeifFormat() {
+        return els.formatSelect.value === 'heif';
+      }
+
       function currentFormatLabel() {
         const value = els.formatSelect.value;
         if (value === 'jpeg') return 'JPEG';
         if (value === 'webp') return 'WebP';
+        if (isHeifFormat()) return 'HEIF';
         if (isTiffFormat()) return 'TIFF / TIF';
         return value.toUpperCase();
       }
@@ -1757,6 +1878,51 @@
         return 'image/jpeg';
       }
 
+      function updateHeifUI() {
+        els.heifHelp.hidden = !isHeifFormat();
+      }
+
+      async function loadHeifEncoder() {
+        if (state.heifEncoder) return state.heifEncoder;
+        if (state.heifEncoderPromise) return state.heifEncoderPromise;
+
+        state.heifEncoderPromise = (async () => {
+          const moduleUrls = [
+            'https://esm.sh/elheif@0.1.0?bundle',
+            'https://cdn.jsdelivr.net/npm/elheif@0.1.0/pkg/index.js',
+          ];
+          let lastError = null;
+
+          for (const url of moduleUrls) {
+            try {
+              const loaded = await import(url);
+              const api = loaded.default && typeof loaded.default.ensureInitialized === 'function'
+                ? loaded.default
+                : loaded;
+
+              if (typeof api.ensureInitialized !== 'function' || typeof api.jsEncodeImage !== 'function') {
+                throw new Error(t('error.heifInterface'));
+              }
+
+              await api.ensureInitialized();
+              state.heifEncoder = api;
+              return api;
+            } catch (error) {
+              lastError = error;
+            }
+          }
+
+          const detail = lastError?.message ? ` ${lastError.message}` : '';
+          throw new Error(t('error.heifLoad', { detail }));
+        })();
+
+        try {
+          return await state.heifEncoderPromise;
+        } finally {
+          if (!state.heifEncoder) state.heifEncoderPromise = null;
+        }
+      }
+
       function canvasToTiffBlob(canvas) {
         const context = canvas.getContext('2d', { willReadFrequently: true });
         const rgba = context.getImageData(0, 0, canvas.width, canvas.height).data;
@@ -1765,7 +1931,7 @@
         const pixelByteLength = width * height * 3;
 
         if (!Number.isSafeInteger(pixelByteLength) || pixelByteLength <= 0) {
-          throw new Error('TIFF 图片尺寸无效，无法编码。');
+          throw new Error(t('error.tiffInvalid'));
         }
 
         // Baseline TIFF, little-endian, RGB 8-bit, uncompressed.
@@ -1828,17 +1994,31 @@
       async function canvasToExportBlob(canvas) {
         if (isTiffFormat()) return canvasToTiffBlob(canvas);
 
+        if (isHeifFormat()) {
+          const encoder = await loadHeifEncoder();
+          const context = canvas.getContext('2d', { willReadFrequently: true });
+          const rgba = context.getImageData(0, 0, canvas.width, canvas.height);
+          const bytes = new Uint8Array(rgba.data.buffer.slice(0));
+          const result = encoder.jsEncodeImage(bytes, canvas.width, canvas.height);
+
+          if (!result || result.err || !result.data?.length) {
+            throw new Error(result?.err || t('error.heifEncode'));
+          }
+
+          return new Blob([result.data], { type: 'image/heif' });
+        }
+
         const mime = mimeFromFormat();
         const blob = await new Promise((resolve, reject) => {
           canvas.toBlob(
-            (result) => result ? resolve(result) : reject(new Error('图片编码失败。')),
+            (result) => result ? resolve(result) : reject(new Error(t('error.imageEncode'))),
             mime,
             mime === 'image/png' ? undefined : 0.94
           );
         });
 
         if (mime === 'image/webp' && blob.type !== 'image/webp') {
-          throw new Error('当前浏览器不支持 WebP 导出，请改用 PNG、JPEG 或 TIFF / TIF。');
+          throw new Error(t('error.webpUnsupported'));
         }
         return blob;
       }
@@ -1869,7 +2049,7 @@
         els.frameModeBtn.classList.toggle('active', !isTime);
         els.timeSettings.hidden = !isTime;
         els.frameSettings.hidden = isTime;
-        els.modeLabel.textContent = isTime ? '按时间间隔' : '按固定帧数';
+        els.modeLabel.textContent = isTime ? t('mode.time.label') : t('mode.frame.label');
         refreshPlan();
         markParametersUpdated();
       }
@@ -1899,6 +2079,7 @@
 
       function refreshPlan() {
         els.formatValue.textContent = currentFormatLabel();
+        updateHeifUI();
         updateResolutionUI(false);
         updateExportUI();
         if (!state.duration) {
@@ -1908,7 +2089,7 @@
           els.fpsValue.textContent = '—';
           els.ruleValue.textContent = '—';
           els.estimateValue.textContent = '—';
-          els.planState.textContent = '未加载';
+          els.planState.textContent = t('plan.notLoaded');
           return;
         }
 
@@ -1923,17 +2104,17 @@
         els.dimensionsValue.textContent = `${state.width} × ${state.height}`;
         els.outputDimensionsValue.textContent = `${dims.width} × ${dims.height}`;
         els.fpsValue.textContent = `${fps.toFixed(fps % 1 ? 2 : 0)} FPS`;
-        els.ruleValue.textContent = isTime ? `每 ${interval} 秒 1 张` : `每 ${stride} 帧 1 张`;
-        els.estimateValue.textContent = targets.length > 12000 ? '超过 12,000 张' : `${targets.length.toLocaleString()} 张`;
-        els.planState.textContent = `预计 ${targets.length.toLocaleString()} 张`;
+        els.ruleValue.textContent = isTime ? t('plan.ruleTime', { interval }) : t('plan.ruleFrame', { stride });
+        els.estimateValue.textContent = targets.length > 12000 ? t('plan.overLimit') : t('plan.estimate', { count: targets.length.toLocaleString() });
+        els.planState.textContent = t('plan.estimate', { count: targets.length.toLocaleString() });
       }
 
-      function renderEmptyFrames(message = '生成后，勾选要放进 ZIP 的图片。') {
+      function renderEmptyFrames(message = t('frames.empty.message')) {
         els.framesGrid.innerHTML = `
           <div class="empty-frames">
             <div>
               <div class="empty-icon">▦</div>
-              <strong>还没有抽取图片</strong>
+              <strong>${t('frames.empty.title')}</strong>
               <span>${message}</span>
             </div>
           </div>`;
@@ -1946,7 +2127,7 @@
         state.frames = [];
       }
 
-      function clearFrames(message = '正在准备新的抽帧任务…') {
+      function clearFrames(message = t('frames.preparing')) {
         revokeFrames();
         renderEmptyFrames(message);
         updateSelectionUI();
@@ -1956,10 +2137,10 @@
       function makeFrameCard(frame, index) {
         const card = document.createElement('label');
         card.className = `frame-card${frame.selected ? ' selected' : ''}`;
-        card.title = `第 ${index + 1} 张，${displayTime(frame.time)}`;
+        card.title = t('frame.card.title', { index: index + 1, time: displayTime(frame.time) });
         card.innerHTML = `
-          <img src="${frame.url}" alt="抽取帧 ${index + 1}" />
-          <input class="check" type="checkbox" ${frame.selected ? 'checked' : ''} aria-label="选择第 ${index + 1} 张图片" />
+          <img src="${frame.url}" alt="${t('frame.card.alt', { index: index + 1 })}" />
+          <input class="check" type="checkbox" ${frame.selected ? 'checked' : ''} aria-label="${t('frame.card.aria', { index: index + 1 })}" />
           <div class="frame-info">
             <span class="frame-time">${displayTime(frame.time)}</span>
             <span class="frame-file">${exportFrameName(frame, index)}</span>
@@ -2000,14 +2181,14 @@
       function updateSelectionUI() {
         const total = state.frames.length;
         const selected = state.frames.filter(f => f.selected).length;
-        els.selectionCount.textContent = `已选 ${selected} / ${total}`;
+        els.selectionCount.textContent = t('frames.selected', { selected, total });
         els.zipBtn.disabled = selected === 0 || state.extracting;
         els.clearBtn.disabled = total === 0 && !state.extracting;
         updateExportUI();
         els.selectAllBtn.disabled = total === 0;
         els.selectNoneBtn.disabled = total === 0;
         els.invertBtn.disabled = total === 0;
-        els.framesIntro.textContent = total ? `共生成 ${total} 张图片；已选 ${selected} 张用于导出。` : '生成后，勾选要放进 ZIP 的图片。';
+        els.framesIntro.textContent = total ? t('frames.intro.summary', { total, selected }) : t('frames.intro.empty');
       }
 
       function waitForEvent(target, eventName, timeout = 12000) {
@@ -2022,8 +2203,8 @@
             fn(value);
           };
           const onEvent = () => done(resolve);
-          const onError = () => done(reject, new Error('视频读取失败，可能是不支持的格式或文件已损坏。'));
-          const timer = setTimeout(() => done(reject, new Error('读取视频超时，请尝试重新选择文件。')), timeout);
+          const onError = () => done(reject, new Error(t('error.videoRead')));
+          const timer = setTimeout(() => done(reject, new Error(t('error.videoTimeout'))), timeout);
           target.addEventListener(eventName, onEvent, { once: true });
           target.addEventListener('error', onError, { once: true });
         });
@@ -2050,7 +2231,7 @@
             if (settled) return;
             settled = true;
             cleanup();
-            reject(new Error('定位视频帧失败。'));
+            reject(new Error(t('error.seek')));
           };
 
           if (Math.abs(video.currentTime - target) < 0.002) {
@@ -2070,7 +2251,7 @@
 
       function canvasToBlob(canvas, mime) {
         return new Promise((resolve, reject) => {
-          canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error('图片编码失败。')), mime, mime === 'image/png' ? undefined : 0.94);
+          canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error(t('error.imageEncode'))), mime, mime === 'image/png' ? undefined : 0.94);
         });
       }
 
@@ -2125,7 +2306,7 @@
       async function loadVideo(file) {
         if (!file) return;
         cancelExtraction();
-        clearFrames('正在读取视频信息…');
+        clearFrames(t('frames.reading'));
 
         if (state.url) URL.revokeObjectURL(state.url);
         state.file = file;
@@ -2141,7 +2322,7 @@
         els.workVideo.src = state.url;
         els.videoArea.classList.add('loaded');
         els.emptyVideo.hidden = true;
-        setStatus('正在读取视频…', 'busy');
+        setStatus(t('status.reading'), 'busy');
 
         try {
           await Promise.all([
@@ -2153,7 +2334,7 @@
           state.width = els.workVideo.videoWidth;
           state.height = els.workVideo.videoHeight;
           els.videoMeta.textContent = `${file.name} · ${state.width} × ${state.height} · ${displayTime(state.duration)}`;
-          setStatus('正在识别帧率…', 'busy');
+          setStatus(t('status.detectingFps'), 'busy');
           state.fps = await detectFps();
           els.outputWidth.value = state.width;
           els.outputHeight.value = state.height;
@@ -2161,23 +2342,23 @@
           updateResolutionUI(true);
           refreshPlan();
           els.extractBtn.disabled = false;
-          setStatus('视频已就绪，等待开始抽帧', 'ready');
-          els.autoNotice.innerHTML = '<b>视频已就绪：</b>确认参数后，点击左上角“开始抽帧”。';
+          setStatus(t('status.videoReady'), 'ready');
+          els.autoNotice.innerHTML = t('notice.videoReady');
         } catch (error) {
           state.duration = 0;
           state.width = 0;
           state.height = 0;
           els.extractBtn.disabled = true;
-          renderEmptyFrames('视频无法读取，请使用浏览器支持的 MP4、MOV 或 WebM 视频文件。');
-          setStatus('无法读取视频');
-          alert(error.message || '读取视频失败。');
+          renderEmptyFrames(t('error.videoUnsupported'));
+          setStatus(t('status.cannotRead'));
+          alert(error.message || t('error.readVideo'));
         }
       }
 
       function markParametersUpdated() {
         if (!state.duration || !state.file || state.extracting) return;
-        setStatus('参数已更新，等待开始抽帧', 'ready');
-        els.autoNotice.innerHTML = '<b>参数已更新：</b>当前图片不会自动重做。确认后请点击“开始抽帧”。';
+        setStatus(t('status.parametersUpdated'), 'ready');
+        els.autoNotice.innerHTML = t('notice.parameterUpdated');
       }
 
       function cancelExtraction() {
@@ -2186,12 +2367,12 @@
         state.extracting = false;
         els.workVideo.pause();
         setStatus(
-          state.frames.length ? `已停止，保留 ${state.frames.length} 张图片` : '已停止抽帧',
+          state.frames.length ? t('status.stoppedWithFrames', { count: state.frames.length }) : t('status.stopped'),
           state.duration ? 'ready' : 'idle'
         );
         els.autoNotice.innerHTML = state.frames.length
-          ? `<b>任务已停止：</b>已经生成的 ${state.frames.length} 张图片会保留，可直接导出 ZIP。`
-          : '<b>任务已停止：</b>尚未生成图片。你可以调整参数后重新开始。';
+          ? t('notice.stopped.withFrames', { count: state.frames.length })
+          : t('notice.stopped.empty');
         updateSelectionUI();
       }
 
@@ -2200,12 +2381,12 @@
         const targets = buildTargets();
 
         if (!targets.length) {
-          alert('当前设置没有可抽取的图片，请检查抽帧间隔或帧数。');
+          alert(t('error.noTargets'));
           return;
         }
 
         if (targets.length > 12000) {
-          alert('当前参数预计超过 12,000 张图片。请增大秒数间隔或帧数间隔后再试。');
+          alert(t('error.tooMany'));
           return;
         }
 
@@ -2216,8 +2397,8 @@
         els.zipBtn.disabled = true;
         els.clearBtn.disabled = false;
         clearFrames();
-        setStatus('正在抽取图片…', 'busy');
-        setProgress(0, `正在抽取 0 / ${targets.length}`);
+        setStatus(isHeifFormat() ? t('status.loadingHeif') : t('status.extracting'), 'busy');
+        setProgress(0, isHeifFormat() ? t('progress.heifPreparing') : t('progress.extracting', { current: 0, total: targets.length }));
 
         const video = els.workVideo;
         const canvas = els.workCanvas;
@@ -2233,7 +2414,7 @@
             if (jobId !== state.jobId) throw new Error('__CANCELED__');
 
             ctx.drawImage(video, 0, 0, outputDims.width, outputDims.height);
-            const previewBlobPromise = isTiffFormat()
+            const previewBlobPromise = (isTiffFormat() || isHeifFormat())
               ? canvasToBlob(canvas, 'image/jpeg')
               : null;
             const blob = await canvasToExportBlob(canvas);
@@ -2243,27 +2424,27 @@
               sequence: i + 1,
               blob,
               selected: true,
-              // TIFF is exported as .tif, while the card keeps a browser-friendly JPEG preview.
+              // TIFF / HEIF is exported in its target format, while the card keeps a browser-friendly JPEG preview.
               url: URL.createObjectURL(previewBlob),
             };
             state.frames.push(frame);
             appendFrame(frame);
 
             const percent = ((i + 1) / targets.length) * 100;
-            setProgress(percent, `正在抽取 ${i + 1} / ${targets.length}`);
+            setProgress(percent, t('progress.extracting', { current: i + 1, total: targets.length }));
             if (i % 4 === 3) await new Promise(r => requestAnimationFrame(r));
           }
 
           if (jobId !== state.jobId) return;
-          setProgress(100, `已完成 ${state.frames.length} 张图片`);
-          setStatus(`已抽取 ${state.frames.length} 张图片`, 'ready');
-          els.autoNotice.innerHTML = `<b>抽帧已完成：</b>下方已默认全选。取消不想导出的图片，再点击左上角“导出已选图片 ZIP”。`;
+          setProgress(100, t('progress.done', { count: state.frames.length }));
+          setStatus(t('status.done', { count: state.frames.length }), 'ready');
+          els.autoNotice.innerHTML = t('notice.done');
           setTimeout(hideProgress, 900);
         } catch (error) {
           if (error.message !== '__CANCELED__') {
             console.error(error);
-            alert(error.message || '抽帧中断，请重新尝试。');
-            setStatus('抽帧失败', state.duration ? 'ready' : 'idle');
+            alert(error.message || t('error.extract'));
+            setStatus(t('status.extractFailed'), state.duration ? 'ready' : 'idle');
           }
         } finally {
           if (jobId === state.jobId) {
@@ -2289,20 +2470,20 @@
 
         if (direct) {
           if (!('showDirectoryPicker' in window)) {
-            alert('当前浏览器不支持文件夹位置选择。请使用最新版 Chrome 或 Edge，或不选择位置并使用浏览器默认下载目录。');
+            alert(t('error.folderPickerUnsupported'));
             return false;
           }
           try {
             const handle = await window.showDirectoryPicker({ mode: 'readwrite', startIn: 'downloads' });
             state.directDirectoryHandle = handle;
-            state.directDirectoryLabel = handle.name || '已选择文件夹';
+            state.directDirectoryLabel = handle.name || t('location.selectedStatus', { name: '' }).replace(/：?$/, '');
             updateExportUI();
             return true;
           } catch (error) {
             if (error?.name !== 'AbortError') {
               console.error(error);
               alert(
-                '无法选择该文件夹。请改选桌面、文档、下载或自建项目目录；不要选择 Windows、Program Files、浏览器安装目录等系统受保护文件夹。'
+                t('error.folderPicker')
               );
             }
             return false;
@@ -2310,7 +2491,7 @@
         }
 
         if (!('showSaveFilePicker' in window)) {
-          alert('当前浏览器不支持保存位置选择。请使用最新版 Chrome 或 Edge，或不选择位置并使用浏览器默认下载目录。');
+          alert(t('error.savePickerUnsupported'));
           return false;
         }
 
@@ -2319,7 +2500,7 @@
             suggestedName: `${exportFolderName()}.zip`,
             startIn: 'downloads',
             types: [{
-              description: 'ZIP 压缩包',
+              description: t('fileType.zip'),
               accept: { 'application/zip': ['.zip'] },
             }],
           });
@@ -2330,7 +2511,7 @@
         } catch (error) {
           if (error?.name !== 'AbortError') {
             console.error(error);
-            alert('无法选择 ZIP 保存位置。请改选普通本地目录，避免系统受保护文件夹。');
+            alert(t('error.zipSavePicker'));
           }
           return false;
         }
@@ -2345,19 +2526,19 @@
       async function exportZip() {
         const selected = selectedFrames();
         if (!selected.length) {
-          alert('请先勾选至少一张图片。');
+          alert(t('error.selectFrames'));
           return;
         }
         if (!window.JSZip) {
-          alert('ZIP 组件未加载。请确认网络可以访问 cdnjs，再刷新页面后重试。');
+          alert(t('error.zipComponent'));
           return;
         }
 
         const originalText = els.zipBtn.textContent;
         els.zipBtn.disabled = true;
-        els.zipBtn.textContent = '正在打包 ZIP…';
-        setStatus('正在打包 ZIP…', 'busy');
-        setProgress(0, `正在压缩 0 / ${selected.length}`);
+        els.zipBtn.textContent = t('status.zipPacking');
+        setStatus(t('status.zipPacking'), 'busy');
+        setProgress(0, t('progress.compressingStart', { count: selected.length }));
 
         try {
           const zip = new JSZip();
@@ -2366,19 +2547,19 @@
 
           const zipBlob = await zip.generateAsync(
             { type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } },
-            (metadata) => setProgress(metadata.percent, `正在压缩 ${selected.length} 张图片`)
+            (metadata) => setProgress(metadata.percent, t('progress.compressing', { count: selected.length }))
           );
 
           if (state.zipSaveHandle) {
             const allowed = await ensureWritePermission(state.zipSaveHandle);
-            if (!allowed) throw new Error('未获得 ZIP 保存位置的写入权限。');
+            if (!allowed) throw new Error(t('error.permissionZip'));
 
             const writable = await state.zipSaveHandle.createWritable();
             await writable.write(zipBlob);
             await writable.close();
 
-            setProgress(100, `ZIP 已保存：${selected.length} 张图片`);
-            setStatus('ZIP 已保存到指定位置', 'ready');
+            setProgress(100, t('progress.zipSaved', { count: selected.length }));
+            setStatus(t('status.zipSaved'), 'ready');
           } else {
             const link = document.createElement('a');
             const zipUrl = URL.createObjectURL(zipBlob);
@@ -2388,14 +2569,14 @@
             link.click();
             link.remove();
             setTimeout(() => URL.revokeObjectURL(zipUrl), 1200);
-            setProgress(100, `ZIP 已导出：${selected.length} 张图片`);
-            setStatus('ZIP 已交给浏览器下载', 'ready');
+            setProgress(100, t('progress.zipExported', { count: selected.length }));
+            setStatus(t('status.zipDownloading'), 'ready');
           }
           setTimeout(hideProgress, 900);
         } catch (error) {
           console.error(error);
-          alert('ZIP 导出失败，请重新尝试。');
-          setStatus('导出失败', 'ready');
+          alert(t('error.zipExport'));
+          setStatus(t('status.exportFailed'), 'ready');
         } finally {
           updateExportUI();
           updateSelectionUI();
@@ -2405,20 +2586,20 @@
       async function exportToFolder() {
         const selected = selectedFrames();
         if (!selected.length) {
-          alert('请先勾选至少一张图片。');
+          alert(t('error.selectFrames'));
           return;
         }
 
         const hasLocation = Boolean(state.directDirectoryHandle);
         els.zipBtn.disabled = true;
-        els.zipBtn.textContent = hasLocation ? '正在写入图片…' : '正在直接导出…';
-        setStatus(hasLocation ? '正在写入指定文件夹…' : '正在直接导出图片…', 'busy');
-        setProgress(0, hasLocation ? `正在写入 0 / ${selected.length}` : `正在下载 0 / ${selected.length}`);
+        els.zipBtn.textContent = hasLocation ? t('status.folderWriting') : t('status.directExporting');
+        setStatus(hasLocation ? t('status.folderWriting') : t('status.directExporting'), 'busy');
+        setProgress(0, hasLocation ? t('progress.writingStart', { count: selected.length }) : t('progress.downloadingStart', { count: selected.length }));
 
         try {
           if (hasLocation) {
             const allowed = await ensureWritePermission(state.directDirectoryHandle);
-            if (!allowed) throw new Error('未获得所选文件夹的写入权限。');
+            if (!allowed) throw new Error(t('error.permissionFolder'));
 
             const targetFolder = await state.directDirectoryHandle.getDirectoryHandle(exportFolderName(), { create: true });
             for (let index = 0; index < selected.length; index += 1) {
@@ -2427,11 +2608,11 @@
               const writable = await fileHandle.createWritable();
               await writable.write(frame.blob);
               await writable.close();
-              setProgress(((index + 1) / selected.length) * 100, `正在写入 ${index + 1} / ${selected.length}`);
+              setProgress(((index + 1) / selected.length) * 100, t('progress.writing', { current: index + 1, total: selected.length }));
             }
 
-            setProgress(100, `已保存 ${selected.length} 张图片到指定位置`);
-            setStatus('图片已保存到指定文件夹', 'ready');
+            setProgress(100, t('progress.folderSaved', { count: selected.length }));
+            setStatus(t('status.folderSaved'), 'ready');
           } else {
             for (let index = 0; index < selected.length; index += 1) {
               const frame = selected[index];
@@ -2445,22 +2626,22 @@
               link.remove();
 
               setTimeout(() => URL.revokeObjectURL(url), 12000);
-              setProgress(((index + 1) / selected.length) * 100, `正在下载 ${index + 1} / ${selected.length}`);
+              setProgress(((index + 1) / selected.length) * 100, t('progress.downloading', { current: index + 1, total: selected.length }));
               await new Promise(resolve => setTimeout(resolve, 120));
             }
 
-            setProgress(100, `已开始直接导出 ${selected.length} 张图片`);
-            setStatus('图片已交给浏览器下载', 'ready');
-            els.autoNotice.innerHTML = '<b>直接导出已开始：</b>图片会保存到浏览器默认下载位置。若浏览器询问是否允许多个下载，请选择允许。';
+            setProgress(100, t('progress.directStarted', { count: selected.length }));
+            setStatus(t('status.directDownloading'), 'ready');
+            els.autoNotice.innerHTML = t('notice.directStarted');
           }
 
           setTimeout(hideProgress, 1000);
         } catch (error) {
           console.error(error);
           alert(
-            `${error?.message || '直接导出失败。'}\n\n请改选桌面、文档、下载或自建项目目录；不要选择 Windows、Program Files 等系统目录。`
+            `${error?.message || t('error.directExport')}${t('error.directExportAdvice')}`
           );
-          setStatus('导出失败', 'ready');
+          setStatus(t('status.exportFailed'), 'ready');
         } finally {
           updateExportUI();
           updateSelectionUI();
@@ -2567,7 +2748,7 @@
         els.dropzone.classList.remove('dragover');
         const file = [...event.dataTransfer.files].find(f => f.type.startsWith('video/'));
         if (file) loadVideo(file);
-        else alert('请拖入视频文件。');
+        else alert(t('error.dropVideo'));
       });
 
       els.extractBtn.addEventListener('click', extractFrames);
@@ -2575,11 +2756,11 @@
       els.zipBtn.addEventListener('click', runExport);
       els.clearBtn.addEventListener('click', () => {
         if (!state.frames.length && !state.extracting) return;
-        const okay = confirm('清空当前已经抽取的图片吗？此操作无法恢复。');
+        const okay = confirm(t('confirm.clear'));
         if (!okay) return;
         if (state.extracting) cancelExtraction();
-        clearFrames('已清空当前结果。');
-        setStatus('结果已清空，等待开始抽帧', state.duration ? 'ready' : 'idle');
+        clearFrames(t('status.cleared'));
+        setStatus(t('status.cleared'), state.duration ? 'ready' : 'idle');
       });
 
       els.selectAllBtn.addEventListener('click', () => setAllSelection(true));
@@ -2594,6 +2775,7 @@
         revokeFrames();
       });
 
+      initLanguage();
       initTheme();
       refreshPlan();
       updateExportUI();
