@@ -7,6 +7,7 @@
 4响应式重新优化： 宽屏电脑：左侧固定控制面板。 
 中等宽度电脑 / 平板：控制面板自动回到页面顶部，避免挤压视频预览和数据区 
 手机：按钮纵向排列、文件夹选择区不遮挡、抽帧图片两列显示
+5可以切换中文与英语
 
 Video Frame Extraction
 English
@@ -18,5 +19,6 @@ Optimized responsive layout:
 Wide-screen computers: Control panel fixed on the left.
 Medium-width computers / tablets: Control panel automatically moves to the top of the page to prevent squeezing the video preview and data area.
 Mobile phones: Buttons arranged vertically, folder selection area without obstruction, frame extraction images displayed in two columns.
+Support switching between Chinese and English.
 
 ﻿
