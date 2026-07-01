@@ -947,6 +947,60 @@
     .theme-icon { display: inline-grid; place-items: center; width: 13px; height: 13px; font-size: 13px; line-height: 1; }
     .theme-label { white-space: nowrap; }
 
+    /* 视频来源选择：手机端可直接调用系统原相机录像；桌面端继续保持文件选择/拖入。 */
+    .video-source-actions {
+      display: none;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 8px;
+      margin-top: 11px;
+    }
+    .source-action {
+      min-width: 0;
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 10px;
+      color: #425982;
+      border: 1px solid rgba(129, 150, 196, .34);
+      border-radius: 13px;
+      background: rgba(255,255,255,.66);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.88), 0 5px 14px rgba(62,78,117,.05);
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform .16s ease, background .16s ease, border-color .16s ease, box-shadow .16s ease;
+    }
+    .source-action:hover {
+      transform: translateY(-1px);
+      color: #38538b;
+      border-color: rgba(94, 121, 188, .62);
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 8px 16px rgba(62,78,117,.09), inset 0 1px 0 rgba(255,255,255,.96);
+    }
+    .source-action:active { transform: translateY(0); }
+    .source-action.camera {
+      color: #fff;
+      border-color: rgba(255,255,255,.28);
+      background: linear-gradient(145deg, #7690cd, #5068aa);
+      box-shadow: 0 9px 18px rgba(67,88,151,.22), inset 0 1px 0 rgba(255,255,255,.26);
+    }
+    .source-action:focus-visible {
+      outline: 3px solid rgba(89,116,190,.24);
+      outline-offset: 2px;
+    }
+    .capture-help {
+      display: none;
+      margin: 8px 2px 0;
+      color: #7b88a2;
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
     @media (max-width: 1220px) {
       .control-panel {
         position: relative;
@@ -999,6 +1053,10 @@
       .theme-label { font-size: 9px; }
 
       .dropzone { padding: 12px 10px; }
+      .dropzone > b, .dropzone > span { display: none; }
+      .video-source-actions { display: grid; }
+      .capture-help { display: block; }
+      .source-action { min-height: 46px; font-size: 12px; }
       .field { margin-top: 14px; }
       .button-row { grid-template-columns: 1fr; gap: 7px; margin-top: 16px; }
       .btn, .btn.wide { width: 100%; }
@@ -1175,6 +1233,24 @@
     }
     html[data-theme="dark"] .control-panel select option { color: #edf3ff; background: #1a2740; }
 
+    html[data-theme="dark"] .source-action {
+      color: #dce7ff;
+      border-color: rgba(165,184,227,.22);
+      background: rgba(35,49,75,.75);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 6px 15px rgba(0,0,0,.16);
+    }
+    html[data-theme="dark"] .source-action:hover {
+      color: #fff;
+      border-color: rgba(180,199,255,.46);
+      background: rgba(46,64,95,.95);
+    }
+    html[data-theme="dark"] .source-action.camera {
+      color: #fff;
+      border-color: rgba(255,255,255,.18);
+      background: linear-gradient(145deg, #7189cf, #556db0);
+    }
+    html[data-theme="dark"] .capture-help { color: #9dacC6; }
+
     html[data-theme="dark"] .direct-folder-row,
     html[data-theme="dark"] .notice {
       border-color: rgba(155,175,220,.15);
@@ -1213,12 +1289,22 @@
       </div>
     </div>
 
-    <label class="dropzone" id="dropzone">
+    <div class="dropzone" id="dropzone" aria-label="选择视频来源" tabindex="0">
       <input id="videoInput" type="file" accept="video/*" />
+      <input id="cameraVideoInput" type="file" accept="video/*" capture="environment" />
       <b>选择或拖入视频</b>
       <span>MP4 / MOV / WebM 等常见格式</span>
+      <div class="video-source-actions" aria-label="手机视频来源">
+        <label class="source-action" for="videoInput" title="从相册或文件中选择已有视频">
+          <span aria-hidden="true">▣</span><span>选择视频</span>
+        </label>
+        <label class="source-action camera" for="cameraVideoInput" title="调用手机系统原相机录制视频">
+          <span aria-hidden="true">●</span><span>原相机录像</span>
+        </label>
+      </div>
+      <p class="capture-help">点击“原相机录像”会调用手机系统相机；录制完成后将自动导入并进入抽帧。</p>
       <div class="file-name" id="fileName">尚未选择文件</div>
-    </label>
+    </div>
 
     <div class="field">
       <div class="field-label"><span>抽帧模式</span><span id="modeLabel">按时间间隔</span></div>
@@ -1254,10 +1340,10 @@
         <option value="png">PNG（无损）</option>
         <option value="jpeg">JPEG（体积小）</option>
         <option value="jpg">JPG（体积小）</option>
-        <option value="heic">HEIC（高效压缩）</option>
-        <option value="heif">HEIF（高效压缩）</option>
+        <option value="webp">WebP（清晰省空间）</option>
+        <option value="tif">TIFF / TIF（无损）</option>
       </select>
-      <p class="small-help" id="heifHelp" hidden>HEIC / HEIF 会在第一次抽帧时加载浏览器端编码器。请保持网络可用；编码器加载失败时不会导出错误格式文件。</p>
+      <p class="small-help">WebP 由浏览器本地编码；TIFF / TIF 为无压缩高质量格式，文件体积会明显更大。</p>
     </div>
 
     <div class="field">
@@ -1403,6 +1489,7 @@
       const els = {
         dropzone: $('#dropzone'),
         videoInput: $('#videoInput'),
+        cameraVideoInput: $('#cameraVideoInput'),
         fileName: $('#fileName'),
         timeModeBtn: $('#timeModeBtn'),
         frameModeBtn: $('#frameModeBtn'),
@@ -1412,7 +1499,6 @@
         intervalSeconds: $('#intervalSeconds'),
         frameStride: $('#frameStride'),
         formatSelect: $('#formatSelect'),
-        heifHelp: $('#heifHelp'),
         exportFolderName: $('#exportFolderName'),
         exportImageName: $('#exportImageName'),
         exportMode: $('#exportMode'),
@@ -1478,8 +1564,6 @@
         directDirectoryLabel: '',
         zipSaveHandle: null,
         zipSaveLabel: '',
-        heifEncoder: null,
-        heifEncoderPromise: null,
       };
 
       const THEME_STORAGE_KEY = 'frame-lab-theme';
@@ -1537,7 +1621,7 @@
       function sanitizeExportName(value, fallback) {
         const cleaned = String(value || '')
           .trim()
-          .replace(/\.(zip|png|jpe?g)$/i, '')
+          .replace(/\.(zip|png|jpe?g|webp|tiff?)$/i, '')
           .replace(/[<>:"/\\|?*\x00-\x1F]+/g, '_')
           .replace(/\s+/g, '_')
           .replace(/_+/g, '_')
@@ -1655,93 +1739,108 @@
         return `${pad(h)}-${pad(m)}-${pad(s)}-${pad(milli, 3)}`;
       }
 
-      function isHeifFormat() {
-        return els.formatSelect.value === 'heic' || els.formatSelect.value === 'heif';
+      function isTiffFormat() {
+        return els.formatSelect.value === 'tif' || els.formatSelect.value === 'tiff';
       }
 
       function currentFormatLabel() {
         const value = els.formatSelect.value;
-        return value === 'jpeg' ? 'JPEG' : value.toUpperCase();
+        if (value === 'jpeg') return 'JPEG';
+        if (value === 'webp') return 'WebP';
+        if (isTiffFormat()) return 'TIFF / TIF';
+        return value.toUpperCase();
       }
 
       function mimeFromFormat() {
         if (els.formatSelect.value === 'png') return 'image/png';
-        if (els.formatSelect.value === 'heic') return 'image/heic';
-        if (els.formatSelect.value === 'heif') return 'image/heif';
+        if (els.formatSelect.value === 'webp') return 'image/webp';
         return 'image/jpeg';
       }
 
-      function updateHeifUI() {
-        els.heifHelp.hidden = !isHeifFormat();
-      }
+      function canvasToTiffBlob(canvas) {
+        const context = canvas.getContext('2d', { willReadFrequently: true });
+        const rgba = context.getImageData(0, 0, canvas.width, canvas.height).data;
+        const width = canvas.width;
+        const height = canvas.height;
+        const pixelByteLength = width * height * 3;
 
-      async function loadHeifEncoder() {
-        if (state.heifEncoder) return state.heifEncoder;
-        if (state.heifEncoderPromise) return state.heifEncoderPromise;
-
-        state.heifEncoderPromise = (async () => {
-          const moduleUrls = [
-            'https://esm.sh/elheif@0.1.0?bundle',
-            'https://cdn.jsdelivr.net/npm/elheif@0.1.0/pkg/index.js',
-          ];
-          let lastError = null;
-
-          for (const url of moduleUrls) {
-            try {
-              const loaded = await import(url);
-              const api = loaded.default && typeof loaded.default.ensureInitialized === 'function'
-                ? loaded.default
-                : loaded;
-
-              if (typeof api.ensureInitialized !== 'function' || typeof api.jsEncodeImage !== 'function') {
-                throw new Error('HEIF 编码模块接口不完整。');
-              }
-
-              await api.ensureInitialized();
-              state.heifEncoder = api;
-              return api;
-            } catch (error) {
-              lastError = error;
-            }
-          }
-
-          const detail = lastError?.message ? ` ${lastError.message}` : '';
-          throw new Error(`HEIC / HEIF 编码器加载失败。请确认网络可用，或改用 PNG/JPEG。${detail}`);
-        })();
-
-        try {
-          return await state.heifEncoderPromise;
-        } finally {
-          if (!state.heifEncoder) state.heifEncoderPromise = null;
+        if (!Number.isSafeInteger(pixelByteLength) || pixelByteLength <= 0) {
+          throw new Error('TIFF 图片尺寸无效，无法编码。');
         }
+
+        // Baseline TIFF, little-endian, RGB 8-bit, uncompressed.
+        // This keeps TIFF export fully local without relying on a network encoder.
+        const entryCount = 10;
+        const ifdOffset = 8;
+        const ifdByteLength = 2 + entryCount * 12 + 4;
+        const bitsOffset = ifdOffset + ifdByteLength;
+        const pixelOffset = bitsOffset + 6;
+        const buffer = new ArrayBuffer(pixelOffset + pixelByteLength);
+        const view = new DataView(buffer);
+        const bytes = new Uint8Array(buffer);
+
+        view.setUint8(0, 0x49);
+        view.setUint8(1, 0x49);
+        view.setUint16(2, 42, true);
+        view.setUint32(4, ifdOffset, true);
+        view.setUint16(ifdOffset, entryCount, true);
+
+        let entryOffset = ifdOffset + 2;
+        const writeEntry = (tag, type, count, value) => {
+          view.setUint16(entryOffset, tag, true);
+          view.setUint16(entryOffset + 2, type, true);
+          view.setUint32(entryOffset + 4, count, true);
+          if (type === 3 && count === 1) view.setUint16(entryOffset + 8, value, true);
+          else view.setUint32(entryOffset + 8, value, true);
+          entryOffset += 12;
+        };
+
+        // TIFF field types: SHORT = 3, LONG = 4.
+        writeEntry(256, 4, 1, width);             // ImageWidth
+        writeEntry(257, 4, 1, height);            // ImageLength
+        writeEntry(258, 3, 3, bitsOffset);        // BitsPerSample: 8,8,8
+        writeEntry(259, 3, 1, 1);                 // Compression: none
+        writeEntry(262, 3, 1, 2);                 // PhotometricInterpretation: RGB
+        writeEntry(273, 4, 1, pixelOffset);       // StripOffsets
+        writeEntry(277, 3, 1, 3);                 // SamplesPerPixel
+        writeEntry(278, 4, 1, height);            // RowsPerStrip
+        writeEntry(279, 4, 1, pixelByteLength);   // StripByteCounts
+        writeEntry(284, 3, 1, 1);                 // PlanarConfiguration: chunky
+        view.setUint32(entryOffset, 0, true);     // Next IFD offset
+
+        view.setUint16(bitsOffset, 8, true);
+        view.setUint16(bitsOffset + 2, 8, true);
+        view.setUint16(bitsOffset + 4, 8, true);
+
+        let source = 0;
+        let target = pixelOffset;
+        while (source < rgba.length) {
+          bytes[target] = rgba[source];
+          bytes[target + 1] = rgba[source + 1];
+          bytes[target + 2] = rgba[source + 2];
+          source += 4;
+          target += 3;
+        }
+
+        return new Blob([buffer], { type: 'image/tiff' });
       }
 
       async function canvasToExportBlob(canvas) {
-        if (!isHeifFormat()) {
-          const mime = mimeFromFormat();
-          return new Promise((resolve, reject) => {
-            canvas.toBlob(
-              (blob) => blob ? resolve(blob) : reject(new Error('图片编码失败。')),
-              mime,
-              mime === 'image/png' ? undefined : 0.94
-            );
-          });
+        if (isTiffFormat()) return canvasToTiffBlob(canvas);
+
+        const mime = mimeFromFormat();
+        const blob = await new Promise((resolve, reject) => {
+          canvas.toBlob(
+            (result) => result ? resolve(result) : reject(new Error('图片编码失败。')),
+            mime,
+            mime === 'image/png' ? undefined : 0.94
+          );
+        });
+
+        if (mime === 'image/webp' && blob.type !== 'image/webp') {
+          throw new Error('当前浏览器不支持 WebP 导出，请改用 PNG、JPEG 或 TIFF / TIF。');
         }
-
-        const encoder = await loadHeifEncoder();
-        const context = canvas.getContext('2d', { willReadFrequently: true });
-        const rgba = context.getImageData(0, 0, canvas.width, canvas.height);
-        const bytes = new Uint8Array(rgba.data.buffer.slice(0));
-        const result = encoder.jsEncodeImage(bytes, canvas.width, canvas.height);
-
-        if (!result || result.err || !result.data?.length) {
-          throw new Error(result?.err || 'HEIC / HEIF 编码失败。');
-        }
-
-        return new Blob(
-          [result.data],
-          { type: els.formatSelect.value === 'heic' ? 'image/heic' : 'image/heif' }
-        );
+        return blob;
       }
 
       function setStatus(text, kind = 'idle') {
@@ -1800,7 +1899,6 @@
 
       function refreshPlan() {
         els.formatValue.textContent = currentFormatLabel();
-        updateHeifUI();
         updateResolutionUI(false);
         updateExportUI();
         if (!state.duration) {
@@ -2118,11 +2216,8 @@
         els.zipBtn.disabled = true;
         els.clearBtn.disabled = false;
         clearFrames();
-        setStatus(isHeifFormat() ? '正在加载 HEIC / HEIF 编码器…' : '正在抽取图片…', 'busy');
-        setProgress(
-          0,
-          isHeifFormat() ? '正在准备 HEIC / HEIF 编码…' : `正在抽取 0 / ${targets.length}`
-        );
+        setStatus('正在抽取图片…', 'busy');
+        setProgress(0, `正在抽取 0 / ${targets.length}`);
 
         const video = els.workVideo;
         const canvas = els.workCanvas;
@@ -2130,7 +2225,6 @@
         const outputDims = getOutputDimensions();
         canvas.width = outputDims.width;
         canvas.height = outputDims.height;
-        const ext = els.formatSelect.value;
 
         try {
           for (let i = 0; i < targets.length; i += 1) {
@@ -2139,13 +2233,18 @@
             if (jobId !== state.jobId) throw new Error('__CANCELED__');
 
             ctx.drawImage(video, 0, 0, outputDims.width, outputDims.height);
+            const previewBlobPromise = isTiffFormat()
+              ? canvasToBlob(canvas, 'image/jpeg')
+              : null;
             const blob = await canvasToExportBlob(canvas);
+            const previewBlob = previewBlobPromise ? await previewBlobPromise : blob;
             const frame = {
               time: targets[i],
               sequence: i + 1,
               blob,
               selected: true,
-              url: URL.createObjectURL(blob),
+              // TIFF is exported as .tif, while the card keeps a browser-friendly JPEG preview.
+              url: URL.createObjectURL(previewBlob),
             };
             state.frames.push(frame);
             appendFrame(frame);
@@ -2438,7 +2537,26 @@
       });
 
 
-      els.videoInput.addEventListener('change', () => loadVideo(els.videoInput.files?.[0]));
+      function importSelectedVideo(input) {
+        const file = input.files?.[0];
+        if (file) loadVideo(file);
+        // 允许用户连续重复录制/选择同一个文件时仍触发 change。
+        input.value = '';
+      }
+
+      els.videoInput.addEventListener('change', () => importSelectedVideo(els.videoInput));
+      els.cameraVideoInput.addEventListener('change', () => importSelectedVideo(els.cameraVideoInput));
+
+      // 桌面端或点击手机卡片空白区域时，保留原来的“点卡片即选择视频”体验。
+      els.dropzone.addEventListener('click', (event) => {
+        if (event.target.closest('label, input, button, a')) return;
+        els.videoInput.click();
+      });
+      els.dropzone.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        els.videoInput.click();
+      });
       els.dropzone.addEventListener('dragover', (event) => {
         event.preventDefault();
         els.dropzone.classList.add('dragover');
@@ -2478,7 +2596,6 @@
 
       initTheme();
       refreshPlan();
-      updateHeifUI();
       updateExportUI();
       updateSelectionUI();
     })();
