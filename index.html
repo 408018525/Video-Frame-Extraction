@@ -2056,6 +2056,16 @@
       .frame-download { width: 25px; height: 25px; right: 7px; bottom: 7px; }
     }
 
+  
+
+    /* 手机端：预览后先显示截帧控制台，再显示当前抽帧计划。 */
+    @media (max-width: 620px) {
+      .workspace-grid .capture-console {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -4409,6 +4419,39 @@
         if (state.url) URL.revokeObjectURL(state.url);
         revokeFrames();
       });
+
+
+
+      // 手机端将“截帧控制台”放在视频预览和“当前抽帧计划”之间；
+      // 平板与电脑保持原来的页面顺序。
+      const mobileSectionOrderQuery = window.matchMedia('(max-width: 620px)');
+      const workspaceGrid = document.querySelector('.workspace-grid');
+      const statsCard = workspaceGrid?.querySelector('.stats-card');
+      const captureConsoleHome = document.createComment('capture-console-home');
+      if (els.captureConsole?.parentNode) {
+        els.captureConsole.parentNode.insertBefore(captureConsoleHome, els.captureConsole);
+      }
+
+      function syncMobileSectionOrder() {
+        if (!workspaceGrid || !statsCard || !els.captureConsole) return;
+
+        if (mobileSectionOrderQuery.matches) {
+          // 手机：视频预览 → 截帧控制台 → 当前抽帧计划。
+          if (els.captureConsole.parentElement !== workspaceGrid || els.captureConsole.nextElementSibling !== statsCard) {
+            workspaceGrid.insertBefore(els.captureConsole, statsCard);
+          }
+        } else if (captureConsoleHome.parentNode && els.captureConsole.parentElement === workspaceGrid) {
+          // 离开手机宽度后，恢复桌面 / 平板的原始页面顺序。
+          captureConsoleHome.after(els.captureConsole);
+        }
+      }
+
+      if (typeof mobileSectionOrderQuery.addEventListener === 'function') {
+        mobileSectionOrderQuery.addEventListener('change', syncMobileSectionOrder);
+      } else if (typeof mobileSectionOrderQuery.addListener === 'function') {
+        mobileSectionOrderQuery.addListener(syncMobileSectionOrder);
+      }
+      syncMobileSectionOrder();
 
       initLanguage();
       initTheme();
