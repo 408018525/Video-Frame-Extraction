@@ -1304,10 +1304,817 @@
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
     }
 
+
+
+    /* =========================================================
+       控制台、帧范围、预览参数与常见问题
+       ========================================================= */
+    .preview-card {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+    }
+    .preview-card .video-area.loaded {
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #05080f;
+    }
+    .preview-card .video-area.loaded video {
+      display: block;
+      width: 100%;
+      height: min(54vw, 520px);
+      max-height: 520px;
+      object-fit: contain;
+      background: #05080f;
+    }
+    .preview-readout {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px 22px;
+      min-height: 64px;
+      padding: 15px 20px;
+      color: #55627b;
+      border-top: 1px solid rgba(149,164,197,.22);
+      background: rgba(248,250,255,.46);
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .preview-readout-item { display: inline-flex; align-items: baseline; gap: 7px; }
+    .preview-readout-item strong { color: #1f3157; font-size: 16px; letter-spacing: -.01em; }
+    .preview-readout-separator { width: 1px; height: 18px; background: rgba(136,153,188,.28); }
+
+    .capture-console,
+    .frame-range-card,
+    .faq-card {
+      margin-top: 20px;
+      padding: 22px;
+    }
+    .capture-console-head,
+    .frame-range-head,
+    .faq-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .capture-console h2,
+    .frame-range-card h2,
+    .faq-card h2 {
+      margin: 0;
+      color: #273b65;
+      font-size: 18px;
+      letter-spacing: -.03em;
+    }
+    .capture-console p,
+    .frame-range-card p,
+    .faq-card p { margin: 5px 0 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
+
+    .capture-mode-switch {
+      display: inline-grid;
+      grid-template-columns: 1fr 1fr;
+      flex: 0 0 auto;
+      gap: 4px;
+      min-width: 174px;
+      padding: 4px;
+      border: 1px solid rgba(151,165,198,.20);
+      border-radius: 14px;
+      background: rgba(225,231,244,.72);
+      box-shadow: inset 0 1px 3px rgba(69,88,129,.08);
+    }
+    .capture-mode-switch button {
+      height: 38px;
+      padding: 0 12px;
+      color: #7180a0;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      font-size: 13px;
+      font-weight: 800;
+      transition: .18s ease;
+    }
+    .capture-mode-switch button.active {
+      color: #2e63d7;
+      background: linear-gradient(145deg, rgba(221,234,255,.96), rgba(203,222,252,.76));
+      box-shadow: 0 4px 10px rgba(71,88,133,.10), inset 0 1px 0 rgba(255,255,255,.9);
+    }
+
+    .capture-auto-panel,
+    .capture-manual-panel { margin-top: 18px; }
+    .auto-mode-note {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px;
+      color: #5f6f8e;
+      border: 1px solid rgba(147,163,198,.20);
+      border-radius: 15px;
+      background: rgba(244,247,253,.62);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+    .auto-mode-dot { width: 9px; height: 9px; flex: 0 0 auto; border-radius: 50%; background: #5a76bd; box-shadow: 0 0 0 4px rgba(90,118,189,.12); }
+    .manual-readout {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 11px;
+    }
+    .manual-readout strong { color: #273b65; font-size: 14px; }
+    .manual-readout span { color: #74819c; font-size: 12px; font-weight: 700; }
+    .timeline-shell {
+      position: relative;
+      overflow: hidden;
+      padding: 8px 8px 22px;
+      border: 1px solid rgba(148,164,198,.24);
+      border-radius: 16px;
+      background: rgba(241,245,252,.72);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.78);
+    }
+    .timeline-filmstrip {
+      display: grid;
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      overflow: hidden;
+      min-height: 68px;
+      border-radius: 11px;
+      background: linear-gradient(90deg, rgba(91,113,162,.15), rgba(145,164,205,.22));
+    }
+    .timeline-thumb {
+      min-width: 0;
+      min-height: 68px;
+      border-right: 1px solid rgba(255,255,255,.55);
+      background-position: center;
+      background-size: cover;
+    }
+    .timeline-thumb:last-child { border-right: 0; }
+    .timeline-slider {
+      position: absolute;
+      right: 12px;
+      bottom: 9px;
+      left: 12px;
+      width: calc(100% - 24px);
+      height: 22px;
+      margin: 0;
+      appearance: none;
+      -webkit-appearance: none;
+      background: transparent;
+      cursor: pointer;
+      touch-action: pan-x;
+    }
+    .timeline-slider::-webkit-slider-runnable-track { height: 5px; border-radius: 999px; background: rgba(255,255,255,.78); box-shadow: inset 0 1px 2px rgba(46,62,101,.18); }
+    .timeline-slider::-webkit-slider-thumb { width: 18px; height: 32px; margin-top: -13px; appearance: none; -webkit-appearance: none; border: 3px solid white; border-radius: 999px; background: #2d6dea; box-shadow: 0 2px 6px rgba(34,73,153,.30); }
+    .timeline-slider::-moz-range-track { height: 5px; border-radius: 999px; background: rgba(255,255,255,.78); }
+    .timeline-slider::-moz-range-thumb { width: 14px; height: 26px; border: 3px solid white; border-radius: 999px; background: #2d6dea; box-shadow: 0 2px 6px rgba(34,73,153,.30); }
+    .timeline-scale { display: flex; justify-content: space-between; margin-top: 7px; color: #7c89a3; font-size: 10px; font-weight: 700; }
+    .manual-actions { display: flex; justify-content: flex-end; margin-top: 12px; }
+    .manual-actions .btn { min-width: 150px; }
+
+    .frame-range-card[hidden], .capture-manual-panel[hidden], .capture-auto-panel[hidden] { display: none !important; }
+    .frame-range-values {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 10px;
+      margin-top: 17px;
+    }
+    .range-field label { display: block; margin: 0 0 7px; color: #536583; font-size: 11px; font-weight: 800; }
+    .range-field input {
+      width: 100%;
+      height: 43px;
+      padding: 0 12px;
+      color: #263a63;
+      border: 1px solid rgba(146,163,202,.34);
+      border-radius: 13px;
+      outline: none;
+      background: rgba(255,255,255,.66);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.88), 0 6px 14px rgba(62,78,117,.04);
+      font: inherit;
+      font-size: 13px;
+    }
+    .range-total { min-height: 43px; display: inline-flex; align-items: center; padding: 0 11px; color: #6d7c99; border: 1px solid rgba(146,163,202,.24); border-radius: 13px; background: rgba(244,247,253,.58); font-size: 11px; font-weight: 800; white-space: nowrap; }
+    .dual-range { position: relative; height: 28px; margin: 18px 4px 0; }
+    .dual-range-track, .dual-range-fill { position: absolute; top: 12px; height: 5px; border-radius: 999px; }
+    .dual-range-track { right: 0; left: 0; background: rgba(144,160,197,.26); }
+    .dual-range-fill { left: 0; right: 0; background: linear-gradient(90deg, #6e8dcd, #2d6dea); }
+    .dual-range input[type="range"] { position: absolute; top: 0; left: 0; width: 100%; height: 28px; margin: 0; appearance: none; -webkit-appearance: none; pointer-events: none; background: transparent; }
+    .dual-range input[type="range"]::-webkit-slider-runnable-track { height: 5px; background: transparent; }
+    .dual-range input[type="range"]::-webkit-slider-thumb { width: 17px; height: 17px; margin-top: -6px; appearance: none; -webkit-appearance: none; pointer-events: auto; border: 3px solid white; border-radius: 50%; background: #2d6dea; box-shadow: 0 2px 5px rgba(34,73,153,.25); cursor: pointer; }
+    .dual-range input[type="range"]::-moz-range-track { height: 5px; background: transparent; }
+    .dual-range input[type="range"]::-moz-range-thumb { width: 13px; height: 13px; pointer-events: auto; border: 3px solid white; border-radius: 50%; background: #2d6dea; box-shadow: 0 2px 5px rgba(34,73,153,.25); cursor: pointer; }
+    .frame-range-note { margin-top: 8px !important; }
+
+    .faq-section { margin-top: 20px; }
+    .faq-list { margin-top: 16px; border-top: 1px solid rgba(149,164,197,.22); }
+    .faq-item { border-bottom: 1px solid rgba(149,164,197,.22); }
+    .faq-item summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      min-height: 64px;
+      padding: 14px 0;
+      color: #263653;
+      list-style: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 800;
+      user-select: none;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-plus { flex: 0 0 auto; color: #607294; font-size: 25px; font-weight: 400; line-height: 1; transition: transform .18s ease; }
+    .faq-item[open] .faq-plus { transform: rotate(45deg); color: #2d6dea; }
+    .faq-answer { max-width: 880px; padding: 0 38px 18px 0; color: #7180a0; font-size: 13px; line-height: 1.72; }
+
+    html[data-theme="dark"] .preview-readout { color: #b5c3da; border-top-color: rgba(165,182,218,.16); background: rgba(16,25,39,.62); }
+    html[data-theme="dark"] .preview-readout-item strong, html[data-theme="dark"] .capture-console h2, html[data-theme="dark"] .frame-range-card h2, html[data-theme="dark"] .faq-card h2, html[data-theme="dark"] .manual-readout strong, html[data-theme="dark"] .faq-item summary { color: #f0f5ff; }
+    html[data-theme="dark"] .preview-readout-separator { background: rgba(169,189,226,.22); }
+    html[data-theme="dark"] .capture-mode-switch { border-color: rgba(164,182,221,.15); background: rgba(40,53,78,.72); }
+    html[data-theme="dark"] .capture-mode-switch button { color: #a9b8d0; }
+    html[data-theme="dark"] .capture-mode-switch button.active { color: #e5edff; background: linear-gradient(145deg, rgba(63,105,191,.75), rgba(47,83,163,.68)); }
+    html[data-theme="dark"] .auto-mode-note, html[data-theme="dark"] .timeline-shell, html[data-theme="dark"] .range-total { color: #afbdd5; border-color: rgba(164,182,221,.15); background: rgba(27,39,59,.62); }
+    html[data-theme="dark"] .range-field label, html[data-theme="dark"] .manual-readout span { color: #abb9d1; }
+    html[data-theme="dark"] .range-field input { color: #eaf1ff; border-color: rgba(164,182,221,.22); background: rgba(20,31,48,.74); }
+    html[data-theme="dark"] .timeline-filmstrip { background: linear-gradient(90deg, rgba(92,119,177,.24), rgba(40,57,93,.42)); }
+    html[data-theme="dark"] .faq-list, html[data-theme="dark"] .faq-item { border-color: rgba(165,182,218,.16); }
+    html[data-theme="dark"] .faq-answer { color: #b2bfd5; }
+    html[data-theme="dark"] .faq-plus { color: #b7c5dc; }
+
+    @media (max-width: 900px) {
+      .preview-card .video-area.loaded video { height: min(72vw, 560px); }
+    }
+    @media (max-width: 640px) {
+      .preview-readout { min-height: 58px; gap: 8px 12px; padding: 13px 14px; font-size: 12px; }
+      .preview-readout-item strong { font-size: 14px; }
+      .preview-readout-separator { display: none; }
+      .capture-console, .frame-range-card, .faq-card { margin-top: 14px; padding: 15px; }
+      .capture-console-head, .frame-range-head { align-items: stretch; flex-direction: column; gap: 12px; }
+      .capture-mode-switch { width: 100%; min-width: 0; }
+      .capture-mode-switch button { height: 42px; }
+      .manual-readout { align-items: flex-start; flex-direction: column; gap: 4px; }
+      .timeline-filmstrip, .timeline-thumb { min-height: 56px; }
+      .manual-actions .btn { width: 100%; }
+      .frame-range-values { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .range-total { grid-column: 1 / -1; justify-content: center; min-height: 40px; }
+      .faq-item summary { min-height: 58px; font-size: 13px; }
+      .faq-answer { padding: 0 6px 16px 0; font-size: 12px; }
+    }
+
+  
+
+    /* =========================================================
+       顶部工具栏 · 多语言菜单 · 单张下载 · FAQ 卡片
+       ========================================================= */
+    html { scroll-behavior: smooth; }
+    body { padding-top: 78px; }
+    .site-header {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 80;
+      height: 76px;
+      color: #d8e4f7;
+      border-bottom: 1px solid rgba(106, 142, 195, .16);
+      background: rgba(8, 17, 31, .92);
+      box-shadow: 0 8px 24px rgba(18, 31, 54, .12);
+      backdrop-filter: blur(18px) saturate(135%);
+      -webkit-backdrop-filter: blur(18px) saturate(135%);
+    }
+    .site-header::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: .34;
+      background-image:
+        linear-gradient(rgba(51, 96, 155, .28) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(51, 96, 155, .28) 1px, transparent 1px);
+      background-size: 76px 76px;
+      mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+    }
+    .site-header-inner {
+      position: relative;
+      z-index: 1;
+      width: min(1520px, calc(100% - 36px));
+      height: 100%;
+      display: flex;
+      align-items: center;
+      gap: clamp(20px, 3vw, 48px);
+      margin: 0 auto;
+    }
+    .site-brand {
+      min-width: max-content;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: inherit;
+      text-decoration: none;
+    }
+    .site-brand-mark {
+      width: 28px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      color: #f3da15;
+      filter: drop-shadow(0 4px 7px rgba(243,218,21,.16));
+    }
+    .site-brand-mark svg { width: 100%; height: 100%; }
+    .site-brand-name {
+      color: #18c6ff;
+      font-size: clamp(16px, 1.45vw, 20px);
+      font-weight: 900;
+      letter-spacing: -.035em;
+      white-space: nowrap;
+    }
+    .site-header-nav {
+      display: inline-flex;
+      align-items: center;
+      align-self: stretch;
+      gap: 0;
+      margin-right: auto;
+    }
+    .site-header-nav a {
+      min-width: 82px;
+      height: 100%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 17px;
+      color: rgba(228, 236, 250, .72);
+      border-left: 1px solid rgba(105, 138, 184, .10);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 760;
+      transition: color .18s ease, background .18s ease;
+    }
+    .site-header-nav a:hover, .site-header-nav a:focus-visible {
+      color: #fff;
+      background: rgba(64, 103, 161, .16);
+      outline: none;
+    }
+    .site-header-actions { display: inline-flex; align-items: center; gap: 9px; }
+    .header-theme-toggle, .language-menu-button {
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: rgba(234, 241, 252, .82);
+      border: 1px solid rgba(118, 151, 198, .18);
+      border-radius: 12px;
+      background: rgba(17, 33, 55, .45);
+      font: inherit;
+      font-size: 13px;
+      font-weight: 760;
+      cursor: pointer;
+      transition: color .18s ease, border-color .18s ease, background .18s ease, transform .18s ease;
+    }
+    .header-theme-toggle { width: 40px; padding: 0; }
+    .language-menu-button { min-width: 132px; padding: 0 11px; }
+    .header-theme-toggle:hover, .language-menu-button:hover,
+    .header-theme-toggle:focus-visible, .language-menu-button:focus-visible {
+      color: #fff;
+      border-color: rgba(77, 191, 244, .46);
+      background: rgba(42, 79, 125, .48);
+      outline: none;
+    }
+    .header-theme-toggle:active, .language-menu-button:active { transform: translateY(1px); }
+    .header-theme-icon { display: grid; place-items: center; font-size: 16px; line-height: 1; }
+    .globe-icon { width: 18px; height: 18px; flex: 0 0 auto; }
+    .language-current {
+      overflow: hidden;
+      max-width: 152px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .language-chevron { margin-left: 1px; color: #a8bad7; font-size: 15px; line-height: 1; transition: transform .18s ease; }
+    .language-menu-button[aria-expanded="true"] .language-chevron { transform: rotate(180deg); }
+    .language-menu { position: relative; }
+    .language-dropdown {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      z-index: 90;
+      width: min(310px, calc(100vw - 28px));
+      max-height: min(534px, calc(100vh - 98px));
+      overflow: auto;
+      padding: 7px;
+      color: #e9f1fd;
+      border: 1px solid rgba(104, 150, 209, .27);
+      border-radius: 16px;
+      background: rgba(11, 24, 43, .98);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, .34);
+      backdrop-filter: blur(18px) saturate(140%);
+      -webkit-backdrop-filter: blur(18px) saturate(140%);
+      scrollbar-width: thin;
+      scrollbar-color: rgba(104, 155, 223, .55) transparent;
+    }
+    .language-dropdown[hidden] { display: none; }
+    .language-option {
+      width: 100%;
+      min-height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 10px;
+      color: #dbe7f9;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: start;
+      cursor: pointer;
+      transition: color .15s ease, background .15s ease;
+    }
+    .language-option:hover, .language-option:focus-visible { color: #fff; background: rgba(67, 115, 179, .40); outline: none; }
+    .language-option[aria-current="true"] { color: #74d7ff; background: rgba(34, 117, 190, .26); }
+    .language-option-check { flex: 0 0 auto; color: #85e5ba; font-size: 14px; opacity: 0; }
+    .language-option[aria-current="true"] .language-option-check { opacity: 1; }
+
+
+    .scroll-anchor { display: block; height: 0; scroll-margin-top: 98px; }
+
+    /* 顶栏存在时，桌面侧栏下移，避免遮挡。 */
+    @media (min-width: 1221px) {
+      .control-panel { top: 92px; max-height: calc(100dvh - 108px); }
+    }
+    .panel-actions .language-toggle, .panel-actions .theme-toggle { display: none; }
+
+    /* 单张图片的直接下载，位于每张卡片右下角。 */
+    .frame-card { isolation: isolate; }
+    .frame-info { min-height: 52px; padding-right: 44px; }
+    .frame-download {
+      position: absolute;
+      right: 8px;
+      bottom: 8px;
+      z-index: 3;
+      width: 31px;
+      height: 31px;
+      display: grid;
+      place-items: center;
+      color: #4d669d;
+      border: 1px solid rgba(122, 145, 192, .28);
+      border-radius: 10px;
+      background: rgba(248, 251, 255, .92);
+      box-shadow: 0 4px 11px rgba(45, 61, 98, .09), inset 0 1px 0 rgba(255,255,255,.9);
+      cursor: pointer;
+      transition: color .15s ease, border-color .15s ease, background .15s ease, transform .15s ease;
+    }
+    .frame-download:hover, .frame-download:focus-visible {
+      color: #fff;
+      border-color: #3f6fc7;
+      background: #4f76bf;
+      outline: none;
+      transform: translateY(-1px);
+    }
+    .frame-download svg { width: 17px; height: 17px; }
+    html[data-theme="dark"] .frame-download {
+      color: #d6e4ff;
+      border-color: rgba(161, 184, 230, .24);
+      background: rgba(37, 53, 80, .88);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 5px 13px rgba(0,0,0,.18);
+    }
+    html[data-theme="dark"] .frame-download:hover, html[data-theme="dark"] .frame-download:focus-visible {
+      color: #fff;
+      border-color: #81b5ff;
+      background: #4975c1;
+    }
+
+    /* 参考卡片式 FAQ：每一项都可点开回答。 */
+    .faq-section { scroll-margin-top: 98px; }
+    .faq-card { padding: clamp(20px, 3vw, 34px); }
+    .faq-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 20px;
+      border-top: 0;
+    }
+    .faq-item {
+      overflow: hidden;
+      border: 1px solid rgba(147, 164, 197, .20);
+      border-radius: 20px;
+      background: rgba(255,255,255,.48);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.72);
+      transition: border-color .18s ease, background .18s ease, box-shadow .18s ease;
+    }
+    .faq-item:hover { border-color: rgba(99, 134, 198, .34); background: rgba(255,255,255,.68); }
+    .faq-item summary {
+      min-height: 94px;
+      padding: 22px clamp(18px, 3vw, 34px);
+      color: #1d3151;
+      font-size: clamp(15px, 1.3vw, 20px);
+      letter-spacing: -.025em;
+    }
+    .faq-plus {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      color: #8c99ad;
+      border-radius: 50%;
+      background: rgba(245, 247, 251, .88);
+      font-size: 27px;
+      line-height: 1;
+      transform: none;
+      transition: transform .18s ease, color .18s ease, background .18s ease;
+    }
+    .faq-item[open] { border-color: rgba(65, 115, 195, .38); background: rgba(247, 251, 255, .76); box-shadow: 0 10px 22px rgba(54,75,120,.07); }
+    .faq-item[open] .faq-plus { color: #2d6dea; background: rgba(216, 231, 255, .80); transform: rotate(180deg); }
+    .faq-answer { max-width: none; padding: 0 clamp(18px, 3vw, 34px) 23px; color: #61718f; font-size: 14px; line-height: 1.75; }
+    html[data-theme="dark"] .site-header { border-bottom-color: rgba(104, 146, 205, .15); background: rgba(5, 13, 24, .92); }
+    html[data-theme="dark"] .site-header-nav a { color: rgba(224, 235, 251, .68); }
+    html[data-theme="dark"] .site-header-nav a:hover, html[data-theme="dark"] .site-header-nav a:focus-visible { color: #fff; background: rgba(65, 106, 164, .22); }
+    html[data-theme="dark"] .header-theme-toggle, html[data-theme="dark"] .language-menu-button { color: #dce8fb; border-color: rgba(120, 158, 214, .21); background: rgba(23, 43, 72, .54); }
+    html[data-theme="dark"] .faq-item { border-color: rgba(161, 183, 224, .16); background: rgba(25, 38, 59, .52); box-shadow: inset 0 1px 0 rgba(255,255,255,.04); }
+    html[data-theme="dark"] .faq-item:hover { border-color: rgba(139, 177, 237, .34); background: rgba(29, 45, 70, .72); }
+    html[data-theme="dark"] .faq-item[open] { border-color: rgba(123, 168, 244, .42); background: rgba(28, 46, 74, .78); }
+    html[data-theme="dark"] .faq-plus { color: #aebbd1; background: rgba(34, 50, 77, .82); }
+    html[data-theme="dark"] .faq-item[open] .faq-plus { color: #dceaff; background: rgba(54, 96, 171, .56); }
+    html[data-theme="dark"] .faq-answer { color: #b7c5dc; }
+
+    html[dir="rtl"] .site-header-nav { margin-right: 0; margin-left: auto; }
+    html[dir="rtl"] .language-dropdown { right: auto; left: 0; }
+    @media (min-width: 1221px) {
+      html[dir="rtl"] .control-panel { left: auto; right: max(18px, calc((100vw - 1440px) / 2)); }
+      html[dir="rtl"] .app { padding-left: 0; padding-right: 386px; }
+    }
+    @media (max-width: 640px) {
+      body { padding-top: 62px; }
+      .site-header { height: 60px; }
+      .site-header::after { background-size: 54px 54px; }
+      .site-header-inner { width: calc(100% - 20px); gap: 8px; }
+      .site-brand { gap: 7px; min-width: 0; }
+      .site-brand-mark { width: 22px; height: 29px; }
+      .site-brand-name { overflow: hidden; font-size: 15px; text-overflow: ellipsis; white-space: nowrap; }
+      .site-header-nav { display: none; }
+      .site-header-actions { gap: 5px; margin-left: auto; }
+      .header-theme-toggle { width: 34px; min-height: 34px; }
+      .language-menu-button { min-width: 0; min-height: 34px; padding: 0 8px; gap: 5px; }
+      .language-current { max-width: min(34vw, 126px); font-size: 11px; }
+      .globe-icon { width: 16px; height: 16px; }
+      .language-dropdown { top: calc(100% + 7px); max-height: calc(100vh - 78px); }
+      .frame-info { min-height: 48px; padding-right: 40px; }
+      .frame-download { width: 29px; height: 29px; right: 7px; bottom: 7px; }
+      .faq-card { padding: 15px; }
+      .faq-list { gap: 12px; margin-top: 15px; }
+      .faq-item { border-radius: 16px; }
+      .faq-item summary { min-height: 76px; padding: 16px 17px; font-size: 15px; }
+      .faq-plus { width: 34px; height: 34px; font-size: 23px; }
+      .faq-answer { padding: 0 17px 18px; font-size: 12px; }
+    }
+
+  
+
+    /* =========================================================
+       紧凑修正版：顶部工具栏与 FAQ 回到原程序的轻量玻璃风格
+       ========================================================= */
+    body { padding-top: 60px; }
+    .site-header {
+      height: 54px;
+      color: var(--ink);
+      border-bottom: 1px solid rgba(151,165,198,.24);
+      background: rgba(255,255,255,.64);
+      box-shadow: 0 8px 22px rgba(45, 61, 98, .06);
+      backdrop-filter: blur(18px) saturate(135%);
+      -webkit-backdrop-filter: blur(18px) saturate(135%);
+    }
+    .site-header::after { display: none; }
+    .site-header-inner {
+      width: min(1440px, calc(100% - 32px));
+      gap: 18px;
+    }
+    .site-brand { gap: 8px; }
+    .site-brand-mark {
+      width: 22px;
+      height: 28px;
+      color: #5f78bb;
+      filter: none;
+    }
+    .site-brand-name {
+      color: #2e4678;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: -.025em;
+    }
+    .site-header-nav {
+      align-self: center;
+      gap: 6px;
+    }
+    .site-header-nav a {
+      min-width: 0;
+      height: 32px;
+      padding: 0 12px;
+      color: #65738f;
+      border-left: 0;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .site-header-nav a:hover, .site-header-nav a:focus-visible {
+      color: #405a91;
+      background: rgba(230, 237, 250, .72);
+    }
+    .site-header-actions { gap: 6px; }
+    .header-theme-toggle, .language-menu-button {
+      min-height: 32px;
+      color: #536583;
+      border-color: rgba(147,163,198,.30);
+      border-radius: 11px;
+      background: rgba(255,255,255,.54);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.76);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .header-theme-toggle { width: 34px; }
+    .language-menu-button { min-width: 112px; padding: 0 9px; gap: 6px; }
+    .header-theme-toggle:hover, .language-menu-button:hover,
+    .header-theme-toggle:focus-visible, .language-menu-button:focus-visible {
+      color: #405a91;
+      border-color: rgba(95,120,187,.50);
+      background: rgba(255,255,255,.84);
+    }
+    .header-theme-icon { font-size: 14px; }
+    .globe-icon { width: 15px; height: 15px; }
+    .language-current { max-width: 118px; }
+    .language-chevron { color: #7c89a4; font-size: 13px; }
+    .language-dropdown {
+      top: calc(100% + 7px);
+      width: min(260px, calc(100vw - 24px));
+      max-height: min(420px, calc(100vh - 78px));
+      padding: 6px;
+      color: #263a63;
+      border-color: rgba(147,163,198,.32);
+      border-radius: 14px;
+      background: rgba(255,255,255,.96);
+      box-shadow: 0 18px 38px rgba(48, 64, 102, .16);
+    }
+    .language-option {
+      min-height: 34px;
+      padding: 7px 9px;
+      color: #536583;
+      border-radius: 9px;
+      font-size: 12px;
+    }
+    .language-option:hover, .language-option:focus-visible { color: #2e4678; background: rgba(230, 237, 250, .92); }
+    .language-option[aria-current="true"] { color: #2e63d7; background: rgba(216, 231, 255, .74); }
+    .language-option-check { color: #25a579; }
+    .scroll-anchor { scroll-margin-top: 72px; }
+    @media (min-width: 1221px) {
+      .control-panel { top: 72px; max-height: calc(100dvh - 88px); }
+    }
+
+    .frame-download {
+      width: 26px;
+      height: 26px;
+      right: 7px;
+      bottom: 7px;
+      border-radius: 8px;
+    }
+    .frame-download svg { width: 14px; height: 14px; }
+    .frame-info { min-height: 48px; padding-right: 38px; }
+
+    .faq-section { scroll-margin-top: 72px; }
+    .faq-card { padding: 18px 20px; }
+    .faq-list {
+      display: block;
+      margin-top: 14px;
+      border-top: 1px solid rgba(149,164,197,.22);
+    }
+    .faq-item {
+      overflow: visible;
+      border: 0;
+      border-bottom: 1px solid rgba(149,164,197,.22);
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    .faq-item:hover { border-color: rgba(149,164,197,.28); background: transparent; }
+    .faq-item[open] { border-color: rgba(149,164,197,.28); background: transparent; box-shadow: none; }
+    .faq-item summary {
+      min-height: 50px;
+      padding: 10px 0;
+      color: #263653;
+      font-size: 13px;
+      letter-spacing: 0;
+    }
+    .faq-plus {
+      width: 23px;
+      height: 23px;
+      display: grid;
+      place-items: center;
+      color: #607294;
+      border-radius: 8px;
+      background: rgba(241,245,252,.70);
+      font-size: 18px;
+      line-height: 1;
+      transform: none;
+    }
+    .faq-item[open] .faq-plus { color: #2d6dea; background: rgba(216,231,255,.70); transform: rotate(45deg); }
+    .faq-answer { max-width: 920px; padding: 0 34px 13px 0; color: #7180a0; font-size: 12px; line-height: 1.65; }
+
+    html[data-theme="dark"] .site-header {
+      color: #eaf1ff;
+      border-bottom-color: rgba(165,182,218,.14);
+      background: rgba(14, 22, 35, .76);
+      box-shadow: 0 8px 22px rgba(0,0,0,.18);
+    }
+    html[data-theme="dark"] .site-brand-name { color: #dce8fb; }
+    html[data-theme="dark"] .site-brand-mark { color: #86a7e9; }
+    html[data-theme="dark"] .site-header-nav a { color: #aebbd1; }
+    html[data-theme="dark"] .site-header-nav a:hover, html[data-theme="dark"] .site-header-nav a:focus-visible { color: #fff; background: rgba(65,106,164,.22); }
+    html[data-theme="dark"] .header-theme-toggle, html[data-theme="dark"] .language-menu-button { color: #dce8fb; border-color: rgba(161,184,230,.20); background: rgba(32, 47, 70, .64); }
+    html[data-theme="dark"] .language-dropdown { color: #eaf1ff; border-color: rgba(161,184,230,.18); background: rgba(14, 24, 40, .98); box-shadow: 0 18px 38px rgba(0,0,0,.34); }
+    html[data-theme="dark"] .language-option { color: #c8d4e8; }
+    html[data-theme="dark"] .language-option:hover, html[data-theme="dark"] .language-option:focus-visible { color: #fff; background: rgba(65, 106, 164, .24); }
+    html[data-theme="dark"] .language-option[aria-current="true"] { color: #dceaff; background: rgba(54, 96, 171, .44); }
+    html[data-theme="dark"] .faq-item { border-color: rgba(165,182,218,.16); background: transparent; box-shadow: none; }
+    html[data-theme="dark"] .faq-item:hover, html[data-theme="dark"] .faq-item[open] { border-color: rgba(165,182,218,.22); background: transparent; }
+    html[data-theme="dark"] .faq-plus { color: #b7c5dc; background: rgba(34,50,77,.70); }
+    html[data-theme="dark"] .faq-item[open] .faq-plus { color: #dceaff; background: rgba(54,96,171,.52); }
+
+    @media (max-width: 640px) {
+      body { padding-top: 54px; }
+      .site-header { height: 48px; }
+      .site-header-inner { width: calc(100% - 20px); gap: 7px; }
+      .site-brand-mark { width: 18px; height: 24px; }
+      .site-brand-name { font-size: 13px; }
+      .header-theme-toggle { width: 30px; min-height: 30px; }
+      .language-menu-button { min-height: 30px; padding: 0 7px; }
+      .language-current { max-width: min(34vw, 108px); font-size: 10px; }
+      .globe-icon { width: 14px; height: 14px; }
+      .language-dropdown { top: calc(100% + 6px); max-height: calc(100vh - 66px); }
+      .faq-card { padding: 14px; }
+      .faq-list { gap: 0; margin-top: 11px; }
+      .faq-item { border-radius: 0; }
+      .faq-item summary { min-height: 46px; padding: 9px 0; font-size: 12px; }
+      .faq-plus { width: 22px; height: 22px; font-size: 16px; }
+      .faq-answer { padding: 0 30px 12px 0; font-size: 11px; }
+      .frame-download { width: 25px; height: 25px; right: 7px; bottom: 7px; }
+    }
+
   </style>
 </head>
 <body>
-  <aside class="control-panel" aria-label="抽帧控制面板" data-i18n-aria-label="panel.aria">
+
+  <header class="site-header" role="banner">
+    <div class="site-header-inner">
+      <a class="site-brand" href="#tool" aria-label="视频帧提取器">
+        <span class="site-brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="2" width="7" height="32" rx="2" stroke="currentColor" stroke-width="3"/>
+            <rect x="19" y="2" width="7" height="32" rx="2" stroke="currentColor" stroke-width="3"/>
+            <path d="M10.5 8H17.5M10.5 18H17.5M10.5 28H17.5" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="site-brand-name" data-i18n="header.brand">视频帧提取器</span>
+      </a>
+      <nav class="site-header-nav" aria-label="Primary">
+        <a href="#tool" data-i18n="nav.tool">工具</a>
+        <a href="#features" data-i18n="nav.features">特点</a>
+        <a href="#faq" data-i18n="nav.faq">常见问题解答</a>
+      </nav>
+      <div class="site-header-actions">
+        <button class="header-theme-toggle" id="headerThemeToggle" type="button" aria-label="切换深色或浅色模式" title="切换深色或浅色模式">
+          <span class="header-theme-icon" id="headerThemeIcon" aria-hidden="true">☾</span>
+        </button>
+        <div class="language-menu">
+          <button class="language-menu-button" id="languageMenuButton" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="选择界面语言" title="选择界面语言">
+            <svg class="globe-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.45 3.75 5.45 3.75 9S14.5 18.55 12 21c-2.5-2.45-3.75-5.45-3.75-9S9.5 5.45 12 3Z"/></svg>
+            <span class="language-current" id="languageMenuLabel">汉语（普通话）</span>
+            <span class="language-chevron" aria-hidden="true">⌄</span>
+          </button>
+          <div class="language-dropdown" id="languageDropdown" role="menu" hidden>
+            <button class="language-option" type="button" role="menuitem" data-language-option="zh"><span>汉语（普通话）</span><span class="language-option-check">✓</span></button>
+            <button class="language-option" type="button" role="menuitem" data-language-option="en"><span>English</span><span class="language-option-check">✓</span></button>
+            <button class="language-option" type="button" role="menuitem" data-language-option="es"><span>Español</span><span class="language-option-check">✓</span></button>
+            <button class="language-option" type="button" role="menuitem" data-language-option="hi"><span>हिन्दी</span><span class="language-option-check">✓</span></button>
+            <button class="language-option" type="button" role="menuitem" data-language-option="ar"><span>العربية</span><span class="language-option-check">✓</span></button>
+            <button class="language-option" type="button" role="menuitem" data-language-option="fr"><span>Français</span><span class="language-option-check">✓</span></button>
+            <button class="language-option" type="button" role="menuitem" data-language-option="bn"><span>বাংলা</span><span class="language-option-check">✓</span></button>
+            <button class="language-option" type="button" role="menuitem" data-language-option="pt"><span>Português</span><span class="language-option-check">✓</span></button>
+            <button class="language-option" type="button" role="menuitem" data-language-option="ru"><span>Русский</span><span class="language-option-check">✓</span></button>
+            <button class="language-option" type="button" role="menuitem" data-language-option="ur"><span>اردو</span><span class="language-option-check">✓</span></button>
+            <button class="language-option" type="button" role="menuitem" data-language-option="idms"><span>Bahasa Indonesia / Melayu</span><span class="language-option-check">✓</span></button>
+            <button class="language-option" type="button" role="menuitem" data-language-option="ja"><span>日本語</span><span class="language-option-check">✓</span></button>
+            <button class="language-option" type="button" role="menuitem" data-language-option="de"><span>Deutsch</span><span class="language-option-check">✓</span></button>
+            <button class="language-option" type="button" role="menuitem" data-language-option="sw"><span>Kiswahili</span><span class="language-option-check">✓</span></button>
+            <button class="language-option" type="button" role="menuitem" data-language-option="te"><span>తెలుగు</span><span class="language-option-check">✓</span></button>
+            <button class="language-option" type="button" role="menuitem" data-language-option="mr"><span>मराठी</span><span class="language-option-check">✓</span></button>
+            <button class="language-option" type="button" role="menuitem" data-language-option="tr"><span>Türkçe</span><span class="language-option-check">✓</span></button>
+            <button class="language-option" type="button" role="menuitem" data-language-option="yue"><span>粵語</span><span class="language-option-check">✓</span></button>
+            <button class="language-option" type="button" role="menuitem" data-language-option="vi"><span>Tiếng Việt</span><span class="language-option-check">✓</span></button>
+            <button class="language-option" type="button" role="menuitem" data-language-option="ko"><span>한국어</span><span class="language-option-check">✓</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <aside id="tool" class="control-panel" aria-label="抽帧控制面板" data-i18n-aria-label="panel.aria">
     <div class="panel-head">
       <div class="panel-brand">
         <div class="brand-mark">▣</div>
@@ -1463,7 +2270,7 @@
     </section>
 
     <section class="workspace-grid">
-      <div class="card">
+      <div class="card preview-card">
         <div class="video-area" id="videoArea">
           <div class="empty-video" id="emptyVideo">
             <div class="play-icon">▶</div>
@@ -1472,6 +2279,11 @@
           </div>
           <video id="previewVideo" controls playsinline preload="metadata"></video>
           <div class="video-meta" id="videoMeta">—</div>
+        </div>
+        <div class="preview-readout" id="previewReadout" aria-live="polite">
+          <span class="preview-readout-item"><span data-i18n="preview.frame">帧</span><strong id="previewFrameCurrent">—</strong><span>/</span><strong id="previewFrameTotal">—</strong></span>
+          <span class="preview-readout-separator" aria-hidden="true"></span>
+          <span class="preview-readout-item"><span data-i18n="preview.time">时间</span><strong id="previewTimeCurrent">—</strong><span>/</span><strong id="previewTimeTotal">—</strong></span>
         </div>
       </div>
 
@@ -1497,6 +2309,56 @@
       </aside>
     </section>
 
+    <span id="features" class="scroll-anchor" aria-hidden="true"></span>
+    <section class="card capture-console" id="captureConsole" data-section="features" aria-label="截帧控制台" data-i18n-aria-label="console.aria">
+      <div class="capture-console-head">
+        <div>
+          <h2 data-i18n="console.title">截帧控制台</h2>
+          <p data-i18n="console.description">选择自动批量抽帧，或切换人工模式逐帧定位截取。</p>
+        </div>
+        <div class="capture-mode-switch" role="tablist" aria-label="截取方式" data-i18n-aria-label="console.mode.aria">
+          <button id="autoCaptureBtn" class="active" type="button" data-i18n="console.auto">自动</button>
+          <button id="manualModeBtn" type="button" data-i18n="console.manual">人工</button>
+        </div>
+      </div>
+      <div class="capture-auto-panel" id="autoCapturePanel">
+        <div class="auto-mode-note"><span class="auto-mode-dot" aria-hidden="true"></span><span data-i18n="console.auto.note">按左侧设置的秒数或帧间隔，批量生成图片。</span></div>
+      </div>
+      <div class="capture-manual-panel" id="manualCapturePanel" hidden>
+        <div class="manual-readout">
+          <strong id="manualFrameReadout">帧：— / —</strong>
+          <span id="manualTimeReadout">时间：— / —</span>
+        </div>
+        <div class="timeline-shell">
+          <div class="timeline-filmstrip" id="timelineFilmstrip" aria-hidden="true"></div>
+          <input class="timeline-slider" id="manualFrameSlider" type="range" min="1" max="1" value="1" step="1" aria-label="帧进度条" data-i18n-aria-label="console.timeline.aria" disabled />
+        </div>
+        <div class="timeline-scale"><span>0</span><span id="manualTimelineEnd">—</span></div>
+        <div class="manual-actions"><button class="btn primary" id="manualCaptureAction" type="button" disabled data-i18n="button.captureCurrent">截取当前帧</button></div>
+      </div>
+    </section>
+
+    <section class="card frame-range-card" id="frameRangeSection" hidden aria-label="帧范围" data-i18n-aria-label="frameRange.aria">
+      <div class="frame-range-head">
+        <div>
+          <h2 data-i18n="frameRange.title">帧范围</h2>
+          <p data-i18n="frameRange.description">按帧抽帧时，只会在此范围内按设定间隔截取。</p>
+        </div>
+      </div>
+      <div class="frame-range-values">
+        <div class="range-field"><label for="frameRangeStart" data-i18n="frameRange.start">起始帧</label><input id="frameRangeStart" type="number" min="1" step="1" value="1" inputmode="numeric" /></div>
+        <div class="range-field"><label for="frameRangeEnd" data-i18n="frameRange.end">结束帧</label><input id="frameRangeEnd" type="number" min="1" step="1" value="1" inputmode="numeric" /></div>
+        <span class="range-total" id="frameRangeTotal">—</span>
+      </div>
+      <div class="dual-range" aria-label="帧范围滑块" data-i18n-aria-label="frameRange.slider.aria">
+        <div class="dual-range-track"></div>
+        <div class="dual-range-fill" id="frameRangeFill"></div>
+        <input id="frameRangeStartSlider" type="range" min="1" max="1" value="1" step="1" aria-label="起始帧" data-i18n-aria-label="frameRange.start" />
+        <input id="frameRangeEndSlider" type="range" min="1" max="1" value="1" step="1" aria-label="结束帧" data-i18n-aria-label="frameRange.end" />
+      </div>
+      <p class="frame-range-note" data-i18n="frameRange.help">拖动两个圆点或直接输入帧数，确定开始与结束位置。</p>
+    </section>
+
     <section class="frames-section">
       <div class="card frames-card">
         <div class="frames-toolbar">
@@ -1519,6 +2381,32 @@
               <span data-i18n-html="frames.empty.description">选择视频后会自动抽帧。<br/>生成图片会显示在这里。</span>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="faq-section" id="faq">
+      <div class="card faq-card">
+        <div class="faq-head">
+          <div>
+            <h2 data-i18n="faq.title">常见问题</h2>
+            <p data-i18n="faq.description">打开问题即可查看对应说明。</p>
+          </div>
+        </div>
+        <div class="faq-list">
+          <details class="faq-item"><summary><span data-i18n="faq.q1">支持哪些视频格式？</span><span class="faq-plus" aria-hidden="true">+</span></summary><div class="faq-answer" data-i18n="faq.a1">支持浏览器可播放的视频，例如 MP4、MOV、WebM。实际可用格式取决于当前浏览器与手机系统的解码能力。</div></details>
+          <details class="faq-item"><summary><span data-i18n="faq.q2">视频文件大小有限制吗？</span><span class="faq-plus" aria-hidden="true">+</span></summary><div class="faq-answer" data-i18n="faq.a2">程序没有固定上传上限，因为文件不会上传；但超大文件或超长视频会占用更多设备内存，建议分段处理。</div></details>
+          <details class="faq-item"><summary><span data-i18n="faq.q3">处理后我的视频会发生什么？</span><span class="faq-plus" aria-hidden="true">+</span></summary><div class="faq-answer" data-i18n="faq.a3">视频只在当前浏览器内读取和处理，不会上传到服务器。刷新页面或关闭页面后，当前会话数据会被清除。</div></details>
+          <details class="faq-item"><summary><span data-i18n="faq.q4">我需要创建账户吗？</span><span class="faq-plus" aria-hidden="true">+</span></summary><div class="faq-answer" data-i18n="faq.a4">不需要。本工具不要求注册、登录或提供账号信息。</div></details>
+          <details class="faq-item"><summary><span data-i18n="faq.q5">我可以一次提取多个帧吗？</span><span class="faq-plus" aria-hidden="true">+</span></summary><div class="faq-answer" data-i18n="faq.a5">可以。自动模式按秒数或按帧间隔批量抽取；人工模式可拖动帧进度条并单独截取关键画面。</div></details>
+          <details class="faq-item"><summary><span data-i18n="faq.q6">如何从视频中获取静态图像？</span><span class="faq-plus" aria-hidden="true">+</span></summary><div class="faq-answer" data-i18n="faq.a6">导入视频后，选择自动或人工方式。自动模式设置抽帧规则后点击开始抽帧；人工模式定位到目标帧后点击截取当前帧。</div></details>
+          <details class="faq-item"><summary><span data-i18n="faq.q7">提取的帧保存为什么图像格式？</span><span class="faq-plus" aria-hidden="true">+</span></summary><div class="faq-answer" data-i18n="faq.a7">可导出 PNG、JPEG、JPG、WebP、HEIF、TIFF / TIF。不同浏览器对 HEIF 的支持不同，首次使用会加载浏览器端编码器。</div></details>
+          <details class="faq-item"><summary><span data-i18n="faq.q8">视频长度有限制吗？</span><span class="faq-plus" aria-hidden="true">+</span></summary><div class="faq-answer" data-i18n="faq.a8">没有固定时长限制，但抽取数量越多，处理时间和内存占用越高。超长视频建议提高间隔或分段处理。</div></details>
+          <details class="faq-item"><summary><span data-i18n="faq.q9">这在移动设备上有效吗？</span><span class="faq-plus" aria-hidden="true">+</span></summary><div class="faq-answer" data-i18n="faq.a9">有效。手机端可从相册选择视频，也可调用系统原相机录像；建议使用新版 Chrome、Edge 或 Safari。</div></details>
+          <details class="faq-item"><summary><span data-i18n="faq.q10">视频到帧是否完全免费使用？</span><span class="faq-plus" aria-hidden="true">+</span></summary><div class="faq-answer" data-i18n="faq.a10">是。本工具可在浏览器本地免费使用，不需要注册、登录或付费；视频不会上传到服务器。</div></details>
+          <details class="faq-item"><summary><span data-i18n="faq.q11">我的视频数据安全且私密吗？</span><span class="faq-plus" aria-hidden="true">+</span></summary><div class="faq-answer" data-i18n="faq.a11">视频只会在当前浏览器和设备内读取、解码和处理；刷新或关闭页面后，本次会话中的视频与抽取结果会被清除。</div></details>
+          <details class="faq-item"><summary><span data-i18n="faq.q12">使用此工具时需要注意什么？</span><span class="faq-plus" aria-hidden="true">+</span></summary><div class="faq-answer" data-i18n="faq.a12">建议使用新版 Chrome、Edge 或 Safari。批量导出时，浏览器可能询问是否允许多个下载；使用 HEIF 时需保持网络可用以加载浏览器端编码器。</div></details>
         </div>
       </div>
     </section>
@@ -1567,6 +2455,29 @@
         videoArea: $('#videoArea'),
         emptyVideo: $('#emptyVideo'),
         videoMeta: $('#videoMeta'),
+        previewReadout: $('#previewReadout'),
+        previewFrameCurrent: $('#previewFrameCurrent'),
+        previewFrameTotal: $('#previewFrameTotal'),
+        previewTimeCurrent: $('#previewTimeCurrent'),
+        previewTimeTotal: $('#previewTimeTotal'),
+        captureConsole: $('#captureConsole'),
+        autoCaptureBtn: $('#autoCaptureBtn'),
+        manualModeBtn: $('#manualModeBtn'),
+        autoCapturePanel: $('#autoCapturePanel'),
+        manualCapturePanel: $('#manualCapturePanel'),
+        manualFrameReadout: $('#manualFrameReadout'),
+        manualTimeReadout: $('#manualTimeReadout'),
+        manualFrameSlider: $('#manualFrameSlider'),
+        manualTimelineEnd: $('#manualTimelineEnd'),
+        manualCaptureAction: $('#manualCaptureAction'),
+        timelineFilmstrip: $('#timelineFilmstrip'),
+        frameRangeSection: $('#frameRangeSection'),
+        frameRangeStart: $('#frameRangeStart'),
+        frameRangeEnd: $('#frameRangeEnd'),
+        frameRangeStartSlider: $('#frameRangeStartSlider'),
+        frameRangeEndSlider: $('#frameRangeEndSlider'),
+        frameRangeFill: $('#frameRangeFill'),
+        frameRangeTotal: $('#frameRangeTotal'),
         durationValue: $('#durationValue'),
         videoSecondsValue: $('#videoSecondsValue'),
         videoFormatValue: $('#videoFormatValue'),
@@ -1591,15 +2502,22 @@
         selectAllBtn: $('#selectAllBtn'),
         selectNoneBtn: $('#selectNoneBtn'),
         invertBtn: $('#invertBtn'),
-        languageToggle: $('#languageToggle'),
-        languageLabel: $('#languageLabel'),
+        languageMenuButton: $('#languageMenuButton'),
+        languageMenuLabel: $('#languageMenuLabel'),
+        languageDropdown: $('#languageDropdown'),
+        languageOptions: Array.from(document.querySelectorAll('[data-language-option]')),
         themeToggle: $('#themeToggle'),
         themeIcon: $('#themeIcon'),
         themeLabel: $('#themeLabel'),
+        headerThemeToggle: $('#headerThemeToggle'),
+        headerThemeIcon: $('#headerThemeIcon'),
       };
 
       const state = {
         mode: 'time',
+        captureMode: 'auto',
+        manualTime: 0,
+        timelineBuildId: 0,
         url: null,
         file: null,
         duration: 0,
@@ -1620,26 +2538,154 @@
       const THEME_STORAGE_KEY = 'frame-lab-theme';
       const LANGUAGE_STORAGE_KEY = 'frame-lab-language';
       const LOCALES = {"zh":{"document.title":"视频抽帧工作台","brand.title":"视频抽帧工作台","brand.subtitle":"本地处理 · 不上传视频","panel.aria":"抽帧控制面板","upload.aria":"选择视频来源","upload.actions.aria":"手机视频来源","upload.title":"选择或拖入视频","upload.subtitle":"MP4 / MOV / WebM 等常见格式","upload.select":"选择视频","upload.select.title":"从相册或文件中选择已有视频","upload.camera":"原相机录像","upload.camera.title":"调用手机系统原相机录制视频","upload.help":"点击“原相机录像”会调用手机系统相机；录制完成后将自动导入并进入抽帧。","file.none":"尚未选择文件","mode.title":"抽帧模式","mode.aria":"抽帧模式","mode.time":"按秒抽帧","mode.frame":"按帧抽帧","mode.time.label":"按时间间隔","mode.frame.label":"按固定帧数","time.interval.title":"每隔多久抽取一帧","unit.second":"秒","time.interval.help":"例如填写 1，即每 1 秒截取一张图片。","frame.stride.title":"每隔多少原视频帧抽取","unit.frame":"帧","frame.stride.help":"系统会自动识别视频帧率，用于计算“每 N 帧”对应的抽取位置。","format.title":"导出图片格式","format.aria":"导出图片格式","format.png":"PNG（无损）","format.jpeg":"JPEG（体积小）","format.jpg":"JPG（体积小）","format.webp":"WebP（清晰省空间）","format.heif":"HEIF（高效压缩）","format.tif":"TIFF / TIF（无损）","format.help":"WebP 由浏览器本地编码；TIFF / TIF 为无压缩高质量格式，文件体积会明显更大。","format.heifHelp":"HEIF 会在第一次抽帧时加载本地浏览器编码器。请保持网络可用；若编码器加载失败，请改用 WebP、PNG、JPEG 或 TIFF / TIF。","folder.title":"文件夹名称","folder.placeholder":"默认跟随原视频名称","folder.help":"ZIP 模式：作为 ZIP 文件名和 ZIP 内文件夹名。直接导出：图片会保存到浏览器默认下载位置，不会创建系统文件夹。","imageName.title":"图片名称","imageName.placeholder":"默认跟随原视频名称","imageName.help":"作为每张图片的文件名前缀，系统会自动补上序号、时间码和图片格式。","export.title":"导出方式","export.aria":"导出方式","export.zip.option":"导出 ZIP 压缩包","export.direct.option":"直接导出","export.button.direct":"直接导出已选图片","export.button.zip":"导出已选图片 ZIP","export.browserDownload":"浏览器下载","export.selectedLocation":"已选位置：{name}","export.sequence":"序号","fileType.zip":"ZIP 压缩包","location.title":"文件导出位置","location.zip.button":"选择 ZIP 保存位置","location.folder.button":"选择图片导出文件夹","location.defaultStatus":"未选择，使用浏览器默认下载位置","location.selectedStatus":"已选择：{name}","location.folder.help.selected":"会在该位置创建“{folder}”文件夹并写入图片。请不要选择 Windows、Program Files 等系统目录。","location.folder.help.default":"可选：选择一个普通本地文件夹后，图片会直接写入该文件夹；不选择则逐张下载到浏览器默认下载位置。","location.zip.help.selected":"ZIP 导出时会直接写入已选位置。修改“文件夹名称”后，建议重新选择 ZIP 保存位置。","location.zip.help.default":"可选：选择后，ZIP 会直接保存到你指定的位置；不选择则下载到浏览器默认下载目录。","resolution.title":"导出分辨率","resolution.aria":"导出分辨率","resolution.original":"原始视频尺寸","resolution.2160":"4K / 长边 2160 px","resolution.1440":"2K / 长边 1440 px","resolution.1080":"Full HD / 长边 1080 px","resolution.720":"HD / 长边 720 px","resolution.custom":"自定义宽高","unit.width":"宽","unit.height":"高","resolution.lock":"锁定视频原始比例","resolution.help":"预设按长边等比例缩放；自定义可输出指定尺寸。","resolution.hintOriginal":"原始尺寸","button.extract":"开始抽帧","button.cancel":"停止任务","button.exportZip":"导出已选图片 ZIP","button.clear":"清空当前结果","button.selectAll":"全选","button.selectNone":"全不选","button.invert":"反选","footer":"修改模式、间隔、帧数、格式或分辨率后，只更新计划；必须点击“开始抽帧”才会生成图片。","hero.title":"从视频里，取走你需要的每一帧。","hero.description":"支持按时间间隔或固定帧数抽取。所有文件仅在当前浏览器中处理，生成后可单独勾选并一次性导出 ZIP。","status.waiting":"等待导入视频","preview.empty.title":"这里会显示视频预览","preview.empty.description":"从左上角选择视频，程序将自动读取时长、尺寸和帧率。","plan.title":"当前抽帧计划","plan.notLoaded":"未加载","plan.ruleTime":"每 {interval} 秒 1 张","plan.ruleFrame":"每 {stride} 帧 1 张","plan.overLimit":"超过 12,000 张","plan.estimate":"预计 {count} 张","summary.duration":"视频时长","summary.dimensions":"视频尺寸","summary.outputDimensions":"导出尺寸","summary.fps":"检测帧率","summary.rule":"抽帧规则","summary.estimate":"预计生成","summary.format":"导出格式","summary.exportName":"导出名称","notice.waiting":"<b>等待手动开始：</b>导入视频和修改参数后会实时更新抽帧计划；确认后，请点击左上角“开始抽帧”。","notice.videoReady":"<b>视频已就绪：</b>确认参数后，点击左上角“开始抽帧”。","notice.parameterUpdated":"<b>参数已更新：</b>当前图片不会自动重做。确认后请点击“开始抽帧”。","notice.stopped.withFrames":"<b>任务已停止：</b>已经生成的 {count} 张图片会保留，可直接导出 ZIP。","notice.stopped.empty":"<b>任务已停止：</b>尚未生成图片。你可以调整参数后重新开始。","notice.done":"<b>抽帧已完成：</b>下方已默认全选。取消不想导出的图片，再点击左上角“导出已选图片 ZIP”。","notice.directStarted":"<b>直接导出已开始：</b>图片会保存到浏览器默认下载位置。若浏览器询问是否允许多个下载，请选择允许。","progress.preparing":"正在准备…","frames.title":"已抽取图片","frames.intro.empty":"生成后，勾选要放进 ZIP 的图片。","frames.intro.summary":"共生成 {total} 张图片；已选 {selected} 张用于导出。","frames.selected":"已选 {selected} / {total}","frames.selected.initial":"已选 0 / 0","frames.empty.title":"还没有抽取图片","frames.empty.description":"选择视频后会自动抽帧。<br/>生成图片会显示在这里。","frames.empty.message":"生成后，勾选要放进 ZIP 的图片。","frames.preparing":"正在准备新的抽帧任务…","frames.reading":"正在读取视频信息…","frame.card.title":"第 {index} 张，{time}","frame.card.alt":"抽取帧 {index}","frame.card.aria":"选择第 {index} 张图片","theme.toLight":"切换为浅色模式","theme.toDark":"切换为深色模式","theme.light":"浅色","theme.dark":"深色","language.toEnglish":"切换为英文","language.toChinese":"切换为中文","language.aria":"切换中文或英文","error.heifInterface":"HEIF 编码模块接口不完整。","error.heifLoad":"HEIF 编码器加载失败。请确认网络可用，或改用 WebP、PNG、JPEG 或 TIFF / TIF。{detail}","error.tiffInvalid":"TIFF 图片尺寸无效，无法编码。","error.heifEncode":"HEIF 编码失败。","error.imageEncode":"图片编码失败。","error.webpUnsupported":"当前浏览器不支持 WebP 导出，请改用 PNG、JPEG、HEIF 或 TIFF / TIF。","error.videoRead":"视频读取失败，可能是不支持的格式或文件已损坏。","error.videoTimeout":"读取视频超时，请尝试重新选择文件。","error.seek":"定位视频帧失败。","error.videoUnsupported":"视频无法读取，请使用浏览器支持的 MP4、MOV 或 WebM 视频文件。","error.readVideo":"读取视频失败。","error.noTargets":"当前设置没有可抽取的图片，请检查抽帧间隔或帧数。","error.tooMany":"当前参数预计超过 12,000 张图片。请增大秒数间隔或帧数间隔后再试。","error.extract":"抽帧中断，请重新尝试。","error.folderPickerUnsupported":"当前浏览器不支持文件夹位置选择。请使用最新版 Chrome 或 Edge，或不选择位置并使用浏览器默认下载目录。","error.folderPicker":"无法选择该文件夹。请改选桌面、文档、下载或自建项目目录；不要选择 Windows、Program Files、浏览器安装目录等系统受保护文件夹。","error.savePickerUnsupported":"当前浏览器不支持保存位置选择。请使用最新版 Chrome 或 Edge，或不选择位置并使用浏览器默认下载目录。","error.zipSavePicker":"无法选择 ZIP 保存位置。请改选普通本地目录，避免系统受保护文件夹。","error.permissionZip":"未获得 ZIP 保存位置的写入权限。","error.selectFrames":"请先勾选至少一张图片。","error.zipComponent":"ZIP 组件未加载。请确认网络可以访问 cdnjs，再刷新页面后重试。","error.zipExport":"ZIP 导出失败，请重新尝试。","error.permissionFolder":"未获得所选文件夹的写入权限。","error.directExport":"直接导出失败。","error.directExportAdvice":"\n\n请改选桌面、文档、下载或自建项目目录；不要选择 Windows、Program Files 等系统目录。","error.dropVideo":"请拖入视频文件。","confirm.clear":"清空当前已经抽取的图片吗？此操作无法恢复。","status.reading":"正在读取视频…","status.detectingFps":"正在识别帧率…","status.videoReady":"视频已就绪，等待开始抽帧","status.cannotRead":"无法读取视频","status.parametersUpdated":"参数已更新，等待开始抽帧","status.stoppedWithFrames":"已停止，保留 {count} 张图片","status.stopped":"已停止抽帧","status.loadingHeif":"正在加载 HEIF 编码器…","status.extracting":"正在抽取图片…","status.done":"已抽取 {count} 张图片","status.extractFailed":"抽帧失败","status.zipPacking":"正在打包 ZIP…","status.zipSaved":"ZIP 已保存到指定位置","status.zipDownloading":"ZIP 已交给浏览器下载","status.folderWriting":"正在写入指定文件夹…","status.directExporting":"正在直接导出图片…","status.folderSaved":"图片已保存到指定文件夹","status.directDownloading":"图片已交给浏览器下载","status.exportFailed":"导出失败","status.cleared":"结果已清空，等待开始抽帧","progress.compressing":"正在压缩 {count} 张图片","progress.compressingStart":"正在压缩 0 / {count}","progress.zipSaved":"ZIP 已保存：{count} 张图片","progress.zipExported":"ZIP 已导出：{count} 张图片","progress.writingStart":"正在写入 0 / {count}","progress.downloadingStart":"正在下载 0 / {count}","progress.writing":"正在写入 {current} / {total}","progress.downloading":"正在下载 {current} / {total}","progress.folderSaved":"已保存 {count} 张图片到指定位置","progress.directStarted":"已开始直接导出 {count} 张图片","progress.heifPreparing":"正在准备 HEIF 编码…","progress.extracting":"正在抽取 {current} / {total}","progress.done":"已完成 {count} 张图片","summary.seconds":"视频秒数","summary.videoFormat":"视频格式","unit.secondShort":"秒"},"en":{"document.title":"Video Frame Extractor","brand.title":"Video Frame Extractor","brand.subtitle":"Local processing · Videos stay on this device","panel.aria":"Frame extraction controls","upload.aria":"Choose video source","upload.actions.aria":"Mobile video source","upload.title":"Choose or drop a video","upload.subtitle":"MP4 / MOV / WebM and other common formats","upload.select":"Choose video","upload.select.title":"Choose an existing video from Photos or Files","upload.camera":"Record with camera","upload.camera.title":"Open the device camera to record a video","upload.help":"Tap “Record with camera” to open the device camera. The video imports automatically after recording.","file.none":"No file selected","mode.title":"Frame extraction mode","mode.aria":"Frame extraction mode","mode.time":"By time","mode.frame":"By frame","mode.time.label":"Time interval","mode.frame.label":"Frame interval","time.interval.title":"Extract one frame every","unit.second":"sec","time.interval.help":"For example, enter 1 to capture one image every second.","frame.stride.title":"Extract one frame every","unit.frame":"frames","frame.stride.help":"The app detects the video frame rate automatically to calculate each extraction point.","format.title":"Export image format","format.aria":"Export image format","format.png":"PNG (lossless)","format.jpeg":"JPEG (smaller files)","format.jpg":"JPG (smaller files)","format.webp":"WebP (sharp, compact)","format.heif":"HEIF (efficient compression)","format.tif":"TIFF / TIF (lossless)","format.help":"WebP is encoded locally in the browser. TIFF / TIF is an uncompressed, high-quality format with substantially larger files.","format.heifHelp":"HEIF loads a browser-side encoder on the first extraction. Keep the network available. If the encoder fails, use WebP, PNG, JPEG, or TIFF / TIF.","folder.title":"Folder name","folder.placeholder":"Default: source video name","folder.help":"ZIP mode uses this as the ZIP filename and the folder inside it. Direct export saves images to the browser download location and does not create a system folder.","imageName.title":"Image name","imageName.placeholder":"Default: source video name","imageName.help":"Used as the prefix for each image. The app automatically appends the sequence, timestamp, and file extension.","export.title":"Export method","export.aria":"Export method","export.zip.option":"Export ZIP archive","export.direct.option":"Direct export","export.button.direct":"Export selected images","export.button.zip":"Export selected images as ZIP","export.browserDownload":"Browser downloads","export.selectedLocation":"Selected: {name}","export.sequence":"sequence","fileType.zip":"ZIP archive","location.title":"Export location","location.zip.button":"Choose ZIP save location","location.folder.button":"Choose image export folder","location.defaultStatus":"Not selected; using the browser download location","location.selectedStatus":"Selected: {name}","location.folder.help.selected":"A “{folder}” folder will be created there for the images. Do not choose Windows, Program Files, or another system folder.","location.folder.help.default":"Optional: choose a normal local folder to write images directly there. Otherwise, each image downloads through the browser.","location.zip.help.selected":"The ZIP will be written directly to the selected location. Choose it again after changing the folder name.","location.zip.help.default":"Optional: choose a location to save the ZIP there. Otherwise, it downloads to the browser’s default download folder.","resolution.title":"Export resolution","resolution.aria":"Export resolution","resolution.original":"Original video size","resolution.2160":"4K / 2160 px long edge","resolution.1440":"2K / 1440 px long edge","resolution.1080":"Full HD / 1080 px long edge","resolution.720":"HD / 720 px long edge","resolution.custom":"Custom width & height","unit.width":"W","unit.height":"H","resolution.lock":"Lock source aspect ratio","resolution.help":"Presets scale proportionally by the long edge; custom mode exports the size you specify.","resolution.hintOriginal":"Original size","button.extract":"Extract frames","button.cancel":"Stop task","button.exportZip":"Export selected images as ZIP","button.clear":"Clear results","button.selectAll":"Select all","button.selectNone":"Select none","button.invert":"Invert selection","footer":"Changing the mode, interval, frame count, format, or resolution only updates the plan. Click “Extract frames” to create images.","hero.title":"Take exactly the frames you need from any video.","hero.description":"Extract by a time interval or a fixed frame interval. Files are processed only in this browser; select any results and export them together as a ZIP.","status.waiting":"Waiting for a video","preview.empty.title":"Your video preview appears here","preview.empty.description":"Choose a video from the panel. The app will read its duration, dimensions, and frame rate.","plan.title":"Current extraction plan","plan.notLoaded":"Not loaded","plan.ruleTime":"1 image every {interval} sec","plan.ruleFrame":"1 image every {stride} frames","plan.overLimit":"More than 12,000 images","plan.estimate":"Est. {count} images","summary.duration":"Video duration","summary.dimensions":"Video dimensions","summary.outputDimensions":"Output dimensions","summary.fps":"Detected frame rate","summary.rule":"Extraction rule","summary.estimate":"Estimated output","summary.format":"Export format","summary.exportName":"Export name","notice.waiting":"<b>Waiting for manual start:</b> import a video or adjust settings to update the extraction plan, then click “Extract frames”.","notice.videoReady":"<b>Video ready:</b> confirm the settings, then click “Extract frames”.","notice.parameterUpdated":"<b>Settings updated:</b> existing images are not remade automatically. Click “Extract frames” when ready.","notice.stopped.withFrames":"<b>Task stopped:</b> the {count} images already created are kept and can be exported.","notice.stopped.empty":"<b>Task stopped:</b> no image has been created. Adjust settings and start again.","notice.done":"<b>Extraction complete:</b> all images below are selected by default. Deselect any you do not want, then export the selected images.","notice.directStarted":"<b>Direct export started:</b> images are saving to the browser download location. Allow multiple downloads if your browser asks.","progress.preparing":"Preparing…","frames.title":"Extracted images","frames.intro.empty":"After extraction, select the images to include in the ZIP.","frames.intro.summary":"{total} images created; {selected} selected for export.","frames.selected":"Selected {selected} / {total}","frames.selected.initial":"Selected 0 / 0","frames.empty.title":"No images extracted yet","frames.empty.description":"Choose a video to start extracting frames.<br/>Your images will appear here.","frames.empty.message":"After extraction, select the images to include in the ZIP.","frames.preparing":"Preparing a new extraction task…","frames.reading":"Reading video details…","frame.card.title":"Image {index}, {time}","frame.card.alt":"Extracted frame {index}","frame.card.aria":"Select image {index}","theme.toLight":"Switch to light mode","theme.toDark":"Switch to dark mode","theme.light":"Light","theme.dark":"Dark","language.toEnglish":"Switch to English","language.toChinese":"切换为中文","language.aria":"Switch Chinese or English","error.heifInterface":"The HEIF encoder interface is incomplete.","error.heifLoad":"Could not load the HEIF encoder. Check your network, or use WebP, PNG, JPEG, or TIFF / TIF.{detail}","error.tiffInvalid":"Invalid TIFF dimensions; encoding cannot continue.","error.heifEncode":"HEIF encoding failed.","error.imageEncode":"Image encoding failed.","error.webpUnsupported":"This browser cannot export WebP. Use PNG, JPEG, HEIF, or TIFF / TIF instead.","error.videoRead":"The video could not be read. It may be unsupported or damaged.","error.videoTimeout":"Timed out reading the video. Try selecting the file again.","error.seek":"Could not seek to the video frame.","error.videoUnsupported":"The video could not be read. Use an MP4, MOV, or WebM file supported by this browser.","error.readVideo":"Could not read the video.","error.noTargets":"The current settings do not produce any frames. Check the time interval or frame interval.","error.tooMany":"The current settings would create more than 12,000 images. Increase the time interval or frame interval and try again.","error.extract":"Frame extraction was interrupted. Try again.","error.folderPickerUnsupported":"This browser cannot choose a folder location. Use the latest Chrome or Edge, or use the browser’s default download folder.","error.folderPicker":"Could not choose that folder. Select Desktop, Documents, Downloads, or a project folder instead; do not choose a protected system folder such as Windows, Program Files, or the browser install folder.","error.savePickerUnsupported":"This browser cannot choose a save location. Use the latest Chrome or Edge, or use the browser’s default download folder.","error.zipSavePicker":"Could not choose a ZIP save location. Select a normal local folder rather than a protected system folder.","error.permissionZip":"Write permission was not granted for the ZIP location.","error.selectFrames":"Select at least one image first.","error.zipComponent":"The ZIP component did not load. Confirm the browser can access cdnjs, then refresh and try again.","error.zipExport":"ZIP export failed. Try again.","error.permissionFolder":"Write permission was not granted for the selected folder.","error.directExport":"Direct export failed.","error.directExportAdvice":"\n\nChoose Desktop, Documents, Downloads, or a project folder; do not choose Windows, Program Files, or another system folder.","error.dropVideo":"Drop a video file here.","confirm.clear":"Clear all extracted images? This cannot be undone.","status.reading":"Reading video…","status.detectingFps":"Detecting frame rate…","status.videoReady":"Video ready; waiting to extract","status.cannotRead":"Unable to read video","status.parametersUpdated":"Settings updated; waiting to extract","status.stoppedWithFrames":"Stopped; kept {count} images","status.stopped":"Extraction stopped","status.loadingHeif":"Loading HEIF encoder…","status.extracting":"Extracting images…","status.done":"Extracted {count} images","status.extractFailed":"Extraction failed","status.zipPacking":"Packing ZIP…","status.zipSaved":"ZIP saved to selected location","status.zipDownloading":"ZIP sent to browser downloads","status.folderWriting":"Writing to selected folder…","status.directExporting":"Exporting images directly…","status.folderSaved":"Images saved to selected folder","status.directDownloading":"Images sent to browser downloads","status.exportFailed":"Export failed","status.cleared":"Results cleared; ready to extract","progress.compressing":"Compressing {count} images","progress.compressingStart":"Compressing 0 / {count}","progress.zipSaved":"ZIP saved: {count} images","progress.zipExported":"ZIP exported: {count} images","progress.writingStart":"Writing 0 / {count}","progress.downloadingStart":"Downloading 0 / {count}","progress.writing":"Writing {current} / {total}","progress.downloading":"Downloading {current} / {total}","progress.folderSaved":"Saved {count} images to selected location","progress.directStarted":"Direct export started for {count} images","progress.heifPreparing":"Preparing HEIF encoder…","progress.extracting":"Extracting {current} / {total}","progress.done":"Completed {count} images","summary.seconds":"Duration (seconds)","summary.videoFormat":"Video format","unit.secondShort":"s"}};
+
+      Object.assign(LOCALES.zh, {
+        "preview.frame":"帧", "preview.time":"时间", "preview.frame.readout":"帧：{current} / {total}", "preview.time.readout":"时间：{current} / {total}",
+        "console.aria":"截帧控制台", "console.title":"截帧控制台", "console.description":"选择自动批量抽帧，或切换人工模式逐帧定位截取。", "console.mode.aria":"截取方式", "console.auto":"自动", "console.manual":"人工", "console.auto.note":"按左侧设置的秒数或帧间隔，批量生成图片。", "console.timeline.aria":"帧进度条", "console.manual.ready":"拖动帧进度条定位，然后点击截取当前帧。",
+        "button.captureCurrent":"截取当前帧", "status.manualCapturing":"正在截取当前帧…", "status.manualCaptured":"已截取当前帧", "progress.manualCapturing":"正在截取当前帧", "notice.manualCaptured":"<b>当前帧已截取：</b>可以继续拖动进度条截取更多图片，或导出已选图片。",
+        "frameRange.aria":"帧范围", "frameRange.title":"帧范围", "frameRange.description":"按帧抽帧时，只会在此范围内按设定间隔截取。", "frameRange.start":"起始帧", "frameRange.end":"结束帧", "frameRange.total":"共 {total} 帧", "frameRange.slider.aria":"帧范围滑块", "frameRange.help":"拖动两个圆点或直接输入帧数，确定开始与结束位置。",
+        "faq.title":"常见问题", "faq.description":"打开问题即可查看对应说明。", "faq.q1":"支持哪些视频格式？", "faq.a1":"支持浏览器可播放的视频，例如 MP4、MOV、WebM。实际可用格式取决于当前浏览器与手机系统的解码能力。", "faq.q2":"视频文件大小有限制吗？", "faq.a2":"程序没有固定上传上限，因为文件不会上传；但超大文件或超长视频会占用更多设备内存，建议分段处理。", "faq.q3":"处理后我的视频会发生什么？", "faq.a3":"视频只在当前浏览器内读取和处理，不会上传到服务器。刷新页面或关闭页面后，当前会话数据会被清除。", "faq.q4":"我需要创建账户吗？", "faq.a4":"不需要。本工具不要求注册、登录或提供账号信息。", "faq.q5":"我可以一次提取多个帧吗？", "faq.a5":"可以。自动模式按秒数或按帧间隔批量抽取；人工模式可拖动帧进度条并单独截取关键画面。", "faq.q6":"如何从视频中获取静态图像？", "faq.a6":"导入视频后，选择自动或人工方式。自动模式设置抽帧规则后点击开始抽帧；人工模式定位到目标帧后点击截取当前帧。", "faq.q7":"提取的帧保存为什么图像格式？", "faq.a7":"可导出 PNG、JPEG、JPG、WebP、HEIF、TIFF / TIF。不同浏览器对 HEIF 的支持不同，首次使用会加载浏览器端编码器。", "faq.q8":"视频长度有限制吗？", "faq.a8":"没有固定时长限制，但抽取数量越多，处理时间和内存占用越高。超长视频建议提高间隔或分段处理。", "faq.q9":"这在移动设备上有效吗？", "faq.a9":"有效。手机端可从相册选择视频，也可调用系统原相机录像；建议使用新版 Chrome、Edge 或 Safari。",
+        "error.noVideo":"请先导入视频。", "unit.secondShort":"秒"
+      });
+      Object.assign(LOCALES.en, {
+        "preview.frame":"Frame", "preview.time":"Time", "preview.frame.readout":"Frame: {current} / {total}", "preview.time.readout":"Time: {current} / {total}",
+        "console.aria":"Frame capture console", "console.title":"Capture console", "console.description":"Choose batch extraction or manually locate and capture individual frames.", "console.mode.aria":"Capture mode", "console.auto":"Auto", "console.manual":"Manual", "console.auto.note":"Create images in a batch using the time or frame interval set in the control panel.", "console.timeline.aria":"Frame progress slider", "console.manual.ready":"Drag the frame progress slider, then capture the current frame.",
+        "button.captureCurrent":"Capture current frame", "status.manualCapturing":"Capturing current frame…", "status.manualCaptured":"Current frame captured", "progress.manualCapturing":"Capturing current frame", "notice.manualCaptured":"<b>Current frame captured:</b> keep moving the slider to capture more images, or export the selected images.",
+        "frameRange.aria":"Frame range", "frameRange.title":"Frame range", "frameRange.description":"In frame mode, images are extracted only within this range at the selected interval.", "frameRange.start":"Start frame", "frameRange.end":"End frame", "frameRange.total":"{total} frames total", "frameRange.slider.aria":"Frame range slider", "frameRange.help":"Drag either handle or enter frame numbers to set the start and end positions.",
+        "faq.title":"Frequently asked questions", "faq.description":"Open a question to see the answer.", "faq.q1":"Which video formats are supported?", "faq.a1":"The tool supports browser-playable videos such as MP4, MOV, and WebM. Actual support depends on your browser and device decoder.", "faq.q2":"Is there a video file size limit?", "faq.a2":"There is no fixed upload limit because the video is not uploaded. Very large or long videos can use more device memory, so processing them in sections is recommended.", "faq.q3":"What happens to my video after processing?", "faq.a3":"Your video is read and processed only in the current browser. It is not uploaded to a server. Refreshing or closing the page clears the current session data.", "faq.q4":"Do I need to create an account?", "faq.a4":"No. This tool does not require registration, sign-in, or account details.", "faq.q5":"Can I extract more than one frame at a time?", "faq.a5":"Yes. Auto mode extracts images in batches by time or frame interval, while Manual mode lets you locate and capture key frames one by one.", "faq.q6":"How do I get a still image from a video?", "faq.a6":"Import a video and choose Auto or Manual. In Auto mode, set the extraction rule and start the task. In Manual mode, locate the target frame and capture the current frame.", "faq.q7":"Which image formats can exported frames use?", "faq.a7":"You can export PNG, JPEG, JPG, WebP, HEIF, and TIFF / TIF. HEIF support varies by browser and loads a browser-side encoder on first use.", "faq.q8":"Is there a video length limit?", "faq.a8":"There is no fixed duration limit, but more extracted images take more time and memory. For long videos, increase the interval or split the video into sections.", "faq.q9":"Does this work on mobile devices?", "faq.a9":"Yes. On mobile you can select a video from the gallery or record one with the system camera. A recent Chrome, Edge, or Safari is recommended.",
+        "error.noVideo":"Import a video first.", "unit.secondShort":"s"
+      });
+
+
+      // 顶部小地球菜单：保存当前选择；中文和英文为完整文案包，其他语言覆盖核心界面，运行时提示回退为英文。
+      Object.assign(LOCALES.zh, {
+        "header.brand":"视频帧提取器", "nav.tool":"工具", "nav.features":"特点", "nav.faq":"常见问题解答",
+        "language.menu":"选择界面语言", "button.downloadFrame":"下载此图片", "status.frameDownloaded":"图片已开始下载",
+        "faq.title":"常见问题", "faq.description":"点击问题即可展开对应说明。",
+        "faq.q10":"视频到帧是否完全免费使用？", "faq.a10":"是。本工具可在浏览器本地免费使用，不需要注册、登录或付费；视频不会上传到服务器。",
+        "faq.q11":"我的视频数据安全且私密吗？", "faq.a11":"视频只会在当前浏览器和设备内读取、解码和处理。刷新或关闭页面后，本次会话中的视频与抽取结果会被清除。",
+        "faq.q12":"使用此工具时需要注意什么？", "faq.a12":"建议使用新版 Chrome、Edge 或 Safari。批量导出时，浏览器可能询问是否允许多个下载；使用 HEIF 时需保持网络可用以加载浏览器端编码器。"
+      });
+      Object.assign(LOCALES.en, {
+        "header.brand":"Video Frame Extractor", "nav.tool":"Tools", "nav.features":"Features", "nav.faq":"FAQ",
+        "language.menu":"Choose interface language", "button.downloadFrame":"Download this image", "status.frameDownloaded":"Image download started",
+        "faq.title":"Frequently asked questions", "faq.description":"Open a question to see its answer.",
+        "faq.q10":"Is video-to-frame extraction completely free?", "faq.a10":"Yes. This tool runs locally in your browser for free. It does not require registration, sign-in, or payment, and your video is not uploaded to a server.",
+        "faq.q11":"Is my video data safe and private?", "faq.a11":"Your video is read, decoded, and processed only in the current browser on your device. Refreshing or closing the page clears the current video and extracted results.",
+        "faq.q12":"What should I keep in mind when using this tool?", "faq.a12":"Use a recent Chrome, Edge, or Safari. During batch export, your browser may ask to allow multiple downloads. HEIF needs a network connection the first time to load the browser-side encoder."
+      });
+
+      const LANGUAGE_META = {
+        zh:   { label: '汉语（普通话）', lang: 'zh-CN', dir: 'ltr' },
+        en:   { label: 'English', lang: 'en', dir: 'ltr' },
+        es:   { label: 'Español', lang: 'es', dir: 'ltr' },
+        hi:   { label: 'हिन्दी', lang: 'hi', dir: 'ltr' },
+        ar:   { label: 'العربية', lang: 'ar', dir: 'rtl' },
+        fr:   { label: 'Français', lang: 'fr', dir: 'ltr' },
+        bn:   { label: 'বাংলা', lang: 'bn', dir: 'ltr' },
+        pt:   { label: 'Português', lang: 'pt', dir: 'ltr' },
+        ru:   { label: 'Русский', lang: 'ru', dir: 'ltr' },
+        ur:   { label: 'اردو', lang: 'ur', dir: 'rtl' },
+        idms: { label: 'Bahasa Indonesia / Melayu', lang: 'id', dir: 'ltr' },
+        ja:   { label: '日本語', lang: 'ja', dir: 'ltr' },
+        de:   { label: 'Deutsch', lang: 'de', dir: 'ltr' },
+        sw:   { label: 'Kiswahili', lang: 'sw', dir: 'ltr' },
+        te:   { label: 'తెలుగు', lang: 'te', dir: 'ltr' },
+        mr:   { label: 'मराठी', lang: 'mr', dir: 'ltr' },
+        tr:   { label: 'Türkçe', lang: 'tr', dir: 'ltr' },
+        yue:  { label: '粵語', lang: 'yue-Hant-HK', dir: 'ltr' },
+        vi:   { label: 'Tiếng Việt', lang: 'vi', dir: 'ltr' },
+        ko:   { label: '한국어', lang: 'ko', dir: 'ltr' },
+      };
+
+      // These packs translate the most visible tool, navigation, export, and FAQ controls.
+      // Less frequent browser-specific error text falls back to English so an unsupported browser never hides an actionable message.
+      const CORE_LANGUAGE_PACKS = {
+        es: {app:'Extractor de fotogramas', tag:'Procesamiento local · El vídeo permanece en este dispositivo', tool:'Herramienta', features:'Funciones', faq:'Preguntas frecuentes', hero:'Toma del vídeo los fotogramas que necesitas.', heroDesc:'Extrae por intervalo de tiempo o por fotogramas. Todo se procesa localmente en el navegador.', mode:'Modo de extracción', byTime:'Por tiempo', byFrame:'Por fotogramas', format:'Formato de imagen', export:'Exportar', extract:'Extraer fotogramas', capture:'Capturar fotograma actual', frames:'Imágenes extraídas', download:'Descargar esta imagen', plan:'Plan de extracción', faqTitle:'Preguntas frecuentes', faqDesc:'Abre una pregunta para ver la respuesta.', light:'Claro', dark:'Oscuro'},
+        hi: {app:'वीडियो फ़्रेम एक्सट्रैक्टर', tag:'स्थानीय प्रोसेसिंग · वीडियो इसी डिवाइस पर रहता है', tool:'उपकरण', features:'विशेषताएँ', faq:'सामान्य प्रश्न', hero:'वीडियो से अपनी ज़रूरी हर फ़्रेम लें।', heroDesc:'समय अंतराल या फ़्रेम के आधार पर निकालें। सब कुछ ब्राउज़र में स्थानीय रूप से संसाधित होता है।', mode:'फ़्रेम निकालने का मोड', byTime:'समय से', byFrame:'फ़्रेम से', format:'इमेज फ़ॉर्मेट', export:'निर्यात', extract:'फ़्रेम निकालें', capture:'वर्तमान फ़्रेम कैप्चर करें', frames:'निकाले गए चित्र', download:'यह चित्र डाउनलोड करें', plan:'एक्सट्रैक्शन योजना', faqTitle:'अक्सर पूछे जाने वाले प्रश्न', faqDesc:'उत्तर देखने के लिए प्रश्न खोलें।', light:'लाइट', dark:'डार्क'},
+        ar: {app:'مستخرج إطارات الفيديو', tag:'معالجة محلية · يبقى الفيديو على هذا الجهاز', tool:'الأداة', features:'الميزات', faq:'الأسئلة الشائعة', hero:'استخرج كل إطار تحتاجه من الفيديو.', heroDesc:'استخرج حسب الفاصل الزمني أو عدد الإطارات. تتم المعالجة محليًا في المتصفح.', mode:'وضع استخراج الإطارات', byTime:'حسب الوقت', byFrame:'حسب الإطار', format:'تنسيق الصورة', export:'تصدير', extract:'استخراج الإطارات', capture:'التقاط الإطار الحالي', frames:'الصور المستخرجة', download:'تنزيل هذه الصورة', plan:'خطة الاستخراج', faqTitle:'الأسئلة الشائعة', faqDesc:'افتح السؤال لعرض الإجابة.', light:'فاتح', dark:'داكن'},
+        fr: {app:'Extracteur d’images vidéo', tag:'Traitement local · La vidéo reste sur cet appareil', tool:'Outil', features:'Fonctionnalités', faq:'FAQ', hero:'Prenez dans la vidéo chaque image dont vous avez besoin.', heroDesc:'Extrayez par intervalle de temps ou par image. Tout est traité localement dans le navigateur.', mode:'Mode d’extraction', byTime:'Par temps', byFrame:'Par image', format:'Format d’image', export:'Exporter', extract:'Extraire les images', capture:'Capturer l’image actuelle', frames:'Images extraites', download:'Télécharger cette image', plan:'Plan d’extraction', faqTitle:'Questions fréquentes', faqDesc:'Ouvrez une question pour voir la réponse.', light:'Clair', dark:'Sombre'},
+        bn: {app:'ভিডিও ফ্রেম এক্সট্র্যাক্টর', tag:'স্থানীয় প্রক্রিয়াকরণ · ভিডিও এই ডিভাইসেই থাকে', tool:'টুল', features:'বৈশিষ্ট্য', faq:'সাধারণ প্রশ্ন', hero:'ভিডিও থেকে আপনার প্রয়োজনীয় প্রতিটি ফ্রেম নিন।', heroDesc:'সময় বা ফ্রেম ব্যবধান অনুযায়ী বের করুন। সবকিছু ব্রাউজারে স্থানীয়ভাবে প্রক্রিয়া হয়।', mode:'ফ্রেম এক্সট্র্যাকশন মোড', byTime:'সময় অনুযায়ী', byFrame:'ফ্রেম অনুযায়ী', format:'ছবির ফরম্যাট', export:'রপ্তানি', extract:'ফ্রেম এক্সট্র্যাক্ট করুন', capture:'বর্তমান ফ্রেম ধরুন', frames:'এক্সট্র্যাক্ট করা ছবি', download:'এই ছবিটি ডাউনলোড করুন', plan:'এক্সট্র্যাকশন পরিকল্পনা', faqTitle:'সাধারণ প্রশ্ন', faqDesc:'উত্তর দেখতে প্রশ্ন খুলুন।', light:'হালকা', dark:'গাঢ়'},
+        pt: {app:'Extrator de quadros de vídeo', tag:'Processamento local · O vídeo fica neste dispositivo', tool:'Ferramenta', features:'Recursos', faq:'Perguntas frequentes', hero:'Tire do vídeo todos os quadros de que precisa.', heroDesc:'Extraia por intervalo de tempo ou por quadro. Tudo é processado localmente no navegador.', mode:'Modo de extração', byTime:'Por tempo', byFrame:'Por quadro', format:'Formato da imagem', export:'Exportar', extract:'Extrair quadros', capture:'Capturar quadro atual', frames:'Imagens extraídas', download:'Baixar esta imagem', plan:'Plano de extração', faqTitle:'Perguntas frequentes', faqDesc:'Abra uma pergunta para ver a resposta.', light:'Claro', dark:'Escuro'},
+        ru: {app:'Извлекатель кадров видео', tag:'Локальная обработка · Видео остаётся на устройстве', tool:'Инструмент', features:'Возможности', faq:'Частые вопросы', hero:'Получите из видео каждый нужный кадр.', heroDesc:'Извлекайте по интервалу времени или по кадрам. Всё обрабатывается локально в браузере.', mode:'Режим извлечения', byTime:'По времени', byFrame:'По кадрам', format:'Формат изображения', export:'Экспорт', extract:'Извлечь кадры', capture:'Сохранить текущий кадр', frames:'Извлечённые изображения', download:'Скачать это изображение', plan:'План извлечения', faqTitle:'Частые вопросы', faqDesc:'Откройте вопрос, чтобы увидеть ответ.', light:'Светлая', dark:'Тёмная'},
+        ur: {app:'ویڈیو فریم ایکسٹریکٹر', tag:'مقامی پروسیسنگ · ویڈیو اسی ڈیوائس پر رہتی ہے', tool:'ٹول', features:'خصوصیات', faq:'عام سوالات', hero:'ویڈیو سے ہر ضروری فریم حاصل کریں۔', heroDesc:'وقت کے وقفے یا فریم کے حساب سے نکالیں۔ سب کچھ براؤزر میں مقامی طور پر پراسیس ہوتا ہے۔', mode:'فریم ایکسٹریکشن موڈ', byTime:'وقت کے مطابق', byFrame:'فریم کے مطابق', format:'تصویر کی فارمیٹ', export:'ایکسپورٹ', extract:'فریم نکالیں', capture:'موجودہ فریم کیپچر کریں', frames:'نکالی گئی تصاویر', download:'یہ تصویر ڈاؤن لوڈ کریں', plan:'ایکسٹریکشن پلان', faqTitle:'عام سوالات', faqDesc:'جواب دیکھنے کے لیے سوال کھولیں۔', light:'روشن', dark:'گہرا'},
+        idms: {app:'Pengekstrak Bingkai Video', tag:'Pemprosesan setempat · Video kekal pada peranti ini', tool:'Alat', features:'Ciri', faq:'Soalan lazim', hero:'Ambil setiap bingkai yang anda perlukan daripada video.', heroDesc:'Ekstrak mengikut selang masa atau bingkai. Semua diproses secara setempat dalam pelayar.', mode:'Mod pengekstrakan bingkai', byTime:'Mengikut masa', byFrame:'Mengikut bingkai', format:'Format imej', export:'Eksport', extract:'Ekstrak bingkai', capture:'Tangkap bingkai semasa', frames:'Imej diekstrak', download:'Muat turun imej ini', plan:'Pelan pengekstrakan', faqTitle:'Soalan lazim', faqDesc:'Buka soalan untuk melihat jawapan.', light:'Cerah', dark:'Gelap'},
+        ja: {app:'動画フレーム抽出', tag:'ローカル処理 · 動画はこの端末に残ります', tool:'ツール', features:'機能', faq:'よくある質問', hero:'動画から必要なフレームを取り出します。', heroDesc:'時間間隔またはフレーム単位で抽出できます。すべてブラウザ内でローカル処理されます。', mode:'抽出モード', byTime:'時間指定', byFrame:'フレーム指定', format:'画像形式', export:'書き出し', extract:'フレームを抽出', capture:'現在のフレームを保存', frames:'抽出した画像', download:'この画像をダウンロード', plan:'抽出プラン', faqTitle:'よくある質問', faqDesc:'質問を開くと回答を確認できます。', light:'ライト', dark:'ダーク'},
+        de: {app:'Video-Frame-Extractor', tag:'Lokale Verarbeitung · Das Video bleibt auf diesem Gerät', tool:'Werkzeug', features:'Funktionen', faq:'Häufige Fragen', hero:'Nehmen Sie aus dem Video genau die Frames, die Sie brauchen.', heroDesc:'Extrahieren Sie nach Zeitintervall oder Frame. Alles wird lokal im Browser verarbeitet.', mode:'Extraktionsmodus', byTime:'Nach Zeit', byFrame:'Nach Frames', format:'Bildformat', export:'Exportieren', extract:'Frames extrahieren', capture:'Aktuellen Frame speichern', frames:'Extrahierte Bilder', download:'Dieses Bild herunterladen', plan:'Extraktionsplan', faqTitle:'Häufige Fragen', faqDesc:'Öffnen Sie eine Frage, um die Antwort zu sehen.', light:'Hell', dark:'Dunkel'},
+        sw: {app:'Kitoa Fremu za Video', tag:'Uchakataji wa ndani · Video inabaki kwenye kifaa hiki', tool:'Zana', features:'Vipengele', faq:'Maswali yanayoulizwa mara kwa mara', hero:'Chukua kila fremu unayohitaji kutoka kwenye video.', heroDesc:'Toa kwa muda au kwa fremu. Kila kitu huchakatwa ndani ya kivinjari.', mode:'Hali ya kutoa fremu', byTime:'Kwa muda', byFrame:'Kwa fremu', format:'Muundo wa picha', export:'Hamisha', extract:'Toa fremu', capture:'Nasa fremu ya sasa', frames:'Picha zilizotolewa', download:'Pakua picha hii', plan:'Mpango wa utoaji', faqTitle:'Maswali yanayoulizwa mara kwa mara', faqDesc:'Fungua swali ili kuona jibu.', light:'Angavu', dark:'Giza'},
+        te: {app:'వీడియో ఫ్రేమ్ ఎక్స్‌ట్రాక్టర్', tag:'స్థానిక ప్రాసెసింగ్ · వీడియో ఈ పరికరంలోనే ఉంటుంది', tool:'సాధనం', features:'ఫీచర్లు', faq:'తరచుగా అడిగే ప్రశ్నలు', hero:'వీడియో నుండి అవసరమైన ప్రతి ఫ్రేమ్ తీసుకోండి.', heroDesc:'సమయ అంతరం లేదా ఫ్రేమ్‌ల ప్రకారం తీసుకోండి. అన్నీ బ్రౌజర్‌లో స్థానికంగా ప్రాసెస్ అవుతాయి.', mode:'ఫ్రేమ్ ఎక్స్‌ట్రాక్షన్ మోడ్', byTime:'సమయం ద్వారా', byFrame:'ఫ్రేమ్ ద్వారా', format:'చిత్ర ఫార్మాట్', export:'ఎగుమతి', extract:'ఫ్రేమ్‌లు తీసుకోండి', capture:'ప్రస్తుత ఫ్రేమ్‌ను తీసుకోండి', frames:'తీసిన చిత్రాలు', download:'ఈ చిత్రాన్ని డౌన్‌లోడ్ చేయండి', plan:'ఎక్స్‌ట్రాక్షన్ ప్లాన్', faqTitle:'తరచుగా అడిగే ప్రశ్నలు', faqDesc:'సమాధానం చూడటానికి ప్రశ్నను తెరవండి.', light:'లైట్', dark:'డార్క్'},
+        mr: {app:'व्हिडिओ फ्रेम एक्स्ट्रॅक्टर', tag:'स्थानिक प्रक्रिया · व्हिडिओ या उपकरणावरच राहतो', tool:'साधन', features:'वैशिष्ट्ये', faq:'सामान्य प्रश्न', hero:'व्हिडिओमधून आवश्यक असलेला प्रत्येक फ्रेम घ्या.', heroDesc:'वेळेच्या अंतराने किंवा फ्रेमनुसार काढा. सर्व प्रक्रिया ब्राउझरमध्ये स्थानिकपणे होते.', mode:'फ्रेम एक्स्ट्रॅक्शन मोड', byTime:'वेळेनुसार', byFrame:'फ्रेमनुसार', format:'प्रतिमा स्वरूप', export:'निर्यात', extract:'फ्रेम काढा', capture:'सध्याचा फ्रेम कॅप्चर करा', frames:'काढलेल्या प्रतिमा', download:'ही प्रतिमा डाउनलोड करा', plan:'एक्स्ट्रॅक्शन योजना', faqTitle:'सामान्य प्रश्न', faqDesc:'उत्तर पाहण्यासाठी प्रश्न उघडा.', light:'हलका', dark:'गडद'},
+        tr: {app:'Video Kare Çıkarıcı', tag:'Yerel işleme · Video bu cihazda kalır', tool:'Araç', features:'Özellikler', faq:'Sık sorulan sorular', hero:'Videodan ihtiyacınız olan her kareyi alın.', heroDesc:'Zaman aralığına veya karelere göre ayıklayın. Her şey tarayıcıda yerel olarak işlenir.', mode:'Kare çıkarma modu', byTime:'Zamana göre', byFrame:'Kareye göre', format:'Görüntü biçimi', export:'Dışa aktar', extract:'Kareleri çıkar', capture:'Geçerli kareyi yakala', frames:'Çıkarılan görüntüler', download:'Bu görüntüyü indir', plan:'Çıkarma planı', faqTitle:'Sık sorulan sorular', faqDesc:'Yanıtı görmek için bir soruyu açın.', light:'Açık', dark:'Koyu'},
+        yue: {app:'影片影格擷取器', tag:'本機處理 · 影片會保留喺呢部裝置', tool:'工具', features:'特色', faq:'常見問題', hero:'由影片擷取你需要嘅每一格。', heroDesc:'支援按時間間隔或影格抽取，所有檔案只會喺瀏覽器本機處理。', mode:'抽格模式', byTime:'按時間', byFrame:'按影格', format:'匯出圖片格式', export:'匯出', extract:'開始抽格', capture:'擷取目前影格', frames:'已抽取圖片', download:'下載呢張圖片', plan:'目前抽格計劃', faqTitle:'常見問題', faqDesc:'撳開問題即可查看答案。', light:'淺色', dark:'深色'},
+        vi: {app:'Trình trích xuất khung hình', tag:'Xử lý cục bộ · Video vẫn ở trên thiết bị này', tool:'Công cụ', features:'Tính năng', faq:'Câu hỏi thường gặp', hero:'Lấy mọi khung hình bạn cần từ video.', heroDesc:'Trích xuất theo thời gian hoặc theo khung hình. Mọi thứ được xử lý cục bộ trong trình duyệt.', mode:'Chế độ trích xuất', byTime:'Theo thời gian', byFrame:'Theo khung hình', format:'Định dạng ảnh', export:'Xuất', extract:'Trích xuất khung hình', capture:'Chụp khung hình hiện tại', frames:'Ảnh đã trích xuất', download:'Tải ảnh này xuống', plan:'Kế hoạch trích xuất', faqTitle:'Câu hỏi thường gặp', faqDesc:'Mở câu hỏi để xem câu trả lời.', light:'Sáng', dark:'Tối'},
+        ko: {app:'동영상 프레임 추출기', tag:'로컬 처리 · 동영상은 이 기기에 유지됩니다', tool:'도구', features:'기능', faq:'자주 묻는 질문', hero:'동영상에서 필요한 모든 프레임을 가져오세요.', heroDesc:'시간 간격 또는 프레임 단위로 추출합니다. 모든 처리는 브라우저에서 로컬로 수행됩니다.', mode:'프레임 추출 모드', byTime:'시간별', byFrame:'프레임별', format:'이미지 형식', export:'내보내기', extract:'프레임 추출', capture:'현재 프레임 캡처', frames:'추출한 이미지', download:'이 이미지 다운로드', plan:'추출 계획', faqTitle:'자주 묻는 질문', faqDesc:'질문을 열어 답변을 확인하세요.', light:'라이트', dark:'다크'}
+      };
+
+      function makeCoreLocale(pack) {
+        return {
+          "document.title": pack.app, "brand.title": pack.app, "brand.subtitle": pack.tag, "header.brand": pack.app,
+          "nav.tool": pack.tool, "nav.features": pack.features, "nav.faq": pack.faq,
+          "hero.title": pack.hero, "hero.description": pack.heroDesc,
+          "mode.title": pack.mode, "mode.time": pack.byTime, "mode.frame": pack.byFrame,
+          "format.title": pack.format, "export.title": pack.export,
+          "button.extract": pack.extract, "button.captureCurrent": pack.capture,
+          "frames.title": pack.frames, "button.downloadFrame": pack.download,
+          "plan.title": pack.plan, "faq.title": pack.faqTitle, "faq.description": pack.faqDesc,
+          "theme.light": pack.light, "theme.dark": pack.dark,
+          "language.menu": 'Choose interface language'
+        };
+      }
+      Object.entries(CORE_LANGUAGE_PACKS).forEach(([code, pack]) => {
+        LOCALES[code] = { ...LOCALES.en, ...makeCoreLocale(pack) };
+      });
+
       state.language = 'zh';
 
       function t(key, variables = {}) {
-        const dictionary = LOCALES[state.language] || LOCALES.zh;
-        let value = dictionary[key] ?? LOCALES.zh[key] ?? key;
+        const dictionary = LOCALES[state.language] || LOCALES.en;
+        const fallback = state.language === 'zh' ? LOCALES.zh : LOCALES.en;
+        let value = dictionary[key] ?? fallback[key] ?? LOCALES.zh[key] ?? key;
         return String(value).replace(/\{(\w+)\}/g, (_match, name) => String(variables[name] ?? ''));
+      }
+
+      function normalizeLanguage(language) {
+        return LANGUAGE_META[language] ? language : 'zh';
       }
 
       function getPreferredLanguage() {
         try {
           const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY);
-          if (saved === 'zh' || saved === 'en') return saved;
+          if (saved && LANGUAGE_META[saved]) return saved;
         } catch (_) {
           // Local storage can be unavailable in restricted browser contexts.
         }
-        return navigator.language?.toLowerCase().startsWith('zh') ? 'zh' : 'en';
+        const language = (navigator.languages?.[0] || navigator.language || 'zh').toLowerCase();
+        if (language.includes('zh-hk') || language.includes('zh-mo') || language.startsWith('yue')) return 'yue';
+        if (language.startsWith('zh')) return 'zh';
+        if (language.startsWith('es')) return 'es';
+        if (language.startsWith('hi')) return 'hi';
+        if (language.startsWith('ar')) return 'ar';
+        if (language.startsWith('fr')) return 'fr';
+        if (language.startsWith('bn')) return 'bn';
+        if (language.startsWith('pt')) return 'pt';
+        if (language.startsWith('ru')) return 'ru';
+        if (language.startsWith('ur')) return 'ur';
+        if (language.startsWith('id') || language.startsWith('ms')) return 'idms';
+        if (language.startsWith('ja')) return 'ja';
+        if (language.startsWith('de')) return 'de';
+        if (language.startsWith('sw')) return 'sw';
+        if (language.startsWith('te')) return 'te';
+        if (language.startsWith('mr')) return 'mr';
+        if (language.startsWith('tr')) return 'tr';
+        if (language.startsWith('vi')) return 'vi';
+        if (language.startsWith('ko')) return 'ko';
+        return 'en';
       }
 
       function localizeStaticContent() {
-        document.documentElement.lang = state.language === 'en' ? 'en' : 'zh-CN';
+        const meta = LANGUAGE_META[state.language] || LANGUAGE_META.en;
+        document.documentElement.lang = meta.lang;
+        document.documentElement.dir = meta.dir;
         document.title = t('document.title');
         document.querySelectorAll('[data-i18n]').forEach((element) => {
           element.textContent = t(element.dataset.i18n);
@@ -1666,21 +2712,37 @@
         }
       }
 
+      function closeLanguageMenu() {
+        if (!els.languageDropdown || !els.languageMenuButton) return;
+        els.languageDropdown.hidden = true;
+        els.languageMenuButton.setAttribute('aria-expanded', 'false');
+      }
+
+      function updateLanguageMenu() {
+        const meta = LANGUAGE_META[state.language] || LANGUAGE_META.en;
+        if (els.languageMenuLabel) els.languageMenuLabel.textContent = meta.label;
+        if (els.languageMenuButton) {
+          els.languageMenuButton.setAttribute('aria-label', t('language.menu'));
+          els.languageMenuButton.setAttribute('title', t('language.menu'));
+        }
+        els.languageOptions?.forEach((option) => {
+          option.setAttribute('aria-current', String(option.dataset.languageOption === state.language));
+        });
+      }
+
       function applyLanguage(language, persist = true) {
-        const nextLanguage = language === 'en' ? 'en' : 'zh';
+        const nextLanguage = normalizeLanguage(language);
         state.language = nextLanguage;
         localizeStaticContent();
-
-        const isEnglish = nextLanguage === 'en';
-        els.languageToggle?.setAttribute('aria-pressed', String(isEnglish));
-        els.languageToggle?.setAttribute('aria-label', t('language.aria'));
-        els.languageToggle?.setAttribute('title', isEnglish ? t('language.toChinese') : t('language.toEnglish'));
-        if (els.languageLabel) els.languageLabel.textContent = isEnglish ? '中文' : 'EN';
+        updateLanguageMenu();
 
         if (document.documentElement.dataset.theme) {
           applyTheme(document.documentElement.dataset.theme, false);
         }
         refreshPlan();
+        updatePreviewReadout();
+        updateFrameRangeUI();
+        updateCaptureModeUI();
         updateSelectionUI();
 
         if (persist) {
@@ -1694,8 +2756,23 @@
 
       function initLanguage() {
         applyLanguage(getPreferredLanguage(), false);
-        els.languageToggle?.addEventListener('click', () => {
-          applyLanguage(state.language === 'en' ? 'zh' : 'en');
+        els.languageMenuButton?.addEventListener('click', (event) => {
+          event.stopPropagation();
+          const isOpen = !els.languageDropdown.hidden;
+          els.languageDropdown.hidden = isOpen;
+          els.languageMenuButton.setAttribute('aria-expanded', String(!isOpen));
+        });
+        els.languageOptions?.forEach((option) => {
+          option.addEventListener('click', () => {
+            applyLanguage(option.dataset.languageOption);
+            closeLanguageMenu();
+          });
+        });
+        document.addEventListener('click', (event) => {
+          if (!event.target.closest('.language-menu')) closeLanguageMenu();
+        });
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') closeLanguageMenu();
         });
       }
 
@@ -1715,10 +2792,15 @@
         document.documentElement.style.colorScheme = nextTheme;
 
         const isDark = nextTheme === 'dark';
+        const title = isDark ? t('theme.toLight') : t('theme.toDark');
         els.themeToggle?.setAttribute('aria-pressed', String(isDark));
-        els.themeToggle?.setAttribute('title', isDark ? t('theme.toLight') : t('theme.toDark'));
+        els.themeToggle?.setAttribute('title', title);
         if (els.themeIcon) els.themeIcon.textContent = isDark ? '☀' : '☾';
         if (els.themeLabel) els.themeLabel.textContent = isDark ? t('theme.light') : t('theme.dark');
+        els.headerThemeToggle?.setAttribute('aria-pressed', String(isDark));
+        els.headerThemeToggle?.setAttribute('aria-label', title);
+        els.headerThemeToggle?.setAttribute('title', title);
+        if (els.headerThemeIcon) els.headerThemeIcon.textContent = isDark ? '☀' : '☾';
 
         if (persist) {
           try {
@@ -1731,10 +2813,12 @@
 
       function initTheme() {
         applyTheme(getPreferredTheme(), false);
-        els.themeToggle?.addEventListener('click', () => {
+        const toggleTheme = () => {
           const current = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
           applyTheme(current === 'dark' ? 'light' : 'dark');
-        });
+        };
+        els.themeToggle?.addEventListener('click', toggleTheme);
+        els.headerThemeToggle?.addEventListener('click', toggleTheme);
       }
 
       function cleanNumber(value, fallback, min) {
@@ -2072,6 +3156,191 @@
         els.progressBar.style.width = '0%';
       }
 
+      function getTotalFrames() {
+        if (!state.duration || !Number.isFinite(state.duration)) return 0;
+        const fps = cleanNumber(state.fps, 30, 1);
+        return Math.max(1, Math.floor(state.duration * fps));
+      }
+
+      function displayCompactSeconds(seconds) {
+        if (!Number.isFinite(seconds)) return '—';
+        return `${Math.max(0, seconds).toFixed(2)}${t('unit.secondShort')}`;
+      }
+
+      function getFrameRange() {
+        const total = getTotalFrames();
+        if (!total) return { start: 1, end: 1, total: 0 };
+        let start = Math.round(cleanNumber(els.frameRangeStart?.value, 1, 1));
+        let end = Math.round(cleanNumber(els.frameRangeEnd?.value, total, 1));
+        start = Math.max(1, Math.min(start, total));
+        end = Math.max(start, Math.min(end, total));
+        return { start, end, total };
+      }
+
+      function updatePreviewReadout(time = null) {
+        const total = getTotalFrames();
+        const safeTime = Number.isFinite(time)
+          ? time
+          : (Number.isFinite(els.previewVideo?.currentTime) ? els.previewVideo.currentTime : 0);
+        const current = total ? Math.max(1, Math.min(total, Math.floor(Math.max(0, safeTime) * cleanNumber(state.fps, 30, 1)) + 1)) : 0;
+        if (els.previewFrameCurrent) els.previewFrameCurrent.textContent = current || '—';
+        if (els.previewFrameTotal) els.previewFrameTotal.textContent = total || '—';
+        if (els.previewTimeCurrent) els.previewTimeCurrent.textContent = total ? displayCompactSeconds(safeTime) : '—';
+        if (els.previewTimeTotal) els.previewTimeTotal.textContent = total ? displayCompactSeconds(state.duration) : '—';
+        if (els.manualFrameReadout) els.manualFrameReadout.textContent = total
+          ? t('preview.frame.readout', { current, total })
+          : t('preview.frame.readout', { current: '—', total: '—' });
+        if (els.manualTimeReadout) els.manualTimeReadout.textContent = total
+          ? t('preview.time.readout', { current: displayCompactSeconds(safeTime), total: displayCompactSeconds(state.duration) })
+          : t('preview.time.readout', { current: '—', total: '—' });
+      }
+
+      function updateFrameRangeFill() {
+        if (!els.frameRangeFill) return;
+        const { start, end, total } = getFrameRange();
+        if (!total) {
+          els.frameRangeFill.style.left = '0%';
+          els.frameRangeFill.style.right = '0%';
+          return;
+        }
+        const left = ((start - 1) / Math.max(1, total - 1)) * 100;
+        const right = 100 - (((end - 1) / Math.max(1, total - 1)) * 100);
+        els.frameRangeFill.style.left = `${left}%`;
+        els.frameRangeFill.style.right = `${right}%`;
+      }
+
+      function updateFrameRangeUI() {
+        if (!els.frameRangeSection) return;
+        const isFrameMode = state.mode === 'frame';
+        els.frameRangeSection.hidden = !isFrameMode;
+        const total = getTotalFrames();
+        if (!total) {
+          els.frameRangeTotal.textContent = '—';
+          return;
+        }
+        const current = getFrameRange();
+        [els.frameRangeStart, els.frameRangeEnd, els.frameRangeStartSlider, els.frameRangeEndSlider].forEach((input) => {
+          if (!input) return;
+          input.min = '1';
+          input.max = String(total);
+        });
+        els.frameRangeStart.value = current.start;
+        els.frameRangeEnd.value = current.end;
+        els.frameRangeStartSlider.value = current.start;
+        els.frameRangeEndSlider.value = current.end;
+        els.frameRangeTotal.textContent = t('frameRange.total', { total: total.toLocaleString() });
+        updateFrameRangeFill();
+      }
+
+      function setFrameRange(startValue, endValue, changed = 'start') {
+        const total = getTotalFrames();
+        if (!total) return;
+        let start = Math.round(cleanNumber(startValue, 1, 1));
+        let end = Math.round(cleanNumber(endValue, total, 1));
+        start = Math.max(1, Math.min(start, total));
+        end = Math.max(1, Math.min(end, total));
+        if (changed === 'start' && start > end) end = start;
+        if (changed === 'end' && end < start) start = end;
+        els.frameRangeStart.value = start;
+        els.frameRangeEnd.value = end;
+        els.frameRangeStartSlider.value = start;
+        els.frameRangeEndSlider.value = end;
+        updateFrameRangeFill();
+        refreshPlan();
+        markParametersUpdated();
+      }
+
+      function updateManualControls() {
+        const total = getTotalFrames();
+        const enabled = Boolean(state.duration && state.file && !state.extracting);
+        if (els.manualFrameSlider) {
+          els.manualFrameSlider.min = '1';
+          els.manualFrameSlider.max = String(Math.max(1, total));
+          const selected = Math.max(1, Math.min(total || 1, Math.round((state.manualTime || 0) * cleanNumber(state.fps, 30, 1)) + 1));
+          els.manualFrameSlider.value = selected;
+          els.manualFrameSlider.disabled = !enabled;
+        }
+        if (els.manualCaptureAction) els.manualCaptureAction.disabled = !enabled;
+        if (els.manualTimelineEnd) els.manualTimelineEnd.textContent = total ? displayCompactSeconds(state.duration) : '—';
+      }
+
+      function updateCaptureModeUI() {
+        const manual = state.captureMode === 'manual';
+        els.autoCaptureBtn?.classList.toggle('active', !manual);
+        els.manualModeBtn?.classList.toggle('active', manual);
+        if (els.autoCapturePanel) els.autoCapturePanel.hidden = manual;
+        if (els.manualCapturePanel) els.manualCapturePanel.hidden = !manual;
+        if (els.extractBtn) {
+          els.extractBtn.textContent = manual ? t('button.captureCurrent') : t('button.extract');
+        }
+        updateManualControls();
+      }
+
+      function setCaptureMode(mode) {
+        state.captureMode = mode === 'manual' ? 'manual' : 'auto';
+        updateCaptureModeUI();
+        if (state.captureMode === 'manual' && state.duration) {
+          const frame = Math.max(1, Math.min(getTotalFrames(), Math.round((state.manualTime || 0) * cleanNumber(state.fps, 30, 1)) + 1));
+          setManualFrame(frame, false);
+        }
+      }
+
+      function setManualFrame(frameValue, seek = true) {
+        const total = getTotalFrames();
+        if (!total) return;
+        const frame = Math.max(1, Math.min(total, Math.round(cleanNumber(frameValue, 1, 1))));
+        const time = Math.min(Math.max(0, (frame - 1) / cleanNumber(state.fps, 30, 1)), Math.max(0, state.duration - 0.001));
+        state.manualTime = time;
+        if (els.manualFrameSlider) els.manualFrameSlider.value = frame;
+        if (seek && els.previewVideo?.readyState >= 1) {
+          try { els.previewVideo.currentTime = time; } catch (_) { /* ignore seeks before the player is ready */ }
+        }
+        updatePreviewReadout(time);
+      }
+
+      async function buildTimelineStrip() {
+        const buildId = ++state.timelineBuildId;
+        if (!els.timelineFilmstrip) return;
+        const total = getTotalFrames();
+        els.timelineFilmstrip.innerHTML = '';
+        if (!state.duration || !total || !state.url) return;
+        const thumbnailCount = 10;
+        const canvas = document.createElement('canvas');
+        canvas.width = 160;
+        canvas.height = 90;
+        const ctx = canvas.getContext('2d', { alpha: false });
+        // Use a separate video element so thumbnail seeking never conflicts with frame extraction.
+        const video = document.createElement('video');
+        video.muted = true;
+        video.playsInline = true;
+        video.preload = 'auto';
+        video.src = state.url;
+        try {
+          if (video.readyState < 1) await waitForEvent(video, 'loadedmetadata');
+          for (let index = 0; index < thumbnailCount; index += 1) {
+            if (buildId !== state.timelineBuildId || !state.duration) return;
+            const time = Math.min((index / Math.max(1, thumbnailCount - 1)) * Math.max(0, state.duration - 0.001), Math.max(0, state.duration - 0.001));
+            try {
+              await seekVideo(video, time);
+              ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+              const thumb = document.createElement('span');
+              thumb.className = 'timeline-thumb';
+              thumb.style.backgroundImage = `url("${canvas.toDataURL('image/jpeg', 0.66)}")`;
+              els.timelineFilmstrip.appendChild(thumb);
+            } catch (_) {
+              const thumb = document.createElement('span');
+              thumb.className = 'timeline-thumb';
+              els.timelineFilmstrip.appendChild(thumb);
+            }
+          }
+        } catch (_) {
+          // The visual strip is optional. The range slider remains fully usable.
+        } finally {
+          video.removeAttribute('src');
+          video.load();
+        }
+      }
+
       function setMode(mode) {
         state.mode = mode;
         const isTime = mode === 'time';
@@ -2080,6 +3349,7 @@
         els.timeSettings.hidden = !isTime;
         els.frameSettings.hidden = isTime;
         els.modeLabel.textContent = isTime ? t('mode.time.label') : t('mode.frame.label');
+        updateFrameRangeUI();
         refreshPlan();
         markParametersUpdated();
       }
@@ -2091,16 +3361,16 @@
 
         if (state.mode === 'time') {
           const interval = cleanNumber(els.intervalSeconds.value, 1, 0.01);
-          for (let t = 0; t < duration - 0.001; t += interval) {
-            targets.push(Math.min(t, Math.max(0, duration - 0.001)));
+          for (let time = 0; time < duration - 0.001; time += interval) {
+            targets.push(Math.min(time, Math.max(0, duration - 0.001)));
             if (targets.length > 12000) break;
           }
         } else {
           const stride = Math.round(cleanNumber(els.frameStride.value, 30, 1));
           const fps = cleanNumber(state.fps, 30, 1);
-          const totalFrames = Math.max(1, Math.floor(duration * fps));
-          for (let frame = 0; frame < totalFrames; frame += stride) {
-            targets.push(Math.min(frame / fps, Math.max(0, duration - 0.001)));
+          const { start, end } = getFrameRange();
+          for (let frame = start; frame <= end; frame += stride) {
+            targets.push(Math.min((frame - 1) / fps, Math.max(0, duration - 0.001)));
             if (targets.length > 12000) break;
           }
         }
@@ -2122,6 +3392,8 @@
           els.ruleValue.textContent = '—';
           els.estimateValue.textContent = '—';
           els.planState.textContent = t('plan.notLoaded');
+          updateFrameRangeUI();
+          updateManualControls();
           return;
         }
 
@@ -2141,6 +3413,8 @@
         els.ruleValue.textContent = isTime ? t('plan.ruleTime', { interval }) : t('plan.ruleFrame', { stride });
         els.estimateValue.textContent = targets.length > 12000 ? t('plan.overLimit') : t('plan.estimate', { count: targets.length.toLocaleString() });
         els.planState.textContent = t('plan.estimate', { count: targets.length.toLocaleString() });
+        updateFrameRangeUI();
+        updateManualControls();
       }
 
       function renderEmptyFrames(message = t('frames.empty.message')) {
@@ -2168,8 +3442,21 @@
         els.clearBtn.disabled = true;
       }
 
+      function downloadSingleFrame(frame, index) {
+        const url = URL.createObjectURL(frame.blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = exportFrameName(frame, index);
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 12000);
+        setStatus(t('status.frameDownloaded'), 'ready');
+      }
+
       function makeFrameCard(frame, index) {
-        const card = document.createElement('label');
+        const card = document.createElement('article');
         card.className = `frame-card${frame.selected ? ' selected' : ''}`;
         card.title = t('frame.card.title', { index: index + 1, time: displayTime(frame.time) });
         card.innerHTML = `
@@ -2178,19 +3465,26 @@
           <div class="frame-info">
             <span class="frame-time">${displayTime(frame.time)}</span>
             <span class="frame-file">${exportFrameName(frame, index)}</span>
-          </div>`;
+          </div>
+          <button class="frame-download" type="button" title="${t('button.downloadFrame')}" aria-label="${t('button.downloadFrame')}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v11"/><path d="m7.5 10.5 4.5 4.5 4.5-4.5"/><path d="M5 20h14"/></svg>
+          </button>`;
         const checkbox = card.querySelector('.check');
+        const downloadButton = card.querySelector('.frame-download');
         checkbox.addEventListener('change', () => {
           frame.selected = checkbox.checked;
           card.classList.toggle('selected', frame.selected);
           updateSelectionUI();
         });
+        downloadButton.addEventListener('click', (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          downloadSingleFrame(frame, index);
+        });
         card.addEventListener('click', (event) => {
-          if (event.target !== checkbox) {
-            event.preventDefault();
-            checkbox.checked = !checkbox.checked;
-            checkbox.dispatchEvent(new Event('change'));
-          }
+          if (event.target === checkbox || event.target.closest('.frame-download')) return;
+          checkbox.checked = !checkbox.checked;
+          checkbox.dispatchEvent(new Event('change'));
         });
         return card;
       }
@@ -2374,7 +3668,14 @@
           els.outputHeight.value = state.height;
           els.lockAspect.dataset.lastChanged = 'width';
           updateResolutionUI(true);
+          const totalFrames = getTotalFrames();
+          els.frameRangeStart.value = '1';
+          els.frameRangeEnd.value = String(totalFrames || 1);
+          state.manualTime = 0;
           refreshPlan();
+          updatePreviewReadout(0);
+          updateCaptureModeUI();
+          void buildTimelineStrip();
           els.extractBtn.disabled = false;
           setStatus(t('status.videoReady'), 'ready');
           els.autoNotice.innerHTML = t('notice.videoReady');
@@ -2382,7 +3683,12 @@
           state.duration = 0;
           state.width = 0;
           state.height = 0;
+          state.manualTime = 0;
+          state.timelineBuildId += 1;
           els.extractBtn.disabled = true;
+          updatePreviewReadout(0);
+          updateFrameRangeUI();
+          updateManualControls();
           renderEmptyFrames(t('error.videoUnsupported'));
           setStatus(t('status.cannotRead'));
           alert(error.message || t('error.readVideo'));
@@ -2407,6 +3713,7 @@
         els.autoNotice.innerHTML = state.frames.length
           ? t('notice.stopped.withFrames', { count: state.frames.length })
           : t('notice.stopped.empty');
+        updateManualControls();
         updateSelectionUI();
       }
 
@@ -2485,7 +3792,75 @@
             state.extracting = false;
             els.extractBtn.disabled = !state.duration;
             els.cancelBtn.disabled = true;
+            updateManualControls();
             updateSelectionUI();
+          }
+        }
+      }
+
+      async function captureManualFrame() {
+        if (!state.duration || !state.file) {
+          alert(t('error.noVideo'));
+          return;
+        }
+        if (state.extracting) return;
+        const total = getTotalFrames();
+        const frameNumber = Math.max(1, Math.min(total, Number(els.manualFrameSlider?.value || 1)));
+        const time = Math.min(Math.max(0, (frameNumber - 1) / cleanNumber(state.fps, 30, 1)), Math.max(0, state.duration - 0.001));
+        const jobId = ++state.jobId;
+        state.extracting = true;
+        els.extractBtn.disabled = true;
+        els.manualCaptureAction.disabled = true;
+        els.cancelBtn.disabled = false;
+        els.zipBtn.disabled = true;
+        els.clearBtn.disabled = false;
+        setStatus(isHeifFormat() ? t('status.loadingHeif') : t('status.manualCapturing'), 'busy');
+        setProgress(0, isHeifFormat() ? t('progress.heifPreparing') : t('progress.manualCapturing'));
+
+        const video = els.workVideo;
+        const canvas = els.workCanvas;
+        const ctx = canvas.getContext('2d', { alpha: false });
+        const outputDims = getOutputDimensions();
+        canvas.width = outputDims.width;
+        canvas.height = outputDims.height;
+
+        try {
+          await seekVideo(video, time);
+          if (jobId !== state.jobId) throw new Error('__CANCELED__');
+          ctx.drawImage(video, 0, 0, outputDims.width, outputDims.height);
+          const previewBlobPromise = (isTiffFormat() || isHeifFormat())
+            ? canvasToBlob(canvas, 'image/jpeg')
+            : null;
+          const blob = await canvasToExportBlob(canvas);
+          const previewBlob = previewBlobPromise ? await previewBlobPromise : blob;
+          if (jobId !== state.jobId) throw new Error('__CANCELED__');
+          const frame = {
+            time,
+            sequence: state.frames.length + 1,
+            blob,
+            selected: true,
+            url: URL.createObjectURL(previewBlob),
+          };
+          state.frames.push(frame);
+          appendFrame(frame);
+          setProgress(100, t('status.manualCaptured'));
+          setStatus(t('status.manualCaptured'), 'ready');
+          els.autoNotice.innerHTML = t('notice.manualCaptured');
+          setTimeout(hideProgress, 800);
+        } catch (error) {
+          if (error.message !== '__CANCELED__') {
+            console.error(error);
+            alert(error.message || t('error.extract'));
+            setStatus(t('status.extractFailed'), state.duration ? 'ready' : 'idle');
+          }
+        } finally {
+          if (jobId === state.jobId) {
+            state.extracting = false;
+            els.extractBtn.disabled = !state.duration;
+            els.manualCaptureAction.disabled = !state.duration;
+            els.cancelBtn.disabled = true;
+            updateSelectionUI();
+            updateManualControls();
           }
         }
       }
@@ -2693,6 +4068,31 @@
       // Events
       els.timeModeBtn.addEventListener('click', () => setMode('time'));
       els.frameModeBtn.addEventListener('click', () => setMode('frame'));
+      els.autoCaptureBtn.addEventListener('click', () => setCaptureMode('auto'));
+      els.manualModeBtn.addEventListener('click', () => setCaptureMode('manual'));
+      els.manualFrameSlider.addEventListener('input', () => setManualFrame(els.manualFrameSlider.value));
+      els.manualCaptureAction.addEventListener('click', captureManualFrame);
+      els.previewVideo.addEventListener('timeupdate', () => {
+        if (!state.duration) return;
+        state.manualTime = els.previewVideo.currentTime || 0;
+        updatePreviewReadout(state.manualTime);
+        if (state.captureMode === 'manual' && els.manualFrameSlider) {
+          const frame = Math.max(1, Math.min(getTotalFrames(), Math.floor(state.manualTime * cleanNumber(state.fps, 30, 1)) + 1));
+          els.manualFrameSlider.value = frame;
+        }
+      });
+      els.previewVideo.addEventListener('seeked', () => {
+        if (!state.duration) return;
+        state.manualTime = els.previewVideo.currentTime || 0;
+        updatePreviewReadout(state.manualTime);
+      });
+
+      const updateFrameRangeFromStart = () => setFrameRange(els.frameRangeStart.value, els.frameRangeEnd.value, 'start');
+      const updateFrameRangeFromEnd = () => setFrameRange(els.frameRangeStart.value, els.frameRangeEnd.value, 'end');
+      els.frameRangeStart.addEventListener('input', updateFrameRangeFromStart);
+      els.frameRangeEnd.addEventListener('input', updateFrameRangeFromEnd);
+      els.frameRangeStartSlider.addEventListener('input', () => setFrameRange(els.frameRangeStartSlider.value, els.frameRangeEndSlider.value, 'start'));
+      els.frameRangeEndSlider.addEventListener('input', () => setFrameRange(els.frameRangeStartSlider.value, els.frameRangeEndSlider.value, 'end'));
 
       [els.intervalSeconds, els.frameStride, els.formatSelect].forEach(input => {
         input.addEventListener('input', () => {
@@ -2785,7 +4185,7 @@
         else alert(t('error.dropVideo'));
       });
 
-      els.extractBtn.addEventListener('click', extractFrames);
+      els.extractBtn.addEventListener('click', () => state.captureMode === 'manual' ? captureManualFrame() : extractFrames());
       els.cancelBtn.addEventListener('click', cancelExtraction);
       els.zipBtn.addEventListener('click', runExport);
       els.clearBtn.addEventListener('click', () => {
