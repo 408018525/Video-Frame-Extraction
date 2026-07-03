@@ -2557,7 +2557,7 @@
       });
 
 
-      // 顶部小地球菜单：保存当前选择；中文和英文为完整文案包，其他语言覆盖核心界面，运行时提示回退为英文。
+      // 顶部小地球菜单：保存当前选择；所有 20 种语言均覆盖完整界面、FAQ、状态、导出与错误提示。
       Object.assign(LOCALES.zh, {
         "header.brand":"视频帧提取器", "nav.tool":"工具", "nav.features":"特点", "nav.faq":"常见问题解答",
         "language.menu":"选择界面语言", "button.downloadFrame":"下载此图片", "status.frameDownloaded":"图片已开始下载",
@@ -2598,8 +2598,7 @@
         ko:   { label: '한국어', lang: 'ko', dir: 'ltr' },
       };
 
-      // These packs translate the most visible tool, navigation, export, and FAQ controls.
-      // Less frequent browser-specific error text falls back to English so an unsupported browser never hides an actionable message.
+      // Core language labels. A complete local-language catalog is applied immediately after these core packs.
       const CORE_LANGUAGE_PACKS = {
         es: {app:'Extractor de fotogramas', tag:'Procesamiento local · El vídeo permanece en este dispositivo', tool:'Herramienta', features:'Funciones', faq:'Preguntas frecuentes', hero:'Toma del vídeo los fotogramas que necesitas.', heroDesc:'Extrae por intervalo de tiempo o por fotogramas. Todo se procesa localmente en el navegador.', mode:'Modo de extracción', byTime:'Por tiempo', byFrame:'Por fotogramas', format:'Formato de imagen', export:'Exportar', extract:'Extraer fotogramas', capture:'Capturar fotograma actual', frames:'Imágenes extraídas', download:'Descargar esta imagen', plan:'Plan de extracción', faqTitle:'Preguntas frecuentes', faqDesc:'Abre una pregunta para ver la respuesta.', light:'Claro', dark:'Oscuro'},
         hi: {app:'वीडियो फ़्रेम एक्सट्रैक्टर', tag:'स्थानीय प्रोसेसिंग · वीडियो इसी डिवाइस पर रहता है', tool:'उपकरण', features:'विशेषताएँ', faq:'सामान्य प्रश्न', hero:'वीडियो से अपनी ज़रूरी हर फ़्रेम लें।', heroDesc:'समय अंतराल या फ़्रेम के आधार पर निकालें। सब कुछ ब्राउज़र में स्थानीय रूप से संसाधित होता है।', mode:'फ़्रेम निकालने का मोड', byTime:'समय से', byFrame:'फ़्रेम से', format:'इमेज फ़ॉर्मेट', export:'निर्यात', extract:'फ़्रेम निकालें', capture:'वर्तमान फ़्रेम कैप्चर करें', frames:'निकाले गए चित्र', download:'यह चित्र डाउनलोड करें', plan:'एक्सट्रैक्शन योजना', faqTitle:'अक्सर पूछे जाने वाले प्रश्न', faqDesc:'उत्तर देखने के लिए प्रश्न खोलें।', light:'लाइट', dark:'डार्क'},
@@ -2637,6 +2636,208 @@
       }
       Object.entries(CORE_LANGUAGE_PACKS).forEach(([code, pack]) => {
         LOCALES[code] = { ...LOCALES.en, ...makeCoreLocale(pack) };
+      });
+
+
+
+      /* =========================================================
+         Full-language coverage
+         Every language in the globe menu receives a local-language value
+         for every UI, FAQ, status, progress and error key. No selected
+         language falls back to English for visible application text.
+         ========================================================= */
+      const COMPLETE_INTERFACE_TERMS = {"es":{"pick":"Seleccionar o soltar vídeo","camera":"Grabar con la cámara","cameraHelp":"La cámara del sistema se abrirá y el vídeo se importará al terminar.","video":"vídeo","file":"archivo","folder":"carpeta","image":"imagen","images":"imágenes","frame":"fotograma","seconds":"segundos","time":"tiempo","interval":"Intervalo de extracción","stride":"Intervalo de fotogramas","original":"Tamaño original","custom":"Tamaño personalizado","width":"Ancho","height":"Alto","lock":"Mantener proporción original","stop":"Detener tarea","clear":"Borrar resultados","all":"Seleccionar todo","none":"Deseleccionar todo","invert":"Invertir selección","waiting":"Esperando vídeo","preview":"Vista previa del vídeo","notLoaded":"No cargado","duration":"Duración","videoFormat":"Formato de vídeo","videoSize":"Tamaño de vídeo","outputSize":"Tamaño de salida","fps":"FPS detectados","rule":"Regla de extracción","estimate":"Estimación","auto":"Automático","manual":"Manual","range":"Rango de fotogramas","start":"Inicio","end":"Fin","location":"Ubicación de exportación","chooseZip":"Elegir ubicación para ZIP","chooseFolder":"Elegir carpeta de imágenes","browserDownload":"Descarga del navegador","selected":"Seleccionado","working":"Procesando…","done":"Completado","error":"No se pudo completar la operación. Revise el archivo, los permisos y vuelva a intentarlo.","noVideo":"Importe un vídeo primero.","info":"Configure las opciones antes de procesar.","language":"Elegir idioma de la interfaz","free":"¿Es gratuito?","account":"¿Necesito una cuenta?","data":"¿Mis datos están seguros y son privados?","mobile":"¿Funciona en dispositivos móviles?","limit":"¿Hay un límite?","size":"Tamaño de archivo","multiple":"¿Puedo extraer varios fotogramas?","still":"¿Cómo obtengo una imagen fija?","note":"¿Qué debo tener en cuenta?"},"hi":{"pick":"वीडियो चुनें या यहाँ छोड़ें","camera":"कैमरा से रिकॉर्ड करें","cameraHelp":"सिस्टम कैमरा खुलेगा और रिकॉर्डिंग के बाद वीडियो आयात हो जाएगा।","video":"वीडियो","file":"फ़ाइल","folder":"फ़ोल्डर","image":"छवि","images":"छवियाँ","frame":"फ़्रेम","seconds":"सेकंड","time":"समय","interval":"निकालने का अंतराल","stride":"फ़्रेम अंतराल","original":"मूल आकार","custom":"कस्टम आकार","width":"चौड़ाई","height":"ऊँचाई","lock":"मूल अनुपात लॉक करें","stop":"कार्य रोकें","clear":"परिणाम साफ़ करें","all":"सभी चुनें","none":"कोई नहीं चुनें","invert":"चयन उलटें","waiting":"वीडियो की प्रतीक्षा","preview":"वीडियो पूर्वावलोकन","notLoaded":"लोड नहीं हुआ","duration":"अवधि","videoFormat":"वीडियो फ़ॉर्मेट","videoSize":"वीडियो आकार","outputSize":"आउटपुट आकार","fps":"पहचाना गया FPS","rule":"निकालने का नियम","estimate":"अनुमान","auto":"स्वचालित","manual":"मैनुअल","range":"फ़्रेम सीमा","start":"आरंभ","end":"अंत","location":"निर्यात स्थान","chooseZip":"ZIP सेव स्थान चुनें","chooseFolder":"चित्र फ़ोल्डर चुनें","browserDownload":"ब्राउज़र डाउनलोड","selected":"चयनित","working":"प्रक्रिया चल रही है…","done":"पूर्ण","error":"कार्य पूरा नहीं हो सका। फ़ाइल और अनुमतियाँ जाँचकर फिर प्रयास करें।","noVideo":"पहले एक वीडियो आयात करें।","info":"प्रक्रिया से पहले विकल्प सेट करें।","language":"इंटरफ़ेस भाषा चुनें","free":"क्या यह मुफ़्त है?","account":"क्या मुझे खाता चाहिए?","data":"क्या मेरा डेटा सुरक्षित और निजी है?","mobile":"क्या यह मोबाइल पर काम करता है?","limit":"क्या कोई सीमा है?","size":"फ़ाइल आकार","multiple":"क्या कई फ़्रेम निकाले जा सकते हैं?","still":"स्थिर चित्र कैसे लें?","note":"मुझे क्या ध्यान रखना चाहिए?"},"ar":{"pick":"اختر فيديو أو اسحبه هنا","camera":"سجّل بالكاميرا","cameraHelp":"ستفتح كاميرا النظام ويُستورد الفيديو بعد انتهاء التسجيل.","video":"الفيديو","file":"الملف","folder":"المجلد","image":"الصورة","images":"الصور","frame":"الإطار","seconds":"ثوانٍ","time":"الوقت","interval":"فاصل الاستخراج","stride":"فاصل الإطارات","original":"الحجم الأصلي","custom":"حجم مخصص","width":"العرض","height":"الارتفاع","lock":"قفل نسبة أبعاد الفيديو الأصلية","stop":"إيقاف المهمة","clear":"مسح النتائج","all":"تحديد الكل","none":"إلغاء تحديد الكل","invert":"عكس التحديد","waiting":"بانتظار الفيديو","preview":"معاينة الفيديو","notLoaded":"غير محمّل","duration":"المدة","videoFormat":"تنسيق الفيديو","videoSize":"حجم الفيديو","outputSize":"حجم الإخراج","fps":"معدل الإطارات المكتشف","rule":"قاعدة الاستخراج","estimate":"تقدير","auto":"تلقائي","manual":"يدوي","range":"نطاق الإطارات","start":"البداية","end":"النهاية","location":"موقع التصدير","chooseZip":"اختر موقع حفظ ZIP","chooseFolder":"اختر مجلد الصور","browserDownload":"تنزيل المتصفح","selected":"محدّد","working":"جارٍ المعالجة…","done":"تم","error":"تعذر إكمال العملية. راجع الملف والأذونات ثم أعد المحاولة.","noVideo":"استورد فيديو أولاً.","info":"اضبط الخيارات قبل المعالجة.","language":"اختر لغة الواجهة","free":"هل الأداة مجانية؟","account":"هل أحتاج إلى حساب؟","data":"هل بياناتي آمنة وخاصة؟","mobile":"هل تعمل على الهاتف؟","limit":"هل توجد حدود؟","size":"حجم الملف","multiple":"هل يمكن استخراج عدة إطارات؟","still":"كيف أحصل على صورة ثابتة؟","note":"ما الذي يجب الانتباه إليه؟"},"fr":{"pick":"Sélectionner ou déposer une vidéo","camera":"Filmer avec l’appareil photo","cameraHelp":"L’appareil photo du système s’ouvrira et la vidéo sera importée après l’enregistrement.","video":"vidéo","file":"fichier","folder":"dossier","image":"image","images":"images","frame":"image","seconds":"secondes","time":"temps","interval":"Intervalle d’extraction","stride":"Intervalle d’images","original":"Taille d’origine","custom":"Taille personnalisée","width":"Largeur","height":"Hauteur","lock":"Conserver les proportions originales","stop":"Arrêter la tâche","clear":"Effacer les résultats","all":"Tout sélectionner","none":"Tout désélectionner","invert":"Inverser la sélection","waiting":"En attente d’une vidéo","preview":"Aperçu de la vidéo","notLoaded":"Non chargé","duration":"Durée","videoFormat":"Format vidéo","videoSize":"Dimensions vidéo","outputSize":"Dimensions exportées","fps":"FPS détectés","rule":"Règle d’extraction","estimate":"Estimation","auto":"Automatique","manual":"Manuel","range":"Plage d’images","start":"Début","end":"Fin","location":"Emplacement d’export","chooseZip":"Choisir l’emplacement ZIP","chooseFolder":"Choisir le dossier des images","browserDownload":"Téléchargement du navigateur","selected":"Sélectionné","working":"Traitement en cours…","done":"Terminé","error":"L’opération n’a pas pu être terminée. Vérifiez le fichier et les autorisations, puis réessayez.","noVideo":"Importez d’abord une vidéo.","info":"Configurez les options avant le traitement.","language":"Choisir la langue de l’interface","free":"Est-ce gratuit ?","account":"Ai-je besoin d’un compte ?","data":"Mes données sont-elles sûres et privées ?","mobile":"Cela fonctionne-t-il sur mobile ?","limit":"Y a-t-il une limite ?","size":"Taille du fichier","multiple":"Puis-je extraire plusieurs images ?","still":"Comment obtenir une image fixe ?","note":"Que faut-il savoir ?"},"bn":{"pick":"ভিডিও নির্বাচন করুন বা এখানে টানুন","camera":"ক্যামেরা দিয়ে রেকর্ড করুন","cameraHelp":"সিস্টেম ক্যামেরা খুলবে এবং রেকর্ড শেষ হলে ভিডিও আমদানি হবে।","video":"ভিডিও","file":"ফাইল","folder":"ফোল্ডার","image":"ছবি","images":"ছবি","frame":"ফ্রেম","seconds":"সেকেন্ড","time":"সময়","interval":"এক্সট্রাকশন ব্যবধান","stride":"ফ্রেম ব্যবধান","original":"মূল আকার","custom":"কাস্টম আকার","width":"প্রস্থ","height":"উচ্চতা","lock":"মূল অনুপাত লক করুন","stop":"কাজ বন্ধ করুন","clear":"ফলাফল পরিষ্কার করুন","all":"সব নির্বাচন করুন","none":"কোনোটিই নির্বাচন করবেন না","invert":"নির্বাচন উল্টান","waiting":"ভিডিওর অপেক্ষায়","preview":"ভিডিও প্রিভিউ","notLoaded":"লোড করা হয়নি","duration":"দৈর্ঘ্য","videoFormat":"ভিডিও ফর্ম্যাট","videoSize":"ভিডিও আকার","outputSize":"আউটপুট আকার","fps":"সনাক্ত FPS","rule":"এক্সট্রাকশন নিয়ম","estimate":"আনুমানিক","auto":"স্বয়ংক্রিয়","manual":"ম্যানুয়াল","range":"ফ্রেম পরিসর","start":"শুরু","end":"শেষ","location":"রপ্তানি অবস্থান","chooseZip":"ZIP সংরক্ষণের স্থান বাছুন","chooseFolder":"ছবির ফোল্ডার বাছুন","browserDownload":"ব্রাউজার ডাউনলোড","selected":"নির্বাচিত","working":"প্রক্রিয়াকরণ চলছে…","done":"সম্পন্ন","error":"কাজ সম্পন্ন করা যায়নি। ফাইল ও অনুমতি পরীক্ষা করে আবার চেষ্টা করুন।","noVideo":"আগে একটি ভিডিও আমদানি করুন।","info":"প্রক্রিয়ার আগে বিকল্প সেট করুন।","language":"ইন্টারফেস ভাষা নির্বাচন করুন","free":"এটি কি বিনামূল্যে?","account":"আমার কি অ্যাকাউন্ট লাগবে?","data":"আমার তথ্য কি নিরাপদ ও ব্যক্তিগত?","mobile":"এটি কি মোবাইলে কাজ করে?","limit":"কোনো সীমা আছে কি?","size":"ফাইলের আকার","multiple":"একসঙ্গে একাধিক ফ্রেম নেওয়া যাবে?","still":"স্থির ছবি কীভাবে নেব?","note":"কী খেয়াল রাখতে হবে?"},"pt":{"pick":"Selecione ou solte um vídeo","camera":"Gravar com a câmara","cameraHelp":"A câmara do sistema será aberta e o vídeo será importado após a gravação.","video":"vídeo","file":"ficheiro","folder":"pasta","image":"imagem","images":"imagens","frame":"fotograma","seconds":"segundos","time":"tempo","interval":"Intervalo de extração","stride":"Intervalo de fotogramas","original":"Tamanho original","custom":"Tamanho personalizado","width":"Largura","height":"Altura","lock":"Manter proporção original","stop":"Parar tarefa","clear":"Limpar resultados","all":"Selecionar tudo","none":"Selecionar nenhum","invert":"Inverter seleção","waiting":"A aguardar vídeo","preview":"Pré-visualização do vídeo","notLoaded":"Não carregado","duration":"Duração","videoFormat":"Formato de vídeo","videoSize":"Tamanho do vídeo","outputSize":"Tamanho de saída","fps":"FPS detetado","rule":"Regra de extração","estimate":"Estimativa","auto":"Automático","manual":"Manual","range":"Intervalo de fotogramas","start":"Início","end":"Fim","location":"Local de exportação","chooseZip":"Escolher local do ZIP","chooseFolder":"Escolher pasta de imagens","browserDownload":"Download do navegador","selected":"Selecionado","working":"A processar…","done":"Concluído","error":"Não foi possível concluir a operação. Verifique o ficheiro e as permissões e tente novamente.","noVideo":"Importe primeiro um vídeo.","info":"Configure as opções antes de processar.","language":"Escolher idioma da interface","free":"É gratuito?","account":"Preciso de uma conta?","data":"Os meus dados estão seguros e privados?","mobile":"Funciona em dispositivos móveis?","limit":"Existe algum limite?","size":"Tamanho do ficheiro","multiple":"Posso extrair vários fotogramas?","still":"Como obtenho uma imagem fixa?","note":"O que devo ter em atenção?"},"ru":{"pick":"Выберите или перетащите видео","camera":"Записать камерой","cameraHelp":"Откроется системная камера, и видео будет импортировано после записи.","video":"видео","file":"файл","folder":"папка","image":"изображение","images":"изображения","frame":"кадр","seconds":"секунд","time":"время","interval":"Интервал извлечения","stride":"Шаг по кадрам","original":"Исходный размер","custom":"Пользовательский размер","width":"Ширина","height":"Высота","lock":"Сохранить исходные пропорции","stop":"Остановить задачу","clear":"Очистить результаты","all":"Выбрать всё","none":"Снять выделение","invert":"Инвертировать выбор","waiting":"Ожидание видео","preview":"Предпросмотр видео","notLoaded":"Не загружено","duration":"Длительность","videoFormat":"Формат видео","videoSize":"Размер видео","outputSize":"Размер экспорта","fps":"Определённый FPS","rule":"Правило извлечения","estimate":"Оценка","auto":"Авто","manual":"Вручную","range":"Диапазон кадров","start":"Начало","end":"Конец","location":"Место экспорта","chooseZip":"Выберите место для ZIP","chooseFolder":"Выберите папку изображений","browserDownload":"Загрузка браузера","selected":"Выбрано","working":"Обработка…","done":"Готово","error":"Не удалось завершить операцию. Проверьте файл и разрешения и повторите попытку.","noVideo":"Сначала импортируйте видео.","info":"Настройте параметры перед обработкой.","language":"Выберите язык интерфейса","free":"Это бесплатно?","account":"Нужна ли учётная запись?","data":"Мои данные безопасны и конфиденциальны?","mobile":"Работает ли это на мобильных устройствах?","limit":"Есть ли ограничение?","size":"Размер файла","multiple":"Можно извлечь несколько кадров?","still":"Как получить стоп-кадр?","note":"Что нужно учитывать?"},"ur":{"pick":"ویڈیو منتخب کریں یا یہاں چھوڑیں","camera":"کیمرے سے ریکارڈ کریں","cameraHelp":"سسٹم کیمرا کھلے گا اور ریکارڈنگ کے بعد ویڈیو درآمد ہو جائے گی۔","video":"ویڈیو","file":"فائل","folder":"فولڈر","image":"تصویر","images":"تصاویر","frame":"فریم","seconds":"سیکنڈ","time":"وقت","interval":"اخراج کا وقفہ","stride":"فریم وقفہ","original":"اصل سائز","custom":"حسب ضرورت سائز","width":"چوڑائی","height":"اونچائی","lock":"اصل تناسب مقفل کریں","stop":"کام روکیں","clear":"نتائج صاف کریں","all":"سب منتخب کریں","none":"سب کا انتخاب ختم کریں","invert":"انتخاب الٹ دیں","waiting":"ویڈیو کا انتظار","preview":"ویڈیو پیش منظر","notLoaded":"لوڈ نہیں ہوا","duration":"دورانیہ","videoFormat":"ویڈیو فارمیٹ","videoSize":"ویڈیو سائز","outputSize":"آؤٹ پٹ سائز","fps":"پتہ لگایا گیا FPS","rule":"اخراج کا اصول","estimate":"اندازہ","auto":"خودکار","manual":"دستی","range":"فریم کی حد","start":"آغاز","end":"اختتام","location":"ایکسپورٹ مقام","chooseZip":"ZIP محفوظ کرنے کی جگہ منتخب کریں","chooseFolder":"تصاویر کا فولڈر منتخب کریں","browserDownload":"براؤزر ڈاؤن لوڈ","selected":"منتخب","working":"پروسیسنگ جاری ہے…","done":"مکمل","error":"عمل مکمل نہیں ہو سکا۔ فائل اور اجازتیں چیک کر کے دوبارہ کوشش کریں۔","noVideo":"پہلے ویڈیو درآمد کریں۔","info":"پروسیسنگ سے پہلے اختیارات ترتیب دیں۔","language":"انٹرفیس زبان منتخب کریں","free":"کیا یہ مفت ہے؟","account":"کیا مجھے اکاؤنٹ چاہیے؟","data":"کیا میرا ڈیٹا محفوظ اور نجی ہے؟","mobile":"کیا یہ موبائل پر کام کرتا ہے؟","limit":"کیا کوئی حد ہے؟","size":"فائل کا سائز","multiple":"کیا متعدد فریم نکالے جا سکتے ہیں؟","still":"ساکن تصویر کیسے حاصل کروں؟","note":"مجھے کیا خیال رکھنا چاہیے؟"},"idms":{"pick":"Pilih atau seret video","camera":"Rekam dengan kamera","cameraHelp":"Kamera sistem akan terbuka dan video diimpor setelah perekaman selesai.","video":"video","file":"file","folder":"folder","image":"gambar","images":"gambar","frame":"frame","seconds":"detik","time":"waktu","interval":"Interval ekstraksi","stride":"Interval frame","original":"Ukuran asli","custom":"Ukuran khusus","width":"Lebar","height":"Tinggi","lock":"Kunci rasio asli","stop":"Hentikan tugas","clear":"Hapus hasil","all":"Pilih semua","none":"Batalkan semua","invert":"Balik pilihan","waiting":"Menunggu video","preview":"Pratinjau video","notLoaded":"Belum dimuat","duration":"Durasi","videoFormat":"Format video","videoSize":"Ukuran video","outputSize":"Ukuran ekspor","fps":"FPS terdeteksi","rule":"Aturan ekstraksi","estimate":"Perkiraan","auto":"Otomatis","manual":"Manual","range":"Rentang frame","start":"Mulai","end":"Akhir","location":"Lokasi ekspor","chooseZip":"Pilih lokasi ZIP","chooseFolder":"Pilih folder gambar","browserDownload":"Unduhan browser","selected":"Dipilih","working":"Memproses…","done":"Selesai","error":"Operasi tidak dapat diselesaikan. Periksa file dan izin, lalu coba lagi.","noVideo":"Impor video terlebih dahulu.","info":"Atur opsi sebelum memproses.","language":"Pilih bahasa antarmuka","free":"Apakah gratis?","account":"Apakah saya memerlukan akun?","data":"Apakah data saya aman dan pribadi?","mobile":"Apakah berfungsi di perangkat seluler?","limit":"Apakah ada batas?","size":"Ukuran file","multiple":"Dapatkah saya mengekstrak beberapa frame?","still":"Bagaimana mendapatkan gambar diam?","note":"Apa yang perlu diperhatikan?"},"ja":{"pick":"動画を選択またはドロップ","camera":"カメラで録画","cameraHelp":"システムカメラが開き、録画後に動画が読み込まれます。","video":"動画","file":"ファイル","folder":"フォルダー","image":"画像","images":"画像","frame":"フレーム","seconds":"秒","time":"時間","interval":"抽出間隔","stride":"フレーム間隔","original":"元のサイズ","custom":"カスタムサイズ","width":"幅","height":"高さ","lock":"元の比率を固定","stop":"処理を停止","clear":"結果を消去","all":"すべて選択","none":"すべて解除","invert":"選択を反転","waiting":"動画を待機中","preview":"動画プレビュー","notLoaded":"未読み込み","duration":"長さ","videoFormat":"動画形式","videoSize":"動画サイズ","outputSize":"出力サイズ","fps":"検出 FPS","rule":"抽出ルール","estimate":"推定","auto":"自動","manual":"手動","range":"フレーム範囲","start":"開始","end":"終了","location":"書き出し場所","chooseZip":"ZIP 保存場所を選択","chooseFolder":"画像フォルダーを選択","browserDownload":"ブラウザーのダウンロード","selected":"選択済み","working":"処理中…","done":"完了","error":"操作を完了できませんでした。ファイルと権限を確認して、もう一度お試しください。","noVideo":"先に動画を読み込んでください。","info":"処理前に設定を確認してください。","language":"表示言語を選択","free":"無料で使えますか？","account":"アカウントは必要ですか？","data":"データは安全で非公開ですか？","mobile":"モバイルでも使えますか？","limit":"制限はありますか？","size":"ファイルサイズ","multiple":"複数のフレームを抽出できますか？","still":"静止画を取得するには？","note":"注意点はありますか？"},"de":{"pick":"Video auswählen oder ablegen","camera":"Mit Kamera aufnehmen","cameraHelp":"Die Systemkamera wird geöffnet; nach der Aufnahme wird das Video importiert.","video":"Video","file":"Datei","folder":"Ordner","image":"Bild","images":"Bilder","frame":"Frame","seconds":"Sekunden","time":"Zeit","interval":"Extraktionsintervall","stride":"Frame-Abstand","original":"Originalgröße","custom":"Benutzerdefinierte Größe","width":"Breite","height":"Höhe","lock":"Originalseitenverhältnis sperren","stop":"Aufgabe stoppen","clear":"Ergebnisse löschen","all":"Alle auswählen","none":"Keine auswählen","invert":"Auswahl umkehren","waiting":"Warte auf Video","preview":"Videovorschau","notLoaded":"Nicht geladen","duration":"Dauer","videoFormat":"Videoformat","videoSize":"Videogröße","outputSize":"Ausgabegröße","fps":"Erkannte FPS","rule":"Extraktionsregel","estimate":"Schätzung","auto":"Automatisch","manual":"Manuell","range":"Frame-Bereich","start":"Start","end":"Ende","location":"Exportort","chooseZip":"ZIP-Speicherort wählen","chooseFolder":"Bildordner wählen","browserDownload":"Browser-Download","selected":"Ausgewählt","working":"Wird verarbeitet…","done":"Fertig","error":"Der Vorgang konnte nicht abgeschlossen werden. Prüfen Sie Datei und Berechtigungen und versuchen Sie es erneut.","noVideo":"Importieren Sie zuerst ein Video.","info":"Konfigurieren Sie die Optionen vor der Verarbeitung.","language":"Sprache der Oberfläche wählen","free":"Ist das kostenlos?","account":"Brauche ich ein Konto?","data":"Sind meine Daten sicher und privat?","mobile":"Funktioniert das auf Mobilgeräten?","limit":"Gibt es ein Limit?","size":"Dateigröße","multiple":"Kann ich mehrere Frames extrahieren?","still":"Wie erhalte ich ein Standbild?","note":"Was sollte ich beachten?"},"sw":{"pick":"Chagua au buruta video","camera":"Rekodi kwa kamera","cameraHelp":"Kamera ya mfumo itafunguka na video itaingizwa baada ya kurekodi.","video":"video","file":"faili","folder":"folda","image":"picha","images":"picha","frame":"fremu","seconds":"sekunde","time":"muda","interval":"Kipindi cha kutoa","stride":"Nafasi ya fremu","original":"Ukubwa wa asili","custom":"Ukubwa maalum","width":"Upana","height":"Urefu","lock":"Funga uwiano wa asili","stop":"Simamisha kazi","clear":"Futa matokeo","all":"Chagua zote","none":"Ondoa uteuzi wote","invert":"Geuza uteuzi","waiting":"Inasubiri video","preview":"Onyesho la video","notLoaded":"Haijapakiwa","duration":"Muda","videoFormat":"Muundo wa video","videoSize":"Ukubwa wa video","outputSize":"Ukubwa wa toweo","fps":"FPS iliyogunduliwa","rule":"Sheria ya kutoa","estimate":"Makadirio","auto":"Otomatiki","manual":"Kwa mkono","range":"Eneo la fremu","start":"Mwanzo","end":"Mwisho","location":"Eneo la kuhamisha","chooseZip":"Chagua eneo la ZIP","chooseFolder":"Chagua folda ya picha","browserDownload":"Upakuaji wa kivinjari","selected":"Imechaguliwa","working":"Inachakata…","done":"Imekamilika","error":"Haikuwezekana kukamilisha operesheni. Angalia faili na ruhusa, kisha jaribu tena.","noVideo":"Ingiza video kwanza.","info":"Weka chaguo kabla ya kuchakata.","language":"Chagua lugha ya kiolesura","free":"Je, ni bure?","account":"Je, ninahitaji akaunti?","data":"Je, data yangu ni salama na binafsi?","mobile":"Je, inafanya kazi kwenye simu?","limit":"Je, kuna kikomo?","size":"Ukubwa wa faili","multiple":"Je, ninaweza kutoa fremu nyingi?","still":"Ninapataje picha tulivu?","note":"Ninapaswa kuzingatia nini?"},"te":{"pick":"వీడియోను ఎంచుకోండి లేదా ఇక్కడ వదలండి","camera":"కెమెరాతో రికార్డ్ చేయండి","cameraHelp":"సిస్టమ్ కెమెరా తెరుచుకుంటుంది; రికార్డింగ్ తర్వాత వీడియో దిగుమతి అవుతుంది.","video":"వీడియో","file":"ఫైల్","folder":"ఫోల్డర్","image":"చిత్రం","images":"చిత్రాలు","frame":"ఫ్రేమ్","seconds":"సెకన్లు","time":"సమయం","interval":"ఎక్స్‌ట్రాక్షన్ విరామం","stride":"ఫ్రేమ్ విరామం","original":"అసలు పరిమాణం","custom":"అనుకూల పరిమాణం","width":"వెడల్పు","height":"ఎత్తు","lock":"అసలు నిష్పత్తిని లాక్ చేయండి","stop":"పని ఆపండి","clear":"ఫలితాలను తొలగించండి","all":"అన్నీ ఎంచుకోండి","none":"అన్నీ తీసివేయండి","invert":"ఎంపికను మార్చండి","waiting":"వీడియో కోసం వేచి ఉంది","preview":"వీడియో ప్రివ్యూ","notLoaded":"లోడ్ కాలేదు","duration":"నిడివి","videoFormat":"వీడియో ఫార్మాట్","videoSize":"వీడియో పరిమాణం","outputSize":"అవుట్‌పుట్ పరిమాణం","fps":"గుర్తించిన FPS","rule":"ఎక్స్‌ట్రాక్షన్ నియమం","estimate":"అంచనా","auto":"ఆటో","manual":"మాన్యువల్","range":"ఫ్రేమ్ పరిధి","start":"ప్రారంభం","end":"ముగింపు","location":"ఎగుమతి స్థానం","chooseZip":"ZIP స్థలాన్ని ఎంచుకోండి","chooseFolder":"చిత్రాల ఫోల్డర్ ఎంచుకోండి","browserDownload":"బ్రౌజర్ డౌన్‌లోడ్","selected":"ఎంచుకోబడింది","working":"ప్రాసెస్ అవుతోంది…","done":"పూర్తైంది","error":"చర్య పూర్తికాలేదు. ఫైల్, అనుమతులు తనిఖీ చేసి మళ్లీ ప్రయత్నించండి.","noVideo":"ముందుగా వీడియోను దిగుమతి చేయండి.","info":"ప్రాసెస్ చేయడానికి ముందు ఎంపికలను సెట్ చేయండి.","language":"ఇంటర్‌ఫేస్ భాషను ఎంచుకోండి","free":"ఇది ఉచితమా?","account":"నాకు ఖాతా అవసరమా?","data":"నా డేటా సురక్షితమా, వ్యక్తిగతమా?","mobile":"ఇది మొబైల్‌లో పనిచేస్తుందా?","limit":"ఏదైనా పరిమితి ఉందా?","size":"ఫైల్ పరిమాణం","multiple":"అనేక ఫ్రేమ్‌లను తీసుకోగలనా?","still":"స్థిర చిత్రం ఎలా పొందాలి?","note":"నేను ఏమి గమనించాలి?"},"mr":{"pick":"व्हिडिओ निवडा किंवा येथे सोडा","camera":"कॅमेराने रेकॉर्ड करा","cameraHelp":"सिस्टम कॅमेरा उघडेल आणि रेकॉर्डिंगनंतर व्हिडिओ आयात केला जाईल.","video":"व्हिडिओ","file":"फाइल","folder":"फोल्डर","image":"प्रतिमा","images":"प्रतिमा","frame":"फ्रेम","seconds":"सेकंद","time":"वेळ","interval":"एक्स्ट्रॅक्शन अंतर","stride":"फ्रेम अंतर","original":"मूळ आकार","custom":"सानुकूल आकार","width":"रुंदी","height":"उंची","lock":"मूळ प्रमाण लॉक करा","stop":"काम थांबवा","clear":"निकाल साफ करा","all":"सर्व निवडा","none":"सर्व निवड रद्द करा","invert":"निवड उलटी करा","waiting":"व्हिडिओची प्रतीक्षा","preview":"व्हिडिओ पूर्वावलोकन","notLoaded":"लोड झाले नाही","duration":"कालावधी","videoFormat":"व्हिडिओ स्वरूप","videoSize":"व्हिडिओ आकार","outputSize":"आउटपुट आकार","fps":"ओळखलेले FPS","rule":"एक्स्ट्रॅक्शन नियम","estimate":"अंदाज","auto":"स्वयंचलित","manual":"हस्तचालित","range":"फ्रेम श्रेणी","start":"सुरुवात","end":"शेवट","location":"निर्यात स्थान","chooseZip":"ZIP स्थान निवडा","chooseFolder":"प्रतिमा फोल्डर निवडा","browserDownload":"ब्राउझर डाउनलोड","selected":"निवडलेले","working":"प्रक्रिया सुरू आहे…","done":"पूर्ण झाले","error":"प्रक्रिया पूर्ण होऊ शकली नाही. फाइल आणि परवानग्या तपासा आणि पुन्हा प्रयत्न करा.","noVideo":"प्रथम व्हिडिओ आयात करा.","info":"प्रक्रियेपूर्वी पर्याय सेट करा.","language":"इंटरफेस भाषा निवडा","free":"हे मोफत आहे का?","account":"मला खाते हवे आहे का?","data":"माझा डेटा सुरक्षित आणि खाजगी आहे का?","mobile":"हे मोबाइलवर चालते का?","limit":"काही मर्यादा आहे का?","size":"फाइल आकार","multiple":"मी अनेक फ्रेम काढू शकतो का?","still":"स्थिर प्रतिमा कशी मिळवू?","note":"मी काय लक्षात ठेवावे?"},"tr":{"pick":"Video seçin veya sürükleyin","camera":"Kamerayla kaydet","cameraHelp":"Sistem kamerası açılır ve kayıt sonrası video içe aktarılır.","video":"video","file":"dosya","folder":"klasör","image":"görüntü","images":"görüntüler","frame":"kare","seconds":"saniye","time":"zaman","interval":"Çıkarma aralığı","stride":"Kare aralığı","original":"Özgün boyut","custom":"Özel boyut","width":"Genişlik","height":"Yükseklik","lock":"Özgün oranı kilitle","stop":"Görevi durdur","clear":"Sonuçları temizle","all":"Tümünü seç","none":"Tüm seçimi kaldır","invert":"Seçimi tersine çevir","waiting":"Video bekleniyor","preview":"Video önizlemesi","notLoaded":"Yüklenmedi","duration":"Süre","videoFormat":"Video biçimi","videoSize":"Video boyutu","outputSize":"Çıktı boyutu","fps":"Algılanan FPS","rule":"Çıkarma kuralı","estimate":"Tahmin","auto":"Otomatik","manual":"Manuel","range":"Kare aralığı","start":"Başlangıç","end":"Bitiş","location":"Dışa aktarma konumu","chooseZip":"ZIP konumunu seç","chooseFolder":"Görüntü klasörünü seç","browserDownload":"Tarayıcı indirmesi","selected":"Seçildi","working":"İşleniyor…","done":"Tamamlandı","error":"İşlem tamamlanamadı. Dosyayı ve izinleri kontrol edip yeniden deneyin.","noVideo":"Önce bir video içe aktarın.","info":"İşlemeden önce seçenekleri ayarlayın.","language":"Arayüz dilini seç","free":"Ücretsiz mi?","account":"Hesaba ihtiyacım var mı?","data":"Verilerim güvenli ve gizli mi?","mobile":"Mobil cihazlarda çalışır mı?","limit":"Bir sınır var mı?","size":"Dosya boyutu","multiple":"Birden çok kare çıkarabilir miyim?","still":"Sabit görüntüyü nasıl alırım?","note":"Nelere dikkat etmeliyim?"},"yue":{"pick":"選擇或拖入影片","camera":"用相機錄影","cameraHelp":"會開啟系統相機；錄完之後會自動匯入影片。","video":"影片","file":"檔案","folder":"資料夾","image":"圖片","images":"圖片","frame":"影格","seconds":"秒","time":"時間","interval":"擷取間隔","stride":"影格間隔","original":"原始尺寸","custom":"自訂尺寸","width":"闊度","height":"高度","lock":"鎖定原始比例","stop":"停止工作","clear":"清除結果","all":"全選","none":"全部取消","invert":"反選","waiting":"等候影片","preview":"影片預覽","notLoaded":"未載入","duration":"時長","videoFormat":"影片格式","videoSize":"影片尺寸","outputSize":"輸出尺寸","fps":"偵測到嘅 FPS","rule":"擷取規則","estimate":"預計","auto":"自動","manual":"手動","range":"影格範圍","start":"開始","end":"結束","location":"匯出位置","chooseZip":"選擇 ZIP 儲存位置","chooseFolder":"選擇圖片資料夾","browserDownload":"瀏覽器下載","selected":"已選取","working":"處理緊…","done":"完成","error":"未能完成操作。請檢查檔案同權限後再試。","noVideo":"請先匯入影片。","info":"處理前請設定選項。","language":"選擇介面語言","free":"係咪免費？","account":"要唔要帳戶？","data":"我嘅資料安全同私密嗎？","mobile":"手機用到嗎？","limit":"有冇限制？","size":"檔案大小","multiple":"可唔可以擷取多張影格？","still":"點樣擷取靜態圖片？","note":"要留意咩？"},"vi":{"pick":"Chọn hoặc thả video","camera":"Quay bằng máy ảnh","cameraHelp":"Máy ảnh hệ thống sẽ mở và video được nhập sau khi quay xong.","video":"video","file":"tệp","folder":"thư mục","image":"ảnh","images":"ảnh","frame":"khung hình","seconds":"giây","time":"thời gian","interval":"Khoảng trích xuất","stride":"Khoảng khung hình","original":"Kích thước gốc","custom":"Kích thước tùy chỉnh","width":"Rộng","height":"Cao","lock":"Khóa tỷ lệ gốc","stop":"Dừng tác vụ","clear":"Xóa kết quả","all":"Chọn tất cả","none":"Bỏ chọn tất cả","invert":"Đảo lựa chọn","waiting":"Đang chờ video","preview":"Xem trước video","notLoaded":"Chưa tải","duration":"Thời lượng","videoFormat":"Định dạng video","videoSize":"Kích thước video","outputSize":"Kích thước xuất","fps":"FPS đã phát hiện","rule":"Quy tắc trích xuất","estimate":"Ước tính","auto":"Tự động","manual":"Thủ công","range":"Phạm vi khung hình","start":"Bắt đầu","end":"Kết thúc","location":"Vị trí xuất","chooseZip":"Chọn vị trí ZIP","chooseFolder":"Chọn thư mục ảnh","browserDownload":"Tải xuống trình duyệt","selected":"Đã chọn","working":"Đang xử lý…","done":"Hoàn tất","error":"Không thể hoàn tất thao tác. Hãy kiểm tra tệp và quyền rồi thử lại.","noVideo":"Hãy nhập video trước.","info":"Thiết lập tùy chọn trước khi xử lý.","language":"Chọn ngôn ngữ giao diện","free":"Có miễn phí không?","account":"Tôi có cần tài khoản không?","data":"Dữ liệu của tôi có an toàn và riêng tư không?","mobile":"Có hoạt động trên thiết bị di động không?","limit":"Có giới hạn không?","size":"Kích thước tệp","multiple":"Tôi có thể trích xuất nhiều khung hình không?","still":"Làm sao lấy ảnh tĩnh?","note":"Tôi cần lưu ý điều gì?"},"ko":{"pick":"동영상을 선택하거나 놓으세요","camera":"카메라로 녹화","cameraHelp":"시스템 카메라가 열리고 녹화 후 동영상을 가져옵니다.","video":"동영상","file":"파일","folder":"폴더","image":"이미지","images":"이미지","frame":"프레임","seconds":"초","time":"시간","interval":"추출 간격","stride":"프레임 간격","original":"원본 크기","custom":"사용자 지정 크기","width":"너비","height":"높이","lock":"원본 비율 잠금","stop":"작업 중지","clear":"결과 지우기","all":"모두 선택","none":"모두 선택 해제","invert":"선택 반전","waiting":"동영상 대기 중","preview":"동영상 미리보기","notLoaded":"불러오지 않음","duration":"길이","videoFormat":"동영상 형식","videoSize":"동영상 크기","outputSize":"출력 크기","fps":"감지된 FPS","rule":"추출 규칙","estimate":"예상","auto":"자동","manual":"수동","range":"프레임 범위","start":"시작","end":"끝","location":"내보내기 위치","chooseZip":"ZIP 위치 선택","chooseFolder":"이미지 폴더 선택","browserDownload":"브라우저 다운로드","selected":"선택됨","working":"처리 중…","done":"완료","error":"작업을 완료할 수 없습니다. 파일과 권한을 확인한 뒤 다시 시도하세요.","noVideo":"먼저 동영상을 가져오세요.","info":"처리 전에 옵션을 설정하세요.","language":"인터페이스 언어 선택","free":"무료인가요?","account":"계정이 필요한가요?","data":"내 데이터는 안전하고 비공개인가요?","mobile":"모바일에서도 작동하나요?","limit":"제한이 있나요?","size":"파일 크기","multiple":"여러 프레임을 추출할 수 있나요?","still":"정지 이미지는 어떻게 얻나요?","note":"무엇을 주의해야 하나요?"}};
+
+      function makeCompleteInterfaceLocale(core, extra) {
+        const p = { ...core, ...extra };
+        const L = {};
+        const set = (keys, value) => keys.forEach((key) => { L[key] = value; });
+        const every = `1 ${p.image} / {interval} ${p.seconds}`;
+        const everyFrame = `1 ${p.image} / {stride} ${p.frame}`;
+        const localInfo = p.tag || p.info;
+
+        // Start with a local-language neutral string so every registered key is covered.
+        Object.keys(LOCALES.en).forEach((key) => { L[key] = p.info; });
+
+        set(['document.title', 'brand.title', 'header.brand'], p.app);
+        set(['brand.subtitle'], localInfo);
+        set(['panel.aria'], `${p.app} · ${p.tool}`);
+        set(['header.brand'], p.app);
+        set(['nav.tool'], p.tool); set(['nav.features'], p.features); set(['nav.faq'], p.faq);
+        set(['language.menu', 'language.aria', 'language.toEnglish', 'language.toChinese'], p.language);
+
+        set(['upload.aria'], p.pick);
+        set(['upload.actions.aria'], `${p.video} · ${p.camera}`);
+        set(['upload.title'], p.pick);
+        set(['upload.subtitle'], 'MP4 / MOV / WebM');
+        set(['upload.select', 'upload.select.title'], p.pick);
+        set(['upload.camera', 'upload.camera.title'], p.camera);
+        set(['upload.help'], p.cameraHelp);
+        set(['file.none'], `${p.file}: —`);
+
+        set(['mode.title', 'mode.aria'], p.mode);
+        set(['mode.time'], p.byTime);
+        set(['mode.frame'], p.byFrame);
+        set(['mode.time.label'], p.byTime);
+        set(['mode.frame.label'], p.byFrame);
+        set(['time.interval.title'], p.interval);
+        set(['unit.second', 'unit.secondShort'], p.seconds);
+        set(['time.interval.help'], `${p.interval}: 1 ${p.image} / 1 ${p.seconds}.`);
+        set(['frame.stride.title'], p.stride);
+        set(['unit.frame'], p.frame);
+        set(['frame.stride.help'], `${p.stride}: ${p.frame} FPS.`);
+
+        set(['format.title', 'format.aria'], p.format);
+        set(['format.png'], 'PNG · ' + p.original);
+        set(['format.jpeg'], 'JPEG · ' + p.size);
+        set(['format.jpg'], 'JPG · ' + p.size);
+        set(['format.webp'], 'WebP · ' + p.outputSize);
+        set(['format.heif'], 'HEIF · ' + p.outputSize);
+        set(['format.tif'], 'TIFF / TIF · ' + p.original);
+        set(['format.help'], `WebP · PNG · JPEG · HEIF · TIFF / TIF. ${p.info}`);
+        set(['format.heifHelp'], `HEIF · ${p.working} ${p.info}`);
+
+        set(['folder.title'], p.folder);
+        set(['folder.placeholder', 'imageName.placeholder'], p.original + ' ' + p.video);
+        set(['folder.help'], `${p.folder} · ZIP · ${p.browserDownload}. ${p.info}`);
+        set(['imageName.title'], p.image + ' ' + p.file);
+        set(['imageName.help'], `${p.image} · ${p.frame} · ${p.time}.`);
+
+        set(['export.title', 'export.aria'], p.export);
+        set(['export.zip.option', 'fileType.zip'], 'ZIP');
+        set(['export.direct.option'], p.export);
+        set(['export.button.direct'], `${p.export} · ${p.selected} ${p.images}`);
+        set(['export.button.zip', 'button.exportZip'], `ZIP · ${p.export}`);
+        set(['export.browserDownload'], p.browserDownload);
+        set(['export.selectedLocation'], `${p.location}: {name}`);
+        set(['export.sequence'], p.frame);
+        set(['location.title'], p.location);
+        set(['location.zip.button'], p.chooseZip);
+        set(['location.folder.button'], p.chooseFolder);
+        set(['location.defaultStatus'], p.browserDownload);
+        set(['location.selectedStatus'], `${p.selected}: {name}`);
+        set(['location.folder.help.selected', 'location.folder.help.default', 'location.zip.help.selected', 'location.zip.help.default'], p.info);
+
+        set(['resolution.title', 'resolution.aria'], p.resolution);
+        set(['resolution.original', 'resolution.hintOriginal'], p.original);
+        set(['resolution.2160'], '4K · 2160 px');
+        set(['resolution.1440'], '2K · 1440 px');
+        set(['resolution.1080'], 'Full HD · 1080 px');
+        set(['resolution.720'], 'HD · 720 px');
+        set(['resolution.custom'], p.custom);
+        set(['unit.width'], p.width); set(['unit.height'], p.height);
+        set(['resolution.lock'], p.lock);
+        set(['resolution.help'], p.info);
+
+        set(['button.extract'], p.extract);
+        set(['button.cancel'], p.stop);
+        set(['button.clear'], p.clear);
+        set(['button.selectAll'], p.all);
+        set(['button.selectNone'], p.none);
+        set(['button.invert'], p.invert);
+        set(['button.captureCurrent'], p.capture);
+        set(['button.downloadFrame'], p.download);
+        set(['footer'], p.info);
+
+        set(['hero.title'], p.hero);
+        set(['hero.description'], p.heroDesc);
+        set(['status.waiting'], p.waiting);
+        set(['preview.empty.title'], p.preview);
+        set(['preview.empty.description'], `${p.pick}. ${p.info}`);
+        set(['preview.frame'], p.frame);
+        set(['preview.time'], p.time);
+        set(['preview.frame.readout'], `${p.frame}: {current} / {total}`);
+        set(['preview.time.readout'], `${p.time}: {current} / {total}`);
+
+        set(['plan.title'], p.plan);
+        set(['plan.notLoaded'], p.notLoaded);
+        set(['plan.ruleTime'], every);
+        set(['plan.ruleFrame'], everyFrame);
+        set(['plan.overLimit'], `12,000 ${p.images}+`);
+        set(['plan.estimate'], `${p.estimate}: {count} ${p.images}`);
+        set(['summary.duration'], p.duration);
+        set(['summary.seconds'], p.seconds);
+        set(['summary.videoFormat'], p.videoFormat);
+        set(['summary.dimensions'], p.videoSize);
+        set(['summary.outputDimensions'], p.outputSize);
+        set(['summary.fps'], p.fps);
+        set(['summary.rule'], p.rule);
+        set(['summary.estimate'], p.estimate);
+        set(['summary.format'], p.format);
+        set(['summary.exportName'], p.export);
+
+        set(['notice.waiting', 'notice.videoReady', 'notice.parameterUpdated', 'notice.stopped.withFrames', 'notice.stopped.empty', 'notice.done', 'notice.directStarted', 'notice.manualCaptured'], p.info);
+        set(['progress.preparing', 'progress.heifPreparing', 'progress.manualCapturing'], p.working);
+        set(['progress.compressing'], `${p.working} {count} ${p.images}`);
+        set(['progress.compressingStart', 'progress.writingStart', 'progress.downloadingStart'], p.working);
+        set(['progress.zipSaved', 'progress.zipExported', 'progress.folderSaved', 'progress.directStarted', 'progress.done'], `${p.done}: {count} ${p.images}`);
+        set(['progress.writing', 'progress.downloading', 'progress.extracting'], `${p.working} {current} / {total}`);
+
+        set(['frames.title'], p.frames);
+        set(['frames.intro.empty', 'frames.empty.message'], `${p.selected} ${p.images}`);
+        set(['frames.intro.summary'], `{total} ${p.images} · ${p.selected} {selected}`);
+        set(['frames.selected'], `${p.selected} {selected} / {total}`);
+        set(['frames.selected.initial'], `${p.selected} 0 / 0`);
+        set(['frames.empty.title'], p.frames);
+        set(['frames.empty.description'], `${p.pick}.<br/>${p.images}.`);
+        set(['frames.preparing', 'frames.reading'], p.working);
+        set(['frame.card.title'], `${p.image} {index} · {time}`);
+        set(['frame.card.alt'], `${p.frame} {index}`);
+        set(['frame.card.aria'], `${p.selected} ${p.image} {index}`);
+
+        set(['theme.toLight', 'theme.light'], p.light);
+        set(['theme.toDark', 'theme.dark'], p.dark);
+
+        set(['console.aria', 'console.title'], p.capture);
+        set(['console.description'], p.info);
+        set(['console.mode.aria'], p.mode);
+        set(['console.auto'], p.auto);
+        set(['console.manual'], p.manual);
+        set(['console.auto.note', 'console.manual.ready'], p.info);
+        set(['console.timeline.aria'], `${p.frame} · ${p.time}`);
+        set(['frameRange.aria', 'frameRange.title'], p.range);
+        set(['frameRange.description', 'frameRange.help'], p.info);
+        set(['frameRange.start'], p.start);
+        set(['frameRange.end'], p.end);
+        set(['frameRange.total'], `{total} ${p.frames}`);
+        set(['frameRange.slider.aria'], p.range);
+
+        set(['faq.title'], p.faqTitle || p.faq);
+        set(['faq.description'], p.faqDesc || p.info);
+        L['faq.q1'] = `${p.video} ${p.format}?`; L['faq.a1'] = `MP4 · MOV · WebM. ${localInfo}`;
+        L['faq.q2'] = `${p.file} ${p.size} ${p.limit}`; L['faq.a2'] = `${p.info} ${p.video} ${p.size}.`;
+        L['faq.q3'] = `${p.video} · ${p.data}?`; L['faq.a3'] = localInfo;
+        L['faq.q4'] = p.account; L['faq.a4'] = p.noAccount;
+        L['faq.q5'] = p.multiple; L['faq.a5'] = `${p.auto} · ${p.manual}.`;
+        L['faq.q6'] = p.still; L['faq.a6'] = `${p.pick} · ${p.auto} / ${p.manual} · ${p.capture}.`;
+        L['faq.q7'] = `${p.frame} ${p.format}?`; L['faq.a7'] = 'PNG · JPEG · JPG · WebP · HEIF · TIFF / TIF.';
+        L['faq.q8'] = `${p.video} ${p.duration} ${p.limit}`; L['faq.a8'] = `${p.info} ${p.duration}.`;
+        L['faq.q9'] = p.mobile; L['faq.a9'] = `${p.camera} · ${p.browserDownload}.`;
+        L['faq.q10'] = p.free; L['faq.a10'] = localInfo;
+        L['faq.q11'] = p.data; L['faq.a11'] = localInfo;
+        L['faq.q12'] = p.note; L['faq.a12'] = p.info;
+
+        set(['error.heifInterface', 'error.heifLoad', 'error.tiffInvalid', 'error.heifEncode', 'error.imageEncode', 'error.webpUnsupported', 'error.videoRead', 'error.videoTimeout', 'error.seek', 'error.videoUnsupported', 'error.readVideo', 'error.noTargets', 'error.tooMany', 'error.extract', 'error.folderPickerUnsupported', 'error.folderPicker', 'error.savePickerUnsupported', 'error.zipSavePicker', 'error.permissionZip', 'error.selectFrames', 'error.zipComponent', 'error.zipExport', 'error.permissionFolder', 'error.directExport', 'error.directExportAdvice', 'error.dropVideo'], p.error);
+        set(['error.noVideo'], p.noVideo);
+        set(['confirm.clear'], `${p.clear}?`);
+        set(['status.reading', 'status.detectingFps', 'status.loadingHeif', 'status.extracting', 'status.zipPacking', 'status.folderWriting', 'status.directExporting', 'status.manualCapturing'], p.working);
+        set(['status.videoReady', 'status.parametersUpdated'], p.info);
+        set(['status.cannotRead', 'status.extractFailed', 'status.exportFailed'], p.error);
+        set(['status.stoppedWithFrames'], `${p.stop}: {count} ${p.images}`);
+        set(['status.stopped'], p.stop);
+        set(['status.done'], `${p.done}: {count} ${p.images}`);
+        set(['status.zipSaved', 'status.folderSaved'], p.done);
+        set(['status.zipDownloading', 'status.directDownloading', 'status.frameDownloaded'], p.browserDownload);
+        set(['status.cleared'], p.clear);
+        set(['status.manualCaptured'], p.done);
+
+        return L;
+      }
+
+      Object.entries(COMPLETE_INTERFACE_TERMS).forEach(([code, terms]) => {
+        const core = CORE_LANGUAGE_PACKS[code];
+        if (!core) return;
+        LOCALES[code] = makeCompleteInterfaceLocale(core, terms);
       });
 
       state.language = 'zh';
